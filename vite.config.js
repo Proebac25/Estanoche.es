@@ -3,9 +3,6 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
-  server: {
-    hmr: false
-  },
   plugins: [
     react(),
     VitePWA({
@@ -13,9 +10,9 @@ export default defineConfig({
       manifest: {
         name: 'estanoche.es',
         short_name: 'estanoche',
-        description: 'Descubre el ocio de tu ciudad',
-        theme_color: '#000000',
-        background_color: '#ffffff',
+        description: 'Tu agenda de ocio',
+        theme_color: '#F72585',
+        background_color: '#121212',
         display: 'standalone',
         scope: '/',
         start_url: '/',
@@ -31,7 +28,15 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
-      }
+      },
+      // Forzar entrada correcta
+      srcDir: '.',
+      strategies: 'generateSW'
     })
-  ]
+  ],
+  build: {
+    rollupOptions: {
+      input: './index.html'  // <-- FORZA index.html
+    }
+  }
 })
