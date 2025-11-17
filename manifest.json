@@ -4,8 +4,8 @@
   "description": "Descubre el ocio de tu ciudad",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#121212",
+  "theme_color": "#F72585",
   "icons": [
     {
       "src": "/icon-192.png",
