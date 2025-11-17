@@ -1,0 +1,209 @@
+import { useState, useEffect } from 'react'
+import { supabase } from './supabase'
+import './App.css'
+
+function App() {
+  const [events, setEvents] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('events')
+          .select('*')
+          .limit(10)
+          .order('date', { ascending: true })
+
+        if (error) throw error
+        setEvents(data || [])
+      } catch (err) {
+        console.error('Error Supabase:', err)
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchEvents()
+  }, [])
+
+  return (
+    <div className="App">
+      {/* HEADER */}
+      <header style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '1rem',
+        background: '#1a1a1a',
+        color: 'white'
+      }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '1.5rem' }}>🌙 estanoche.es</h1>
+          <p style={{ margin: '0.25rem 0 0', fontSize: '0.875rem', color: '#aaa' }}>
+            Descubre el ocio de tu ciudad
+          </p>
+        </div>
+        <button style={{
+          background: 'linear-gradient(90deg, #F72585, #FFB703)',
+          border: 'none',
+          padding: '0.5rem 1rem',
+          borderRadius: '9999px',
+          color: 'white',
+          fontWeight: 'bold',
+          cursor: 'pointer'
+        }}>
+          Publica tu evento
+        </button>
+      </header>
+
+      {/* HERO */}
+      <section style={{
+        minHeight: '70vh',
+        background: 'linear-gradient(135deg, #3C3C8A 0%, #1C1C3A 40%, #F72585 100%)',
+        color: 'white',
+        textAlign: 'center',
+        padding: '4rem 1rem',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <h1 style={{ fontSize: '3rem', margin: '0 0 1rem' }}>
+          Descubre el ocio<br /><span style={{
+            background: 'linear-gradient(90deg, #F72585, #FFB703)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>de tu ciudad</span>
+        </h1>
+        <p style={{ fontSize: '1.25rem', maxWidth: '600px', margin: '0 0 2rem' }}>
+          Conciertos, eventos y planes únicos.<br />
+          <strong>Sin descargas. Sin complicaciones.</strong>
+        </p>
+        <a href="#eventos" style={{
+          background: 'linear-gradient(90deg, #F72585, #FFB703)',
+          color: 'white',
+          padding: '1rem 2rem',
+          borderRadius: '9999px',
+          textDecoration: 'none',
+          fontWeight: 'bold',
+          fontSize: '1.1rem'
+        }}>
+          🎉 Ver eventos
+        </a>
+      </section>
+
+      {/* EVENTOS */}
+      <section id="eventos" style={{ padding: '3rem 1rem', background: '#121212', color: 'white' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Próximos eventos</h2>
+          {loading ? (
+            <p style={{ textAlign: 'center' }}>Cargando eventos...</p>
+          ) : error ? (
+            <p style={{ color: '#ff6b6b', textAlign: 'center' }}>Error: {error}</p>
+          ) : events.length === 0 ? (
+            <p style={{ textAlign: 'center', color: '#aaa' }}>No hay eventos aún.</p>
+          ) : (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '1.5rem'
+            }}>
+              {events.map(event => (
+                <div key={event.id} style={{
+                  background: 'rgba(42, 42, 94, 0.15)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  padding: '1.5rem',
+                  textAlign: 'left'
+                }}>
+                  <h3 style={{ margin: '0 0 0.5rem', color: '#F72585' }}>
+                    {event.title || 'Evento sin título'}
+                  </h3>
+                  <p style={{ margin: '0.25rem 0', fontSize: '0.9rem', color: '#ccc' }}>
+                    📍 {event.location || 'Lugar no especificado'}
+                  </p>
+                  <p style={{ margin: '0.25rem 0', fontSize: '0.9rem', color: '#ccc' }}>
+                    🗓️ {event.date ? new Date(event.date).toLocaleDateString('es-ES') : 'Fecha no disponible'}
+                  </p>
+                  <p style={{ margin: '0.25rem 0 1rem', fontSize: '0.9rem', color: '#aaa' }}>
+                    {event.city || 'Ciudad no especificada'}
+                  </p>
+                  <button style={{
+                    background: '#F72585',
+                    color: 'white',
+                    border: 'none',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '0.9rem'
+                  }}>
+                    Ver detalles
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{
+        textAlign: 'center',
+        padding: '2rem 1rem',
+        background: '#0a0a0a',
+        color: '#666',
+        fontSize: '0.875rem'
+      }}>
+        <p><strong>www.estanoche.es</strong> · Tu agenda de ocio</p>
+        <p>© 2025 Proebac25 · Todos los derechos reservados</p>
+      </footer>
+    </div>
+import { useState, useEffect } from 'react'
+import { supabase } from './supabase'
+import './App.css'
+
+function App() {
+  const [events, setEvents] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    supabase
+      .from('eventos')
+      .select('id, titulo, descripcion, ubicacion, ciudad, fecha_inicio')
+      .eq('estado', 'activo')
+      .limit(3)
+      .then(({ data }) => {
+        setEvents(data || [])
+        setLoading(false)
+      })
+  }, [])
+
+  return (
+    <div className="App">
+      {/* TU DISEÑO ORIGINAL AQUÍ */}
+      <header>...</header>
+      <section className="hero-section">...</section>
+      <section id="eventos">
+        {loading ? <p>Cargando...</p> : (
+          <div className="events-grid">
+            {events.map(e => (
+              <div key={e.id} className="event-card glass">
+                <h3>{e.titulo}</h3>
+                <p>📍 {e.ubicacion}</p>
+                <p>🌆 {e.ciudad}</p>
+                <p>🗓️ {new Date(e.fecha_inicio).toLocaleDateString('es-ES')}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+      <footer>...</footer>
+    </div>
+  )
+}
+
+export default App

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - www.estanoche.es</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+    <style>
+        .publicidad-badge {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // DATOS - CIUDADES
+        const ciudadesData = {
+            jerez: { id: 'jerez', nombre: 'Jerez', nombreCompleto: 'Jerez de la Frontera', cercanas: ['cadiz', 'puerto'] },
+            cadiz: { id: 'cadiz', nombre: 'Cádiz', nombreCompleto: 'Cádiz', cercanas: ['jerez', 'puerto'] },
+            puerto: { id: 'puerto', nombre: 'El Puerto', nombreCompleto: 'El Puerto de Santa María', cercanas: ['jerez', 'cadiz'] }
+        };
+
+        // PERFILES PUBLICITARIOS
+        const perfiles = {
+            ejemplo_bar: { id: 'ejemplo_bar', nombre: 'Tu Bar Aquí', tipo: 'local_fijo', ciudad: 'jerez', descripcion: '¿Tienes un bar? Promociona tus eventos y ofertas aquí.', imagen: '🍺', telefono: '+34 900 000 000', instagram: '@tubar', web: 'www.tubar.com', esPublicidad: true },
+            ejemplo_musico: { id: 'ejemplo_musico', nombre: 'Tu Grupo Musical', tipo: 'itinerante', ciudad: 'jerez', descripcion: '¿Eres músico? Publica tus conciertos aquí.', imagen: '🎸', instagram: '@tugrupo', web: 'www.tugrupo.com', esPublicidad: true },
+            ejemplo_grupo: { id: 'ejemplo_grupo', nombre: 'Tu Grupo de Amigos', tipo: 'itinerante', ciudad: 'jerez', descripcion: '¿Organizas quedadas? Publícalas aquí.', imagen: '🎉', whatsapp: '+34 600 000 000', esPublicidad: true },
+            ejemplo_sala: { id: 'ejemplo_sala', nombre: 'Tu Sala de Conciertos', tipo: 'local_fijo', ciudad: 'cadiz', descripcion: '¿Tienes una sala? Promociona tu programación cultural.', imagen: '🎭', telefono: '+34 900 111 222', web: 'www.tusala.com', esPublicidad: true }
+        };
+
+        // EVENTOS PUBLICITARIOS
+        const generarFecha = (dias, hora, min) => { const f = new Date(); f.setDate(f.getDate() + dias); f.setHours(hora, min, 0); return f; };
+        
+        const eventos = [
+            { id: 1, creadorId: 'ejemplo_bar', titulo: '¿Tienes ofertas especiales? Publícalas aquí', descripcion: 'Aquí puedes promocionar tus happy hours, tapas, menús especiales. Añade foto, horarios y precios. Los usuarios podrán contactarte por WhatsApp, llamada o web.', categoria: 'gastronomia', precio: 'Tu precio', fechaInicio: generarFecha(0, 20, 0), fechaFin: generarFecha(0, 23, 30), imagen: '🍺', esPublicidad: true },
+            { id: 2, creadorId: 'ejemplo_musico', titulo: '¿Eres músico? Anuncia tu próximo concierto', descripcion: 'Publica detalles: dónde actúas, qué día, precio de entrada. Añade cartel del evento o foto del grupo. Conecta con tu público y salas.', categoria: 'musica', precio: 'Precio entrada', fechaInicio: generarFecha(1, 22, 0), fechaFin: generarFecha(2, 2, 0), imagen: '🎸', esPublicidad: true },
+            { id: 3, creadorId: 'ejemplo_grupo', titulo: '¿Organizas quedadas? Publícalas aquí', descripcion: 'Aquí puedes poner la quedada de tu grupo para que se unan más personas. Especifica lugar, hora y actividad. Comparte WhatsApp del grupo para coordinar. Perfecto para tardeos, rutas o excursiones.', categoria: 'social', precio: 'Gratis', fechaInicio: generarFecha(0, 15, 0), fechaFin: generarFecha(0, 20, 0), imagen: '🎉', esPublicidad: true },
+            { id: 4, creadorId: 'ejemplo_sala', titulo: '¿Tienes una sala? Anuncia tu programación', descripcion: 'Publica tu cartelera: obras de teatro, monólogos, conciertos, espectáculos. Añade cartel, precios y enlace para entradas. Llena aforos.', categoria: 'teatro', precio: 'Precio entrada', fechaInicio: generarFecha(2, 20, 0), fechaFin: generarFecha(2, 23, 0), imagen: '🎭', esPublicidad: true },
+            { id: 5, creadorId: 'ejemplo_bar', titulo: 'Promociona tu negocio en EstaNoche', descripcion: 'Este espacio puede ser tuyo. Publica ofertas, eventos, promociones. Añade imagen profesional, horarios, ubicación y contactos. Miles de personas buscan planes cada día.', categoria: 'gastronomia', precio: 'Consultar', fechaInicio: generarFecha(1, 13, 0), fechaFin: generarFecha(1, 17, 0), imagen: '💼', esPublicidad: true },
+            { id: 6, creadorId: 'ejemplo_musico', titulo: 'Llega a tu público con EstaNoche', descripcion: 'Promociona tus eventos culturales y de ocio. Teatro, música, arte, talleres... Configura qué contactos mostrar: teléfono, WhatsApp, web, Instagram.', categoria: 'musica', precio: 'Variable', fechaInicio: generarFecha(3, 21, 0), fechaFin: generarFecha(4, 1, 0), imagen: '🎨', esPublicidad: true },
+            { id: 7, creadorId: 'ejemplo_grupo', titulo: 'Crea tu comunidad en EstaNoche', descripcion: 'Organiza eventos recurrentes y construye comunidad. Quedadas semanales, clubs, grupos de interés. Los usuarios se unen fácilmente y coordinan por WhatsApp.', categoria: 'social', precio: 'Según evento', fechaInicio: generarFecha(0, 18, 0), fechaFin: generarFecha(0, 22, 0), imagen: '👥', esPublicidad: true }
+        ];
+
+        // COMPONENTE PRINCIPAL
+        function AgendaApp() {
+            const [currentTime, setCurrentTime] = useState(new Date());
+            const [filtroHora, setFiltroHora] = useState('ahora');
+            const [ciudadSeleccionada, setCiudadSeleccionada] = useState('jerez');
+            const [mostrarCercanas, setMostrarCercanas] = useState(true);
+            const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('todas');
+            const [eventoSeleccionado, setEventoSeleccionado] = useState(null);
+            const [perfilSeleccionado, setPerfilSeleccionado] = useState(null);
+
+            useEffect(() => {
+                const params = new URLSearchParams(window.location.search);
+                const ciudad = params.get('ciudad');
+                if (ciudad && ciudadesData[ciudad]) setCiudadSeleccionada(ciudad);
+                const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+                return () => clearInterval(timer);
+            }, []);
+
+            const categorias = [
+                { id: 'todas', nombre: 'Todas', icon: '📅' },
+                { id: 'musica', nombre: 'Música', icon: '🎵' },
+                { id: 'gastronomia', nombre: 'Gastro', icon: '🍽️' },
+                { id: 'social', nombre: 'Social', icon: '👥' },
+                { id: 'teatro', nombre: 'Teatro', icon: '🎭' }
+            ];
+
+            const horasDisponibles = [
+                { valor: 'ahora', label: `Ahora (${currentTime.getHours().toString().padStart(2,'0')}:${currentTime.getMinutes().toString().padStart(2,'0')})` },
+                { valor: '14', label: '14:00' },
+                { valor: '16', label: '16:00' },
+                { valor: '18', label: '18:00' },
+                { valor: '20', label: '20:00' },
+                { valor: '22', label: '22:00' },
+                { valor: '0', label: '00:00' },
+                { valor: '2', label: '02:00' },
+                { valor: '4', label: '04:00' }
+            ];
+
+            const ciudadesAMostrar = useMemo(() => {
+                const ciudad = ciudadesData[ciudadSeleccionada];
+                if (!mostrarCercanas) return [ciudadSeleccionada];
+                return [ciudadSeleccionada, ...ciudad.cercanas];
+            }, [ciudadSeleccionada, mostrarCercanas]);
+
+            const eventosFiltrados = useMemo(() => {
+                let horaFiltro = currentTime;
+                if (filtroHora !== 'ahora') {
+                    horaFiltro = new Date();
+                    horaFiltro.setHours(parseInt(filtroHora), 0, 0);
+                }
+                
+                return eventos.filter(e => {
+                    const creador = perfiles[e.creadorId];
+                    if (!ciudadesAMostrar.includes(creador.ciudad)) return false;
+                    if (categoriaSeleccionada !== 'todas' && e.categoria !== categoriaSeleccionada) return false;
+                    if (e.fechaFin < currentTime) return false;
+                    if (e.fechaFin < horaFiltro) return false;
+                    return true;
+                }).sort((a, b) => a.fechaInicio - b.fechaInicio);
+            }, [ciudadesAMostrar, categoriaSeleccionada, filtroHora, currentTime]);
+
+            const getTimeRemaining = (fechaFin) => {
+                const diff = fechaFin - currentTime;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                if (diff < 0) return { text: 'Finalizado', color: 'text-gray-400' };
+                if (hours === 0) return { text: `${minutes} min`, color: 'text-red-600' };
+                if (hours < 2) return { text: `${hours}h ${minutes}min`, color: 'text-orange-600' };
+                if (hours < 24) return { text: `${hours}h`, color: 'text-gray-600' };
+                return { text: `${Math.floor(hours/24)}d`, color: 'text-gray-600' };
+            };
+
+            if (perfilSeleccionado) {
+                return <PerfilCreador perfil={perfilSeleccionado} onClose={() => setPerfilSeleccionado(null)} eventos={eventos.filter(e => e.creadorId === perfilSeleccionado.id)} />;
+            }
+
+            return (
+                <div className="min-h-screen bg-gray-50 pb-20">
+                    {eventoSeleccionado && <DetalleEvento evento={eventoSeleccionado} creador={perfiles[eventoSeleccionado.creadorId]} onClose={() => setEventoSeleccionado(null)} onVerPerfil={(p) => { setEventoSeleccionado(null); setPerfilSeleccionado(p); }} getTimeRemaining={getTimeRemaining} />}
+                    
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 sticky top-0 z-20 shadow-lg">
+                        <div className="max-w-4xl mx-auto flex items-center justify-between">
+                            <div>
+                                <h1 className="text-xl font-bold">www.estanoche.es</h1>
+                                <p className="text-xs text-indigo-100">Tu agenda de ocio</p>
+                            </div>
+                            <a href="mailto:contacto@estanoche.es" className="bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg text-sm font-semibold transition">
+                                📧 Contacto
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Filtros */}
+                    <div className="bg-white border-b sticky top-[72px] z-10 shadow-sm">
+                        <div className="max-w-4xl mx-auto p-3 space-y-3">
+                            {/* Ciudad */}
+                            <div>
+                                <label className="text-xs font-semibold text-gray-600 mb-1 block">CIUDAD</label>
+                                <div className="flex gap-2 items-center flex-wrap">
+                                    {Object.values(ciudadesData).map(c => (
+                                        <button key={c.id} onClick={() => setCiudadSeleccionada(c.id)} className={`px-3 py-1 rounded-full text-sm transition ${ciudadSeleccionada === c.id ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                                            {c.nombre}
+                                        </button>
+                                    ))}
+                                    <label className="flex items-center gap-1 text-xs text-gray-600 ml-2">
+                                        <input type="checkbox" checked={mostrarCercanas} onChange={(e) => setMostrarCercanas(e.target.checked)} className="rounded" />
+                                        + cercanas
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Filtro Horario */}
+                            <div>
+                                <label className="text-xs font-semibold text-gray-600 mb-1 block">MOSTRAR DESDE</label>
+                                <select value={filtroHora} onChange={(e) => setFiltroHora(e.target.value)} className="w-full sm:w-auto px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    {horasDisponibles.map(h => <option key={h.valor} value={h.valor}>{h.label}</option>)}
+                                </select>
+                            </div>
+
+                            {/* Categorías */}
+                            <div>
+                                <label className="text-xs font-semibold text-gray-600 mb-1 block">CATEGORÍA</label>
+                                <div className="flex gap-2 overflow-x-auto pb-2">
+                                    {categorias.map(cat => (
+                                        <button key={cat.id} onClick={() => setCategoriaSeleccionada(cat.id)} className={`flex items-center gap-1 px-3 py-1 rounded-full whitespace-nowrap text-sm transition ${categoriaSeleccionada === cat.id ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                                            <span>{cat.icon}</span><span>{cat.nombre}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Lista de Eventos */}
+                    <div className="max-w-4xl mx-auto p-4 space-y-4">
+                        {eventosFiltrados.map(evento => {
+                            const creador = perfiles[evento.creadorId];
+                            const timeRemaining = getTimeRemaining(evento.fechaFin);
+                            return (
+                                <div key={evento.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer" onClick={() => setEventoSeleccionado(evento)}>
+                                    <div className="p-4">
+                                        <div className="flex items-start justify-between mb-3">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-3xl">{evento.imagen}</span>
+                                                <div>
+                                                    <button onClick={(e) => { e.stopPropagation(); setPerfilSeleccionado(creador); }} className="font-bold text-gray-800 hover:text-indigo-600 text-left">
+                                                        {creador.nombre}
+                                                    </button>
+                                                    <p className="text-xs text-gray-500">{ciudadesData[creador.ciudad].nombre}</p>
+                                                </div>
+                                            </div>
+                                            {evento.esPublicidad && <div className="publicidad-badge">Publicidad</div>}
+                                        </div>
+                                        <h3 className="text-lg font-bold text-gray-800 mb-2">{evento.titulo}</h3>
+                                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{evento.descripcion}</p>
+                                        <div className="flex items-center justify-between pt-3 border-t">
+                                            <div className="flex items-baseline gap-2">
+                                                <span className="text-xl font-bold text-indigo-600">{evento.precio}</span>
+                                            </div>
+                                            <div className={`flex items-center gap-1 ${timeRemaining.color}`}>
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                <span className="text-sm font-semibold">{timeRemaining.text}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+                        {eventosFiltrados.length === 0 && (
+                            <div className="text-center py-12 bg-white rounded-xl">
+                                <div className="text-6xl mb-4">😔</div>
+                                <h3 className="text-xl font-semibold text-gray-800 mb-2">No hay eventos</h3>
+                                <p className="text-gray-600 mb-4">Ajusta los filtros para ver más</p>
+                                <a href="registro.html" className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700">
+                                    🚀 Publica tu evento
+                                </a>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Footer CTA */}
+                    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-indigo-600 to-purple-600 p-4 shadow-lg">
+                        <div className="max-w-4xl mx-auto flex items-center justify-between">
+                            <p className="text-white text-sm font-semibold">¿Quieres publicar eventos?</p>
+                            <a href="registro.html" className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-bold hover:bg-indigo-50 transition">
+                                Empieza aquí
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // MODAL DETALLE EVENTO
+        function DetalleEvento({ evento, creador, onClose, onVerPerfil, getTimeRemaining }) {
+            const timeRemaining = getTimeRemaining(evento.fechaFin);
+            return (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+                    <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+                        <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between z-10">
+                            <h2 className="text-xl font-bold">Detalle del evento</h2>
+                            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
+                        <div className="p-6">
+                            <div className="flex items-start gap-4 mb-6">
+                                <span className="text-5xl">{evento.imagen}</span>
+                                <div className="flex-1">
+                                    <h3 className="text-2xl font-bold text-gray-800 mb-2">{evento.titulo}</h3>
+                                    <button onClick={() => onVerPerfil(creador)} className="flex items-center gap-2 text-indigo-600 hover:underline mb-2">
+                                        <span className="font-semibold">{creador.nombre}</span>
+                                    </button>
+                                    {evento.esPublicidad && <div className="publicidad-badge inline-block">Publicidad</div>}
+                                </div>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                                <p className="text-gray-700 leading-relaxed whitespace-pre-line">{evento.descripcion}</p>
+                            </div>
+                            <div className="flex items-center justify-between mb-6 p-4 bg-indigo-50 rounded-lg">
+                                <div>
+                                    <div className="text-3xl font-bold text-indigo-600 mb-1">{evento.precio}</div>
+                                    <p className="text-xs text-gray-600">{evento.fechaInicio.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</p>
+                                </div>
+                                <div className={`flex items-center gap-2 ${timeRemaining.color}`}>
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span className="font-bold">{timeRemaining.text}</span>
+                                </div>
+                            </div>
+                            {evento.esPublicidad && (
+                                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg p-4 text-center">
+                                    <p className="font-semibold mb-2">📣 Espacio publicitario disponible</p>
+                                    <p className="text-sm text-indigo-100 mb-3">Este espacio puede ser tuyo. Promociona tu negocio, evento o actividad.</p>
+                                    <a href="registro.html" className="inline-block bg-white text-indigo-600 px-6 py-2 rounded-lg font-bold hover:bg-indigo-50">
+                                        Publicar aquí
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // MODAL PERFIL CREADOR
+        function PerfilCreador({ perfil, onClose, eventos }) {
+            return (
+                <div className="fixed inset-0 bg-gray-50 z-50 overflow-y-auto">
+                    <div className="sticky top-0 bg-white border-b p-4 flex items-center gap-3 z-10 shadow-sm">
+                        <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <h2 className="text-xl font-bold">Perfil</h2>
+                    </div>
+                    <div className="max-w-4xl mx-auto p-4">
+                        <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6">
+                            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <span className="text-6xl">{perfil.imagen}</span>
+                                    <div>
+                                        <h1 className="text-3xl font-bold mb-2">{perfil.nombre}</h1>
+                                        <p className="text-indigo-100">{perfil.tipo === 'local_fijo' ? 'Local fijo' : 'Itinerante'}</p>
+                                    </div>
+                                </div>
+                                <p className="text-indigo-50">{perfil.descripcion}</p>
+                            </div>
+                            <div className="p-6">
+                                {perfil.esPublicidad && (
+                                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                                        <p className="text-sm text-yellow-800 font-semibold mb-2">📣 Perfil de ejemplo publicitario</p>
+                                        <p className="text-sm text-yellow-700 mb-3">Este es un espacio de demostración. Aquí podría estar tu perfil completo con tus datos reales.</p>
+                                        <a href="registro.html" className="inline-block bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-700">
+                                            Crear mi perfil
+                                        </a>
+                                    </div>
+                                )}
+                                <h3 className="font-bold text-gray-800 mb-3">Contacto</h3>
+                                <div className="space-y-2 text-sm">
+                                    {perfil.telefono && <p className="text-gray-700">📞 {perfil.telefono}</p>}
+                                    {perfil.instagram && <p className="text-gray-700">📸 {perfil.instagram}</p>}
+                                    {perfil.web && <p className="text-gray-700">🌐 {perfil.web}</p>}
+                                    {perfil.whatsapp && <p className="text-gray-700">💬 WhatsApp disponible</p>}
+                                </div>
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-bold mb-4">Eventos ({eventos.length})</h3>
+                        <div className="space-y-4">
+                            {eventos.map(e => (
+                                <div key={e.id} className="bg-white rounded-xl shadow-md p-4">
+                                    <div className="flex items-start gap-3">
+                                        <span className="text-3xl">{e.imagen}</span>
+                                        <div className="flex-1">
+                                            <h4 className="font-bold text-gray-800 mb-1">{e.titulo}</h4>
+                                            <p className="text-sm text-gray-600 mb-2 line-clamp-2">{e.descripcion}</p>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-lg font-bold text-indigo-600">{e.precio}</span>
+                                                <span className="text-sm text-gray-500">{e.fechaInicio.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<AgendaApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>

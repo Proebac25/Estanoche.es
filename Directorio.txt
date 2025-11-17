@@ -1,0 +1,1578 @@
+Listado de rutas de carpetas
+El número de serie del volumen es 8452-3CEB
+D:.
+├───docs
+├───node_modules
+│ ├───.bin
+│ ├───.vite
+│ │ └───deps
+│ ├───.vite-temp
+│ ├───@babel
+│ │ ├───code-frame
+│ │ │ └───lib
+│ │ ├───compat-data
+│ │ │ └───data
+│ │ ├───core
+│ │ │ ├───lib
+│ │ │ │ ├───config
+│ │ │ │ │ ├───files
+│ │ │ │ │ ├───helpers
+│ │ │ │ │ └───validation
+│ │ │ │ ├───errors
+│ │ │ │ ├───gensync-utils
+│ │ │ │ ├───parser
+│ │ │ │ │ └───util
+│ │ │ │ ├───tools
+│ │ │ │ ├───transformation
+│ │ │ │ │ ├───file
+│ │ │ │ │ └───util
+│ │ │ │ └───vendor
+│ │ │ └───src
+│ │ │ └───config
+│ │ │ └───files
+│ │ ├───generator
+│ │ │ └───lib
+│ │ │ ├───generators
+│ │ │ └───node
+│ │ ├───helper-annotate-as-pure
+│ │ │ └───lib
+│ │ ├───helper-compilation-targets
+│ │ │ └───lib
+│ │ ├───helper-create-class-features-plugin
+│ │ │ └───lib
+│ │ ├───helper-create-regexp-features-plugin
+│ │ │ └───lib
+│ │ ├───helper-define-polyfill-provider
+│ │ │ ├───esm
+│ │ │ └───lib
+│ │ │ ├───browser
+│ │ │ ├───node
+│ │ │ └───visitors
+│ │ ├───helper-globals
+│ │ │ └───data
+│ │ ├───helper-member-expression-to-functions
+│ │ │ └───lib
+│ │ ├───helper-module-imports
+│ │ │ └───lib
+│ │ ├───helper-module-transforms
+│ │ │ └───lib
+│ │ ├───helper-optimise-call-expression
+│ │ │ └───lib
+│ │ ├───helper-plugin-utils
+│ │ │ └───lib
+│ │ ├───helper-remap-async-to-generator
+│ │ │ └───lib
+│ │ ├───helper-replace-supers
+│ │ │ └───lib
+│ │ ├───helper-skip-transparent-expression-wrappers
+│ │ │ └───lib
+│ │ ├───helper-string-parser
+│ │ │ └───lib
+│ │ ├───helper-validator-identifier
+│ │ │ └───lib
+│ │ ├───helper-validator-option
+│ │ │ └───lib
+│ │ ├───helper-wrap-function
+│ │ │ └───lib
+│ │ ├───helpers
+│ │ │ └───lib
+│ │ │ └───helpers
+│ │ ├───parser
+│ │ │ ├───bin
+│ │ │ ├───lib
+│ │ │ └───typings
+│ │ ├───plugin-bugfix-firefox-class-in-computed-class-key
+│ │ │ └───lib
+│ │ ├───plugin-bugfix-safari-class-field-initializer-scope
+│ │ │ └───lib
+│ │ ├───plugin-bugfix-safari-id-destructuring-collision-in-function-expression
+│ │ │ └───lib
+│ │ ├───plugin-bugfix-v8-spread-parameters-in-optional-chaining
+│ │ │ └───lib
+│ │ ├───plugin-bugfix-v8-static-class-fields-redefine-readonly
+│ │ │ └───lib
+│ │ ├───plugin-proposal-private-property-in-object
+│ │ │ └───lib
+│ │ ├───plugin-syntax-import-assertions
+│ │ │ └───lib
+│ │ ├───plugin-syntax-import-attributes
+│ │ │ └───lib
+│ │ ├───plugin-syntax-unicode-sets-regex
+│ │ │ └───lib
+│ │ ├───plugin-transform-arrow-functions
+│ │ │ └───lib
+│ │ ├───plugin-transform-async-generator-functions
+│ │ │ └───lib
+│ │ ├───plugin-transform-async-to-generator
+│ │ │ └───lib
+│ │ ├───plugin-transform-block-scoped-functions
+│ │ │ └───lib
+│ │ ├───plugin-transform-block-scoping
+│ │ │ └───lib
+│ │ ├───plugin-transform-class-properties
+│ │ │ └───lib
+│ │ ├───plugin-transform-class-static-block
+│ │ │ └───lib
+│ │ ├───plugin-transform-classes
+│ │ │ └───lib
+│ │ ├───plugin-transform-computed-properties
+│ │ │ └───lib
+│ │ ├───plugin-transform-destructuring
+│ │ │ └───lib
+│ │ ├───plugin-transform-dotall-regex
+│ │ │ └───lib
+│ │ ├───plugin-transform-duplicate-keys
+│ │ │ └───lib
+│ │ ├───plugin-transform-duplicate-named-capturing-groups-regex
+│ │ │ └───lib
+│ │ ├───plugin-transform-dynamic-import
+│ │ │ └───lib
+│ │ ├───plugin-transform-explicit-resource-management
+│ │ │ └───lib
+│ │ ├───plugin-transform-exponentiation-operator
+│ │ │ └───lib
+│ │ ├───plugin-transform-export-namespace-from
+│ │ │ └───lib
+│ │ ├───plugin-transform-for-of
+│ │ │ └───lib
+│ │ ├───plugin-transform-function-name
+│ │ │ └───lib
+│ │ ├───plugin-transform-json-strings
+│ │ │ └───lib
+│ │ ├───plugin-transform-literals
+│ │ │ └───lib
+│ │ ├───plugin-transform-logical-assignment-operators
+│ │ │ └───lib
+│ │ ├───plugin-transform-member-expression-literals
+│ │ │ └───lib
+│ │ ├───plugin-transform-modules-amd
+│ │ │ └───lib
+│ │ ├───plugin-transform-modules-commonjs
+│ │ │ └───lib
+│ │ ├───plugin-transform-modules-systemjs
+│ │ │ └───lib
+│ │ ├───plugin-transform-modules-umd
+│ │ │ └───lib
+│ │ ├───plugin-transform-named-capturing-groups-regex
+│ │ │ └───lib
+│ │ ├───plugin-transform-new-target
+│ │ │ └───lib
+│ │ ├───plugin-transform-nullish-coalescing-operator
+│ │ │ └───lib
+│ │ ├───plugin-transform-numeric-separator
+│ │ │ └───lib
+│ │ ├───plugin-transform-object-rest-spread
+│ │ │ └───lib
+│ │ ├───plugin-transform-object-super
+│ │ │ └───lib
+│ │ ├───plugin-transform-optional-catch-binding
+│ │ │ └───lib
+│ │ ├───plugin-transform-optional-chaining
+│ │ │ └───lib
+│ │ ├───plugin-transform-parameters
+│ │ │ └───lib
+│ │ ├───plugin-transform-private-methods
+│ │ │ └───lib
+│ │ ├───plugin-transform-private-property-in-object
+│ │ │ └───lib
+│ │ ├───plugin-transform-property-literals
+│ │ │ └───lib
+│ │ ├───plugin-transform-react-jsx-self
+│ │ │ └───lib
+│ │ ├───plugin-transform-react-jsx-source
+│ │ │ └───lib
+│ │ ├───plugin-transform-regenerator
+│ │ │ └───lib
+│ │ │ └───regenerator
+│ │ ├───plugin-transform-regexp-modifiers
+│ │ │ └───lib
+│ │ ├───plugin-transform-reserved-words
+│ │ │ └───lib
+│ │ ├───plugin-transform-shorthand-properties
+│ │ │ └───lib
+│ │ ├───plugin-transform-spread
+│ │ │ └───lib
+│ │ ├───plugin-transform-sticky-regex
+│ │ │ └───lib
+│ │ ├───plugin-transform-template-literals
+│ │ │ └───lib
+│ │ ├───plugin-transform-typeof-symbol
+│ │ │ └───lib
+│ │ ├───plugin-transform-unicode-escapes
+│ │ │ └───lib
+│ │ ├───plugin-transform-unicode-property-regex
+│ │ │ └───lib
+│ │ ├───plugin-transform-unicode-regex
+│ │ │ └───lib
+│ │ ├───plugin-transform-unicode-sets-regex
+│ │ │ └───lib
+│ │ ├───preset-env
+│ │ │ ├───data
+│ │ │ └───lib
+│ │ │ └───polyfills
+│ │ ├───preset-modules
+│ │ │ ├───lib
+│ │ │ │ └───plugins
+│ │ │ │ ├───transform-async-arrows-in-class
+│ │ │ │ ├───transform-edge-default-parameters
+│ │ │ │ ├───transform-edge-function-name
+│ │ │ │ ├───transform-jsx-spread
+│ │ │ │ ├───transform-safari-block-shadowing
+│ │ │ │ ├───transform-safari-for-shadowing
+│ │ │ │ └───transform-tagged-template-caching
+│ │ │ └───src
+│ │ │ └───plugins
+│ │ │ ├───transform-async-arrows-in-class
+│ │ │ ├───transform-edge-default-parameters
+│ │ │ ├───transform-edge-function-name
+│ │ │ ├───transform-jsx-spread
+│ │ │ ├───transform-safari-block-shadowing
+│ │ │ ├───transform-safari-for-shadowing
+│ │ │ └───transform-tagged-template-caching
+│ │ ├───runtime
+│ │ │ ├───helpers
+│ │ │ │ └───esm
+│ │ │ └───regenerator
+│ │ ├───template
+│ │ │ └───lib
+│ │ ├───traverse
+│ │ │ └───lib
+│ │ │ ├───path
+│ │ │ │ ├───inference
+│ │ │ │ └───lib
+│ │ │ └───scope
+│ │ │ └───lib
+│ │ └───types
+│ │ └───lib
+│ │ ├───asserts
+│ │ │ └───generated
+│ │ ├───ast-types
+│ │ │ └───generated
+│ │ ├───builders
+│ │ │ ├───flow
+│ │ │ ├───generated
+│ │ │ ├───react
+│ │ │ └───typescript
+│ │ ├───clone
+│ │ ├───comments
+│ │ ├───constants
+│ │ │ └───generated
+│ │ ├───converters
+│ │ ├───definitions
+│ │ ├───modifications
+│ │ │ ├───flow
+│ │ │ └───typescript
+│ │ ├───retrievers
+│ │ ├───traverse
+│ │ ├───utils
+│ │ │ └───react
+│ │ └───validators
+│ │ ├───generated
+│ │ └───react
+│ ├───@esbuild
+│ │ └───win32-x64
+│ ├───@eslint
+│ │ ├───config-array
+│ │ │ └───dist
+│ │ │ ├───cjs
+│ │ │ │ └───std__path
+│ │ │ └───esm
+│ │ │ └───std__path
+│ │ ├───config-helpers
+│ │ │ └───dist
+│ │ │ ├───cjs
+│ │ │ └───esm
+│ │ ├───core
+│ │ │ └───dist
+│ │ │ ├───cjs
+│ │ │ └───esm
+│ │ ├───eslintrc
+│ │ │ ├───conf
+│ │ │ ├───dist
+│ │ │ ├───lib
+│ │ │ │ ├───config-array
+│ │ │ │ ├───shared
+│ │ │ │ └───types
+│ │ │ └───node_modules
+│ │ │ └───globals
+│ │ ├───js
+│ │ │ ├───src
+│ │ │ │ └───configs
+│ │ │ └───types
+│ │ ├───object-schema
+│ │ │ └───dist
+│ │ │ ├───cjs
+│ │ │ └───esm
+│ │ └───plugin-kit
+│ │ └───dist
+│ │ ├───cjs
+│ │ └───esm
+│ ├───@eslint-community
+│ │ ├───eslint-utils
+│ │ │ └───node_modules
+│ │ │ └───eslint-visitor-keys
+│ │ │ ├───dist
+│ │ │ └───lib
+│ │ └───regexpp
+│ ├───@humanfs
+│ │ ├───core
+│ │ │ ├───dist
+│ │ │ └───src
+│ │ └───node
+│ │ ├───dist
+│ │ └───src
+│ ├───@humanwhocodes
+│ │ ├───module-importer
+│ │ │ ├───dist
+│ │ │ └───src
+│ │ └───retry
+│ │ └───dist
+│ ├───@jridgewell
+│ │ ├───gen-mapping
+│ │ │ ├───dist
+│ │ │ │ └───types
+│ │ │ ├───src
+│ │ │ └───types
+│ │ ├───remapping
+│ │ │ ├───dist
+│ │ │ ├───src
+│ │ │ └───types
+│ │ ├───resolve-uri
+│ │ │ └───dist
+│ │ │ └───types
+│ │ ├───source-map
+│ │ │ ├───dist
+│ │ │ ├───src
+│ │ │ └───types
+│ │ ├───sourcemap-codec
+│ │ │ ├───dist
+│ │ │ ├───src
+│ │ │ └───types
+│ │ └───trace-mapping
+│ │ ├───dist
+│ │ ├───src
+│ │ └───types
+│ ├───@remix-run
+│ │ └───router
+│ │ └───dist
+│ ├───@rolldown
+│ │ └───pluginutils
+│ │ └───dist
+│ ├───@rollup
+│ │ ├───plugin-node-resolve
+│ │ │ ├───dist
+│ │ │ │ ├───cjs
+│ │ │ │ └───es
+│ │ │ └───types
+│ │ ├───plugin-terser
+│ │ │ ├───dist
+│ │ │ │ ├───cjs
+│ │ │ │ └───es
+│ │ │ ├───src
+│ │ │ └───types
+│ │ ├───pluginutils
+│ │ │ ├───dist
+│ │ │ │ ├───cjs
+│ │ │ │ └───es
+│ │ │ └───types
+│ │ ├───rollup-win32-x64-gnu
+│ │ └───rollup-win32-x64-msvc
+│ ├───@supabase
+│ │ ├───auth-js
+│ │ │ ├───dist
+│ │ │ │ ├───main
+│ │ │ │ │ └───lib
+│ │ │ │ │ └───web3
+│ │ │ │ └───module
+│ │ │ │ └───lib
+│ │ │ │ └───web3
+│ │ │ └───src
+│ │ │ └───lib
+│ │ │ └───web3
+│ │ ├───functions-js
+│ │ │ ├───dist
+│ │ │ │ ├───main
+│ │ │ │ └───module
+│ │ │ └───src
+│ │ ├───postgrest-js
+│ │ │ ├───dist
+│ │ │ │ ├───cjs
+│ │ │ │ │ ├───select-query-parser
+│ │ │ │ │ └───types
+│ │ │ │ │ └───common
+│ │ │ │ └───esm
+│ │ │ └───src
+│ │ │ ├───select-query-parser
+│ │ │ └───types
+│ │ │ └───common
+│ │ ├───realtime-js
+│ │ │ ├───dist
+│ │ │ │ ├───main
+│ │ │ │ │ └───lib
+│ │ │ │ └───module
+│ │ │ │ └───lib
+│ │ │ └───src
+│ │ │ └───lib
+│ │ ├───storage-js
+│ │ │ ├───dist
+│ │ │ │ ├───main
+│ │ │ │ │ ├───lib
+│ │ │ │ │ │ └───vectors
+│ │ │ │ │ └───packages
+│ │ │ │ ├───module
+│ │ │ │ │ ├───lib
+│ │ │ │ │ │ └───vectors
+│ │ │ │ │ └───packages
+│ │ │ │ └───umd
+│ │ │ └───src
+│ │ │ ├───lib
+│ │ │ │ └───vectors
+│ │ │ └───packages
+│ │ └───supabase-js
+│ │ ├───dist
+│ │ │ ├───main
+│ │ │ │ └───lib
+│ │ │ │ └───rest
+│ │ │ │ └───types
+│ │ │ │ └───common
+│ │ │ ├───module
+│ │ │ │ └───lib
+│ │ │ │ └───rest
+│ │ │ │ └───types
+│ │ │ │ └───common
+│ │ │ └───umd
+│ │ └───src
+│ │ └───lib
+│ │ └───rest
+│ │ └───types
+│ │ └───common
+│ ├───@surma
+│ │ └───rollup-plugin-off-main-thread
+│ │ └───tests
+│ │ └───fixtures
+│ │ ├───amd-function-name
+│ │ │ └───build
+│ │ ├───assets-in-worker
+│ │ │ └───build
+│ │ │ └───assets
+│ │ ├───dynamic-import
+│ │ │ └───build
+│ │ ├───import-meta
+│ │ │ └───build
+│ │ ├───import-meta-worker
+│ │ │ └───build
+│ │ ├───import-worker-url
+│ │ │ └───build
+│ │ ├───import-worker-url-custom-scheme
+│ │ │ └───build
+│ │ ├───module-worker
+│ │ │ └───build
+│ │ ├───more-workers
+│ │ │ └───build
+│ │ ├───public-path
+│ │ │ └───build
+│ │ ├───simple-bundle
+│ │ │ └───build
+│ │ ├───single-default
+│ │ │ └───build
+│ │ ├───url-import-meta-worker
+│ │ │ └───build
+│ │ └───worker
+│ │ └───build
+│ ├───@types
+│ │ ├───babel__core
+│ │ ├───babel__generator
+│ │ ├───babel__template
+│ │ ├───babel__traverse
+│ │ ├───estree
+│ │ ├───json-schema
+│ │ ├───node
+│ │ │ ├───assert
+│ │ │ ├───compatibility
+│ │ │ ├───dns
+│ │ │ ├───fs
+│ │ │ ├───readline
+│ │ │ ├───stream
+│ │ │ ├───timers
+│ │ │ ├───ts5.6
+│ │ │ │ └───compatibility
+│ │ │ ├───ts5.7
+│ │ │ │ └───compatibility
+│ │ │ └───web-globals
+│ │ ├───phoenix
+│ │ ├───react
+│ │ │ └───ts5.0
+│ │ ├───react-dom
+│ │ │ └───test-utils
+│ │ ├───resolve
+│ │ ├───trusted-types
+│ │ │ └───lib
+│ │ └───ws
+│ ├───@vitejs
+│ │ └───plugin-react
+│ │ ├───dist
+│ │ └───types
+│ ├───acorn
+│ │ ├───bin
+│ │ └───dist
+│ ├───acorn-jsx
+│ ├───ajv
+│ │ ├───dist
+│ │ ├───lib
+│ │ │ ├───compile
+│ │ │ ├───dot
+│ │ │ ├───dotjs
+│ │ │ └───refs
+│ │ └───scripts
+│ ├───ansi-styles
+│ ├───argparse
+│ │ └───lib
+│ ├───array-buffer-byte-length
+│ │ ├───.github
+│ │ └───test
+│ ├───arraybuffer.prototype.slice
+│ │ └───test
+│ ├───async
+│ │ ├───dist
+│ │ └───internal
+│ ├───async-function
+│ │ ├───.github
+│ │ └───test
+│ ├───at-least-node
+│ ├───autoprefixer
+│ │ ├───bin
+│ │ ├───data
+│ │ └───lib
+│ │ └───hacks
+│ ├───available-typed-arrays
+│ │ ├───.github
+│ │ └───test
+│ ├───babel-plugin-polyfill-corejs2
+│ │ ├───esm
+│ │ └───lib
+│ ├───babel-plugin-polyfill-corejs3
+│ │ ├───core-js-compat
+│ │ ├───esm
+│ │ └───lib
+│ ├───babel-plugin-polyfill-regenerator
+│ │ ├───esm
+│ │ └───lib
+│ ├───balanced-match
+│ │ └───.github
+│ ├───baseline-browser-mapping
+│ │ └───dist
+│ ├───brace-expansion
+│ ├───browserslist
+│ ├───buffer-from
+│ ├───call-bind
+│ │ ├───.github
+│ │ └───test
+│ ├───call-bind-apply-helpers
+│ │ ├───.github
+│ │ └───test
+│ ├───call-bound
+│ │ ├───.github
+│ │ └───test
+│ ├───callsites
+│ ├───caniuse-lite
+│ │ ├───data
+│ │ │ ├───features
+│ │ │ └───regions
+│ │ └───dist
+│ │ ├───lib
+│ │ └───unpacker
+│ ├───chalk
+│ │ └───source
+│ ├───color-convert
+│ ├───color-name
+│ ├───commander
+│ │ └───typings
+│ ├───common-tags
+│ │ ├───dist
+│ │ ├───es
+│ │ │ ├───codeBlock
+│ │ │ ├───commaLists
+│ │ │ ├───commaListsAnd
+│ │ │ ├───commaListsOr
+│ │ │ ├───html
+│ │ │ ├───inlineArrayTransformer
+│ │ │ ├───inlineLists
+│ │ │ ├───oneLine
+│ │ │ ├───oneLineCommaLists
+│ │ │ ├───oneLineCommaListsAnd
+│ │ │ ├───oneLineCommaListsOr
+│ │ │ ├───oneLineInlineLists
+│ │ │ ├───oneLineTrim
+│ │ │ ├───removeNonPrintingValuesTransformer
+│ │ │ ├───replaceResultTransformer
+│ │ │ ├───replaceStringTransformer
+│ │ │ ├───replaceSubstitutionTransformer
+│ │ │ ├───safeHtml
+│ │ │ ├───source
+│ │ │ ├───splitStringTransformer
+│ │ │ ├───stripIndent
+│ │ │ ├───stripIndents
+│ │ │ ├───stripIndentTransformer
+│ │ │ ├───TemplateTag
+│ │ │ ├───trimResultTransformer
+│ │ │ └───utils
+│ │ │ └───readFromFixture
+│ │ └───lib
+│ │ ├───codeBlock
+│ │ ├───commaLists
+│ │ ├───commaListsAnd
+│ │ ├───commaListsOr
+│ │ ├───html
+│ │ ├───inlineArrayTransformer
+│ │ ├───inlineLists
+│ │ ├───oneLine
+│ │ ├───oneLineCommaLists
+│ │ ├───oneLineCommaListsAnd
+│ │ ├───oneLineCommaListsOr
+│ │ ├───oneLineInlineLists
+│ │ ├───oneLineTrim
+│ │ ├───removeNonPrintingValuesTransformer
+│ │ ├───replaceResultTransformer
+│ │ ├───replaceStringTransformer
+│ │ ├───replaceSubstitutionTransformer
+│ │ ├───safeHtml
+│ │ ├───source
+│ │ ├───splitStringTransformer
+│ │ ├───stripIndent
+│ │ ├───stripIndents
+│ │ ├───stripIndentTransformer
+│ │ ├───TemplateTag
+│ │ ├───trimResultTransformer
+│ │ └───utils
+│ │ └───readFromFixture
+│ ├───concat-map
+│ │ ├───example
+│ │ └───test
+│ ├───convert-source-map
+│ ├───core-js-compat
+│ ├───cross-spawn
+│ │ └───lib
+│ │ └───util
+│ ├───crypto-random-string
+│ ├───csstype
+│ ├───data-view-buffer
+│ │ ├───.github
+│ │ └───test
+│ ├───data-view-byte-length
+│ │ ├───.github
+│ │ └───test
+│ ├───data-view-byte-offset
+│ │ ├───.github
+│ │ └───test
+│ ├───debug
+│ │ └───src
+│ ├───deep-is
+│ │ ├───example
+│ │ └───test
+│ ├───deepmerge
+│ │ └───dist
+│ ├───define-data-property
+│ │ ├───.github
+│ │ └───test
+│ ├───define-properties
+│ │ └───.github
+│ ├───dunder-proto
+│ │ ├───.github
+│ │ └───test
+│ ├───ejs
+│ │ ├───bin
+│ │ └───lib
+│ ├───electron-to-chromium
+│ ├───es-abstract
+│ │ ├───2015
+│ │ │ └───tables
+│ │ ├───2016
+│ │ │ └───tables
+│ │ ├───2017
+│ │ │ └───tables
+│ │ ├───2018
+│ │ │ └───tables
+│ │ ├───2019
+│ │ │ └───tables
+│ │ ├───2020
+│ │ │ ├───BigInt
+│ │ │ ├───Number
+│ │ │ └───tables
+│ │ ├───2021
+│ │ │ ├───BigInt
+│ │ │ ├───Number
+│ │ │ └───tables
+│ │ ├───2022
+│ │ │ ├───BigInt
+│ │ │ ├───Number
+│ │ │ └───tables
+│ │ ├───2023
+│ │ │ ├───BigInt
+│ │ │ ├───Number
+│ │ │ └───tables
+│ │ ├───2024
+│ │ │ ├───BigInt
+│ │ │ ├───Number
+│ │ │ └───tables
+│ │ ├───2025
+│ │ │ ├───BigInt
+│ │ │ ├───Number
+│ │ │ └───tables
+│ │ ├───5
+│ │ ├───helpers
+│ │ │ └───records
+│ │ └───operations
+│ ├───es-define-property
+│ │ ├───.github
+│ │ └───test
+│ ├───es-errors
+│ │ ├───.github
+│ │ └───test
+│ ├───es-object-atoms
+│ │ ├───.github
+│ │ └───test
+│ ├───es-set-tostringtag
+│ │ └───test
+│ ├───es-to-primitive
+│ │ ├───.github
+│ │ ├───helpers
+│ │ └───test
+│ ├───esbuild
+│ │ ├───bin
+│ │ └───lib
+│ ├───escalade
+│ │ ├───dist
+│ │ └───sync
+│ ├───escape-string-regexp
+│ ├───eslint
+│ │ ├───bin
+│ │ ├───conf
+│ │ ├───lib
+│ │ │ ├───cli-engine
+│ │ │ │ └───formatters
+│ │ │ ├───config
+│ │ │ ├───eslint
+│ │ │ ├───languages
+│ │ │ │ └───js
+│ │ │ │ └───source-code
+│ │ │ │ └───token-store
+│ │ │ ├───linter
+│ │ │ │ └───code-path-analysis
+│ │ │ ├───rule-tester
+│ │ │ ├───rules
+│ │ │ │ └───utils
+│ │ │ │ └───unicode
+│ │ │ ├───services
+│ │ │ ├───shared
+│ │ │ └───types
+│ │ └───messages
+│ ├───eslint-plugin-react-hooks
+│ │ └───cjs
+│ ├───eslint-plugin-react-refresh
+│ ├───eslint-scope
+│ │ ├───dist
+│ │ └───lib
+│ ├───eslint-visitor-keys
+│ │ ├───dist
+│ │ └───lib
+│ ├───espree
+│ │ ├───dist
+│ │ └───lib
+│ ├───esquery
+│ │ └───dist
+│ ├───esrecurse
+│ ├───estraverse
+│ ├───estree-walker
+│ │ ├───dist
+│ │ │ ├───esm
+│ │ │ └───umd
+│ │ ├───src
+│ │ └───types
+│ ├───esutils
+│ │ └───lib
+│ ├───fast-deep-equal
+│ │ └───es6
+│ ├───fast-json-stable-stringify
+│ │ ├───.github
+│ │ ├───benchmark
+│ │ ├───example
+│ │ └───test
+│ ├───fast-levenshtein
+│ ├───fast-uri
+│ │ ├───.github
+│ │ │ └───workflows
+│ │ ├───benchmark
+│ │ ├───lib
+│ │ ├───test
+│ │ │ └───fixtures
+│ │ └───types
+│ ├───fdir
+│ │ └───dist
+│ ├───file-entry-cache
+│ ├───filelist
+│ │ └───node_modules
+│ │ ├───brace-expansion
+│ │ │ └───.github
+│ │ └───minimatch
+│ │ └───lib
+│ ├───find-up
+│ ├───flat-cache
+│ │ └───src
+│ ├───flatted
+│ │ ├───cjs
+│ │ ├───esm
+│ │ ├───php
+│ │ ├───python
+│ │ └───types
+│ ├───for-each
+│ │ ├───.github
+│ │ └───test
+│ ├───fraction.js
+│ │ ├───dist
+│ │ ├───examples
+│ │ ├───src
+│ │ └───tests
+│ ├───fs-extra
+│ │ └───lib
+│ │ ├───copy
+│ │ ├───copy-sync
+│ │ ├───empty
+│ │ ├───ensure
+│ │ ├───fs
+│ │ ├───json
+│ │ ├───mkdirs
+│ │ ├───move
+│ │ ├───move-sync
+│ │ ├───output
+│ │ ├───path-exists
+│ │ ├───remove
+│ │ └───util
+│ ├───fs.realpath
+│ ├───function-bind
+│ │ ├───.github
+│ │ └───test
+│ ├───function.prototype.name
+│ │ ├───.github
+│ │ ├───helpers
+│ │ └───test
+│ ├───functions-have-names
+│ │ ├───.github
+│ │ └───test
+│ ├───generator-function
+│ │ ├───.github
+│ │ └───test
+│ ├───gensync
+│ │ └───test
+│ ├───get-intrinsic
+│ │ ├───.github
+│ │ └───test
+│ ├───get-own-enumerable-property-symbols
+│ │ └───lib
+│ ├───get-proto
+│ │ ├───.github
+│ │ └───test
+│ ├───get-symbol-description
+│ │ ├───.github
+│ │ └───test
+│ ├───glob
+│ ├───glob-parent
+│ ├───globals
+│ ├───globalthis
+│ │ └───test
+│ ├───gopd
+│ │ ├───.github
+│ │ └───test
+│ ├───graceful-fs
+│ ├───has-bigints
+│ │ ├───.github
+│ │ └───test
+│ ├───has-flag
+│ ├───has-property-descriptors
+│ │ ├───.github
+│ │ └───test
+│ ├───has-proto
+│ │ ├───.github
+│ │ └───test
+│ ├───has-symbols
+│ │ ├───.github
+│ │ └───test
+│ │ └───shams
+│ ├───has-tostringtag
+│ │ ├───.github
+│ │ └───test
+│ │ └───shams
+│ ├───hasown
+│ │ └───.github
+│ ├───hermes-estree
+│ │ └───dist
+│ │ └───generated
+│ ├───hermes-parser
+│ │ └───dist
+│ │ ├───babel
+│ │ ├───estree
+│ │ ├───generated
+│ │ ├───transform
+│ │ ├───traverse
+│ │ └───utils
+│ ├───idb
+│ │ └───build
+│ ├───ignore
+│ ├───import-fresh
+│ ├───imurmurhash
+│ ├───inflight
+│ ├───inherits
+│ ├───internal-slot
+│ │ ├───.github
+│ │ └───test
+│ ├───is-array-buffer
+│ │ ├───.github
+│ │ └───test
+│ ├───is-async-function
+│ │ └───test
+│ ├───is-bigint
+│ │ ├───.github
+│ │ └───test
+│ ├───is-boolean-object
+│ │ ├───.github
+│ │ └───test
+│ ├───is-callable
+│ │ ├───.github
+│ │ └───test
+│ ├───is-core-module
+│ │ └───test
+│ ├───is-data-view
+│ │ ├───.github
+│ │ └───test
+│ ├───is-date-object
+│ │ ├───.github
+│ │ └───test
+│ ├───is-extglob
+│ ├───is-finalizationregistry
+│ │ ├───.github
+│ │ └───test
+│ ├───is-generator-function
+│ │ └───test
+│ ├───is-glob
+│ ├───is-map
+│ │ ├───.github
+│ │ └───test
+│ ├───is-module
+│ ├───is-negative-zero
+│ │ ├───.github
+│ │ └───test
+│ ├───is-number-object
+│ │ ├───.github
+│ │ └───test
+│ ├───is-obj
+│ ├───is-regex
+│ │ └───test
+│ ├───is-regexp
+│ ├───is-set
+│ │ ├───.github
+│ │ └───test
+│ ├───is-shared-array-buffer
+│ │ ├───.github
+│ │ └───test
+│ ├───is-stream
+│ ├───is-string
+│ │ ├───.github
+│ │ └───test
+│ ├───is-symbol
+│ │ ├───.github
+│ │ └───test
+│ ├───is-typed-array
+│ │ ├───.github
+│ │ └───test
+│ ├───is-weakmap
+│ │ ├───.github
+│ │ └───test
+│ ├───is-weakref
+│ │ ├───.github
+│ │ └───test
+│ ├───is-weakset
+│ │ ├───.github
+│ │ └───test
+│ ├───isarray
+│ ├───isexe
+│ │ └───test
+│ ├───jake
+│ │ ├───bin
+│ │ ├───lib
+│ │ │ ├───task
+│ │ │ └───utils
+│ │ └───test
+│ │ ├───integration
+│ │ │ └───jakelib
+│ │ └───unit
+│ ├───js-tokens
+│ ├───js-yaml
+│ │ ├───bin
+│ │ ├───dist
+│ │ └───lib
+│ │ ├───schema
+│ │ └───type
+│ ├───jsesc
+│ │ ├───bin
+│ │ └───man
+│ ├───json-buffer
+│ │ └───test
+│ ├───json-schema
+│ │ └───lib
+│ ├───json-schema-traverse
+│ │ └───spec
+│ │ └───fixtures
+│ ├───json-stable-stringify-without-jsonify
+│ │ ├───example
+│ │ └───test
+│ ├───json5
+│ │ ├───dist
+│ │ └───lib
+│ ├───jsonfile
+│ ├───jsonpointer
+│ ├───keyv
+│ │ └───src
+│ ├───leven
+│ ├───levn
+│ │ └───lib
+│ ├───locate-path
+│ ├───lodash
+│ │ └───fp
+│ ├───lodash.debounce
+│ ├───lodash.merge
+│ ├───lodash.sortby
+│ ├───lru-cache
+│ ├───magic-string
+│ │ └───dist
+│ ├───math-intrinsics
+│ │ ├───.github
+│ │ ├───constants
+│ │ └───test
+│ ├───minimatch
+│ ├───ms
+│ ├───nanoid
+│ │ ├───async
+│ │ ├───bin
+│ │ ├───non-secure
+│ │ └───url-alphabet
+│ ├───natural-compare
+│ ├───node-releases
+│ │ └───data
+│ │ ├───processed
+│ │ └───release-schedule
+│ ├───normalize-range
+│ ├───object-inspect
+│ │ ├───.github
+│ │ ├───example
+│ │ └───test
+│ │ └───browser
+│ ├───object-keys
+│ │ └───test
+│ ├───object.assign
+│ │ ├───.github
+│ │ ├───dist
+│ │ └───test
+│ ├───once
+│ ├───optionator
+│ │ └───lib
+│ ├───own-keys
+│ │ ├───.github
+│ │ └───test
+│ ├───p-limit
+│ ├───p-locate
+│ ├───parent-module
+│ ├───path-exists
+│ ├───path-is-absolute
+│ ├───path-key
+│ ├───path-parse
+│ ├───picocolors
+│ ├───picomatch
+│ │ └───lib
+│ ├───possible-typed-array-names
+│ │ ├───.github
+│ │ └───test
+│ ├───postcss
+│ │ └───lib
+│ ├───postcss-value-parser
+│ │ └───lib
+│ ├───prelude-ls
+│ │ └───lib
+│ ├───pretty-bytes
+│ ├───punycode
+│ ├───randombytes
+│ ├───react
+│ │ └───cjs
+│ ├───react-dom
+│ │ └───cjs
+│ ├───react-refresh
+│ │ └───cjs
+│ ├───react-router
+│ │ └───dist
+│ │ ├───lib
+│ │ └───umd
+│ ├───react-router-dom
+│ │ └───dist
+│ │ └───umd
+│ ├───reflect.getprototypeof
+│ │ └───test
+│ ├───regenerate
+│ ├───regenerate-unicode-properties
+│ │ ├───Binary_Property
+│ │ ├───General_Category
+│ │ ├───Property_of_Strings
+│ │ ├───Script
+│ │ └───Script_Extensions
+│ ├───regexp.prototype.flags
+│ │ └───test
+│ ├───regexpu-core
+│ │ └───data
+│ ├───regjsgen
+│ ├───regjsparser
+│ │ └───bin
+│ ├───require-from-string
+│ ├───resolve
+│ │ ├───.github
+│ │ ├───bin
+│ │ ├───example
+│ │ ├───lib
+│ │ └───test
+│ │ ├───dotdot
+│ │ │ └───abc
+│ │ ├───module_dir
+│ │ │ ├───xmodules
+│ │ │ │ └───aaa
+│ │ │ ├───ymodules
+│ │ │ │ └───aaa
+│ │ │ └───zmodules
+│ │ │ └───bbb
+│ │ ├───node_path
+│ │ │ ├───x
+│ │ │ │ ├───aaa
+│ │ │ │ └───ccc
+│ │ │ └───y
+│ │ │ ├───bbb
+│ │ │ └───ccc
+│ │ ├───pathfilter
+│ │ │ └───deep_ref
+│ │ ├───precedence
+│ │ │ ├───aaa
+│ │ │ └───bbb
+│ │ ├───resolver
+│ │ │ ├───baz
+│ │ │ ├───browser_field
+│ │ │ ├───dot_main
+│ │ │ ├───dot_slash_main
+│ │ │ ├───false_main
+│ │ │ ├───incorrect_main
+│ │ │ ├───invalid_main
+│ │ │ ├───multirepo
+│ │ │ │ └───packages
+│ │ │ │ ├───package-a
+│ │ │ │ └───package-b
+│ │ │ ├───nested_symlinks
+│ │ │ │ └───mylib
+│ │ │ ├───other_path
+│ │ │ │ └───lib
+│ │ │ ├───quux
+│ │ │ │ └───foo
+│ │ │ ├───same_names
+│ │ │ │ └───foo
+│ │ │ ├───symlinked
+│ │ │ │ ├───package
+│ │ │ │ └───_
+│ │ │ │ ├───node_modules
+│ │ │ │ └───symlink_target
+│ │ │ └───without_basedir
+│ │ └───shadowed_core
+│ │ └───node_modules
+│ │ └───util
+│ ├───resolve-from
+│ ├───rollup
+│ │ └───dist
+│ │ ├───bin
+│ │ ├───es
+│ │ │ └───shared
+│ │ └───shared
+│ ├───safe-array-concat
+│ │ ├───.github
+│ │ └───test
+│ ├───safe-buffer
+│ ├───safe-push-apply
+│ │ ├───.github
+│ │ └───test
+│ ├───safe-regex-test
+│ │ ├───.github
+│ │ └───test
+│ ├───scheduler
+│ │ └───cjs
+│ ├───semver
+│ │ └───bin
+│ ├───serialize-javascript
+│ ├───set-function-length
+│ │ └───.github
+│ ├───set-function-name
+│ │ └───.github
+│ ├───set-proto
+│ │ ├───.github
+│ │ └───test
+│ ├───shebang-command
+│ ├───shebang-regex
+│ ├───side-channel
+│ │ ├───.github
+│ │ └───test
+│ ├───side-channel-list
+│ │ ├───.github
+│ │ └───test
+│ ├───side-channel-map
+│ │ ├───.github
+│ │ └───test
+│ ├───side-channel-weakmap
+│ │ ├───.github
+│ │ └───test
+│ ├───smob
+│ │ └───dist
+│ │ └───utils
+│ ├───source-map
+│ │ └───lib
+│ ├───source-map-js
+│ │ └───lib
+│ ├───source-map-support
+│ │ └───node_modules
+│ │ └───source-map
+│ │ ├───dist
+│ │ └───lib
+│ ├───sourcemap-codec
+│ │ └───dist
+│ │ └───types
+│ ├───stop-iteration-iterator
+│ │ ├───.github
+│ │ └───test
+│ ├───string.prototype.matchall
+│ │ ├───.github
+│ │ └───test
+│ ├───string.prototype.trim
+│ │ └───test
+│ ├───string.prototype.trimend
+│ │ └───test
+│ ├───string.prototype.trimstart
+│ │ └───test
+│ ├───stringify-object
+│ ├───strip-comments
+│ │ └───lib
+│ ├───strip-json-comments
+│ ├───supports-color
+│ ├───supports-preserve-symlinks-flag
+│ │ ├───.github
+│ │ └───test
+│ ├───tailwindcss
+│ │ └───dist
+│ ├───temp-dir
+│ ├───tempy
+│ ├───terser
+│ │ ├───bin
+│ │ ├───dist
+│ │ ├───lib
+│ │ │ ├───compress
+│ │ │ └───utils
+│ │ └───tools
+│ ├───tinyglobby
+│ │ └───dist
+│ ├───tr46
+│ │ └───lib
+│ ├───tslib
+│ │ └───modules
+│ ├───type-check
+│ │ └───lib
+│ ├───type-fest
+│ │ └───source
+│ ├───typed-array-buffer
+│ │ ├───.github
+│ │ └───test
+│ ├───typed-array-byte-length
+│ │ ├───.github
+│ │ └───test
+│ ├───typed-array-byte-offset
+│ │ ├───.github
+│ │ └───test
+│ ├───typed-array-length
+│ │ ├───.github
+│ │ └───test
+│ ├───unbox-primitive
+│ │ ├───.github
+│ │ └───test
+│ ├───undici-types
+│ ├───unicode-canonical-property-names-ecmascript
+│ ├───unicode-match-property-ecmascript
+│ ├───unicode-match-property-value-ecmascript
+│ │ └───data
+│ ├───unicode-property-aliases-ecmascript
+│ ├───unique-string
+│ ├───universalify
+│ ├───upath
+│ │ └───build
+│ │ └───code
+│ ├───update-browserslist-db
+│ ├───uri-js
+│ │ └───dist
+│ │ ├───es5
+│ │ └───esnext
+│ │ └───schemes
+│ ├───vite
+│ │ ├───bin
+│ │ ├───dist
+│ │ │ ├───client
+│ │ │ └───node
+│ │ │ └───chunks
+│ │ ├───misc
+│ │ └───types
+│ │ └───internal
+│ ├───vite-plugin-pwa
+│ │ ├───dist
+│ │ │ └───client
+│ │ │ ├───build
+│ │ │ └───dev
+│ │ └───types
+│ ├───webidl-conversions
+│ │ └───lib
+│ ├───whatwg-url
+│ │ └───lib
+│ ├───which
+│ │ └───bin
+│ ├───which-boxed-primitive
+│ │ ├───.github
+│ │ └───test
+│ ├───which-builtin-type
+│ │ └───test
+│ ├───which-collection
+│ │ ├───.github
+│ │ └───test
+│ ├───which-typed-array
+│ │ ├───.github
+│ │ └───test
+│ ├───word-wrap
+│ ├───workbox-background-sync
+│ │ ├───build
+│ │ ├───lib
+│ │ └───src
+│ │ └───lib
+│ ├───workbox-broadcast-update
+│ │ ├───build
+│ │ ├───src
+│ │ │ └───utils
+│ │ └───utils
+│ ├───workbox-build
+│ │ ├───build
+│ │ │ ├───lib
+│ │ │ ├───schema
+│ │ │ └───templates
+│ │ ├───node_modules
+│ │ │ ├───.bin
+│ │ │ ├───@apideck
+│ │ │ │ └───better-ajv-errors
+│ │ │ │ ├───dist
+│ │ │ │ │ ├───lib
+│ │ │ │ │ └───types
+│ │ │ │ └───src
+│ │ │ │ ├───lib
+│ │ │ │ └───types
+│ │ │ ├───@rollup
+│ │ │ │ ├───plugin-babel
+│ │ │ │ │ ├───dist
+│ │ │ │ │ └───types
+│ │ │ │ ├───plugin-replace
+│ │ │ │ │ ├───dist
+│ │ │ │ │ ├───src
+│ │ │ │ │ └───types
+│ │ │ │ └───pluginutils
+│ │ │ │ ├───dist
+│ │ │ │ │ ├───cjs
+│ │ │ │ │ └───es
+│ │ │ │ └───types
+│ │ │ ├───@types
+│ │ │ │ └───estree
+│ │ │ ├───ajv
+│ │ │ │ ├───dist
+│ │ │ │ │ ├───compile
+│ │ │ │ │ │ ├───codegen
+│ │ │ │ │ │ ├───jtd
+│ │ │ │ │ │ └───validate
+│ │ │ │ │ ├───refs
+│ │ │ │ │ │ ├───json-schema-2019-09
+│ │ │ │ │ │ │ └───meta
+│ │ │ │ │ │ └───json-schema-2020-12
+│ │ │ │ │ │ └───meta
+│ │ │ │ │ ├───runtime
+│ │ │ │ │ ├───standalone
+│ │ │ │ │ ├───types
+│ │ │ │ │ └───vocabularies
+│ │ │ │ │ ├───applicator
+│ │ │ │ │ ├───core
+│ │ │ │ │ ├───discriminator
+│ │ │ │ │ ├───dynamic
+│ │ │ │ │ ├───format
+│ │ │ │ │ ├───jtd
+│ │ │ │ │ ├───unevaluated
+│ │ │ │ │ └───validation
+│ │ │ │ └───lib
+│ │ │ │ ├───compile
+│ │ │ │ │ ├───codegen
+│ │ │ │ │ ├───jtd
+│ │ │ │ │ └───validate
+│ │ │ │ ├───refs
+│ │ │ │ │ ├───json-schema-2019-09
+│ │ │ │ │ │ └───meta
+│ │ │ │ │ └───json-schema-2020-12
+│ │ │ │ │ └───meta
+│ │ │ │ ├───runtime
+│ │ │ │ ├───standalone
+│ │ │ │ ├───types
+│ │ │ │ └───vocabularies
+│ │ │ │ ├───applicator
+│ │ │ │ ├───core
+│ │ │ │ ├───discriminator
+│ │ │ │ ├───dynamic
+│ │ │ │ ├───format
+│ │ │ │ ├───jtd
+│ │ │ │ ├───unevaluated
+│ │ │ │ └───validation
+│ │ │ ├───estree-walker
+│ │ │ │ ├───dist
+│ │ │ │ ├───src
+│ │ │ │ └───types
+│ │ │ ├───json-schema-traverse
+│ │ │ │ ├───.github
+│ │ │ │ │ └───workflows
+│ │ │ │ └───spec
+│ │ │ │ └───fixtures
+│ │ │ ├───picomatch
+│ │ │ │ └───lib
+│ │ │ ├───pretty-bytes
+│ │ │ └───rollup
+│ │ │ └───dist
+│ │ │ ├───bin
+│ │ │ ├───es
+│ │ │ │ └───shared
+│ │ │ └───shared
+│ │ └───src
+│ │ ├───lib
+│ │ ├───schema
+│ │ └───templates
+│ ├───workbox-cacheable-response
+│ │ ├───build
+│ │ └───src
+│ ├───workbox-core
+│ │ ├───build
+│ │ ├───models
+│ │ │ └───messages
+│ │ ├───src
+│ │ │ ├───models
+│ │ │ │ └───messages
+│ │ │ ├───utils
+│ │ │ └───_private
+│ │ ├───utils
+│ │ └───_private
+│ ├───workbox-expiration
+│ │ ├───build
+│ │ ├───models
+│ │ └───src
+│ │ └───models
+│ ├───workbox-google-analytics
+│ │ ├───build
+│ │ ├───src
+│ │ │ └───utils
+│ │ └───utils
+│ ├───workbox-navigation-preload
+│ │ ├───build
+│ │ └───src
+│ ├───workbox-precaching
+│ │ ├───build
+│ │ ├───src
+│ │ │ └───utils
+│ │ └───utils
+│ ├───workbox-range-requests
+│ │ ├───build
+│ │ ├───src
+│ │ │ └───utils
+│ │ └───utils
+│ ├───workbox-recipes
+│ │ ├───build
+│ │ └───src
+│ ├───workbox-routing
+│ │ ├───build
+│ │ ├───src
+│ │ │ └───utils
+│ │ └───utils
+│ ├───workbox-strategies
+│ │ ├───build
+│ │ ├───plugins
+│ │ ├───src
+│ │ │ ├───plugins
+│ │ │ └───utils
+│ │ └───utils
+│ ├───workbox-streams
+│ │ ├───build
+│ │ ├───src
+│ │ │ └───utils
+│ │ └───utils
+│ ├───workbox-sw
+│ │ ├───build
+│ │ └───controllers
+│ ├───workbox-window
+│ │ ├───build
+│ │ ├───src
+│ │ │ └───utils
+│ │ └───utils
+│ ├───wrappy
+│ ├───ws
+│ │ └───lib
+│ ├───yallist
+│ ├───yocto-queue
+│ ├───zod
+│ │ ├───locales
+│ │ ├───mini
+│ │ ├───src
+│ │ │ ├───locales
+│ │ │ ├───mini
+│ │ │ ├───v3
+│ │ │ │ ├───benchmarks
+│ │ │ │ ├───helpers
+│ │ │ │ ├───locales
+│ │ │ │ └───tests
+│ │ │ ├───v4
+│ │ │ │ ├───classic
+│ │ │ │ │ └───tests
+│ │ │ │ ├───core
+│ │ │ │ │ └───tests
+│ │ │ │ │ └───locales
+│ │ │ │ ├───locales
+│ │ │ │ └───mini
+│ │ │ │ └───tests
+│ │ │ └───v4-mini
+│ │ ├───v3
+│ │ │ ├───helpers
+│ │ │ └───locales
+│ │ ├───v4
+│ │ │ ├───classic
+│ │ │ ├───core
+│ │ │ ├───locales
+│ │ │ └───mini
+│ │ └───v4-mini
+│ └───zod-validation-error
+│ ├───v3
+│ └───v4
+├───public
+│ └───static_html
+├───Reservas
+├───src
+│ ├───api
+│ ├───assets
+│ │ ├───icons
+│ │ └───images
+│ ├───components
+│ ├───pages
+│ │ ├───agenda
+│ │ ├───events
+│ │ ├───ficha
+│ │ ├───legal
+│ │ └───registro
+│ └───styles
+└───tests

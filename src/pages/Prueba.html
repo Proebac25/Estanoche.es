@@ -1,0 +1,89 @@
+$path = 'D:\pwaestanoche\src\pages\Index.jsx'
+$dir = Split-Path $path
+if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+
+@'
+import React from "react";
+
+/*
+  Index.jsx
+  Versión React del contenido principal. Mantiene el HTML interno tal cual para respetar el diseño.
+  Nota: los estilos siguen en public/index.html (o en src/index.css si prefieres moverlos).
+*/
+export default function Index() {
+  return (
+    <main>
+      <header className="container">
+        <div>
+          <div className="logo">EstaNoche.es</div>
+          <div className="logo-subtitle">Tu agenda de ocio</div>
+        </div>
+        <nav style={{display:"flex", gap:".5rem", alignItems:"center"}}>
+          <a href="/agenda" className="btn-gradiente btn-header" style={{padding:".4rem .6rem", fontSize:".85rem"}}>Agenda</a>
+          <a href="/calendario" className="btn-gradiente btn-header" style={{padding:".4rem .6rem", fontSize:".85rem"}}>Calendario</a>
+          <a href="/crear-evento" className="btn-gradiente btn-header" style={{padding:".4rem .6rem", fontSize:".85rem"}}>Crear evento</a>
+          <a href="/alta" className="btn-gradiente btn-header" style={{padding:".4rem .6rem", fontSize:".85rem"}}>Alta</a>
+          <a href="/ficha" className="btn-gradiente btn-header" style={{padding:".4rem .6rem", fontSize:".85rem"}}>Ficha</a>
+          <a href="/sobre" className="btn-gradiente btn-header" style={{padding:".4rem .6rem", fontSize:".85rem"}}>Sobre</a>
+          <a href="/legal/politica-privacidad" className="btn-gradiente btn-header" style={{padding:".4rem .6rem", fontSize:".85rem"}}>Legal</a>
+        </nav>
+      </header>
+
+      <section className="hero animate-gradient" aria-label="Hero">
+        <div style={{position:"absolute", top:"30%", left:"50%", transform:"translate(-50%,-50%)", pointerEvents:"none", opacity:.20, color:"white", fontWeight:800, fontSize:"clamp(2rem, 12vw, 6rem)", lineHeight:1.1, textAlign:"center"}}>
+          Especial<br/>Zambombas de Jerez
+        </div>
+
+        <div className="hero-content">
+          <div className="hero-inner">
+            <div className="hero-emoji">🌙
+              <svg width="1.4em" height="1.4em" viewBox="0 0 64 64" style={{verticalAlign:"middle"}}>
+                <ellipse cx="32" cy="50" rx="18" ry="10" fill="#0A3D91" stroke="#1A1A1A" strokeWidth="3" />
+                <ellipse cx="32" cy="46" rx="18" ry="10" fill="#FFFFFF" stroke="#1A1A1A" strokeWidth="3" />
+                <ellipse cx="32" cy="42" rx="18" ry="10" fill="#0A3D91" stroke="#1A1A1A" strokeWidth="3" />
+                <path d="M22 18 Q32 8 42 18 V40 Q32 48 22 40 Z" fill="#D88C44" stroke="#1A1A1A" strokeWidth="3" />
+                <ellipse cx="32" cy="18" rx="12" ry="6" fill="#F5E6C8" stroke="#1A1A1A" strokeWidth="3" />
+                <line x1="32" y1="12" x2="32" y2="0" stroke="#E0C58F" strokeWidth="4" />
+              </svg>
+            </div>
+
+            <h1 className="hero-title">Descubre el ocio<br/><span className="gradient-text">de tu ciudad</span></h1>
+            <p className="hero-subtitle">Conciertos, eventos y planes únicos.<br/><strong>Sin descargas. Sin complicaciones.</strong></p>
+            <div className="hero-cta">
+              <a href="/agenda" className="btn-gradiente btn-hero" style={{borderRadius:9999, fontWeight:700, fontSize:"1.125rem", padding:".75rem 2.5rem", display:"inline-block", width:"auto"}}>🎉 Ver eventos</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sección central (botones + título) */}
+      <section className="cities-section" aria-label="Acciones">
+        <div className="container" style={{textAlign:"center"}}>
+          <div className="middle-row" style={{display:"flex", justifyContent:"space-between", alignItems:"center", gap:"1rem", flexWrap:"wrap"}}>
+            <a href="/alta" className="btn-gradiente btn-cta" style={{borderRadius:"1rem", padding:".6rem .9rem", fontSize:".9rem", whiteSpace:"nowrap"}}>📝 Darte de alta</a>
+            <h2 className="cta-title" style={{flex:1, margin:0, textAlign:"center"}}>¿Tienes un local, eres Artista o Creas eventos?</h2>
+            <a href="/crear-evento" className="btn-gradiente btn-cta" style={{borderRadius:"1rem", padding:".6rem .9rem", fontSize:".9rem", whiteSpace:"nowrap"}}>🚀 Publica tu evento</a>
+          </div>
+        </div>
+      </section>
+
+      {/* Sección inferior (sobre nosotros) */}
+      <section id="registro-creador" className="cta-section animate-gradient" aria-label="Sobre">
+        <div className="container">
+          <h2 className="cta-title">Descubre quiénes somos y por qué lo hacemos</h2>
+          <p className="cta-text">Somos una plataforma independiente que conecta a personas con los mejores planes de su ciudad. Eventos únicos, creados por locales, artistas y promotores que apuestan por un ocio diferente. Si quieres saber cómo funciona el proyecto y por qué está creciendo tan rápido, aquí te lo contamos.</p>
+          <div style={{display:"flex", justifyContent:"center"}}>
+            <a href="/sobre" className="btn-gradiente btn-cta" style={{textAlign:"center", borderRadius:"1rem", padding:".85rem 1rem", minWidth:220}}>📘 Sobre nosotros</a>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p className="footer-main"><strong>www.estanoche.es</strong> · © 2025 Proebac · Todos los derechos reservados.</p>
+      </footer>
+    </main>
+  );
+}
+'@ | Set-Content -Path $path -Encoding UTF8
+
+Write-Output "CREATED: $path"
