@@ -3,110 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EstaNoche - Descubre el ocio cerca de ti</title>
+  <title>EstaNoche - Especial Zambombas de Jerez</title>
   <link rel="manifest" href="/manifest.json">
-  <meta name="description" content="Encuentra eventos, conciertos, planes y ocio nocturno de tu ciudad en EstaNoche.es">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #121212; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
-    @keyframes gradient { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
-    .animate-gradient { background-size: 200% 200%; animation: gradient 15s ease infinite; }
-    .glass { background: rgba(42,42,94,0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-    .btn-primary { background-color: #F72585; }
-    .btn-primary:hover { background-color: #d41469; }
-    .btn-gradiente { background: linear-gradient(90deg, #F72585 0%, #FFB703 100%); display: inline-block; text-decoration: none; color: white; transition: all 0.3s; }
-    .btn-gradiente:hover { filter: brightness(1.1); opacity: 0.9; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; }
-    .logo { font-weight: bold; font-size: 1.25rem; }
-    .logo-subtitle { font-size: 0.875rem; color: #B3B3B3; }
-    .btn-header { font-size: 0.75rem; padding: 0.5rem 1rem; border-radius: 9999px; font-weight: 600; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-    .hero { min-height: 80vh; background: linear-gradient(135deg, #3C3C8A 0%, #1C1C3A 40%, #F72585 100%); background-size:200% 200%; display:flex; align-items:center; text-align:center; padding:2rem 1rem; }
-    .hero-content { width: 100%; }
-    .hero-inner { max-width: 42rem; margin: 0 auto; }
-    .hero-emoji { font-size: 3.75rem; margin-bottom: 1rem; }
-    .hero-title { font-size: 2.25rem; font-weight: bold; margin-bottom: 1rem; line-height:1.2; }
-    .gradient-text { background: linear-gradient(90deg,#FFB703 0%,#F72585 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .hero-subtitle { font-size:1.125rem; color:rgba(234,234,234,0.8); margin-bottom:2rem; }
-    .hero-cta { display:flex; flex-direction:column; gap:0.75rem; align-items:center; }
-    .btn-hero { border-radius:9999px; font-weight:bold; font-size:1.125rem; box-shadow:0 20px 25px -5px rgba(0,0,0,0.1); padding:0.75rem 2.5rem; width:100%; }
-    .cities-section { background:#121212; padding:2.5rem 1rem; text-align:center; }
-    .section-title { font-size:1.5rem; font-weight:bold; margin-bottom:1rem; }
-    .cities-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; max-width:64rem; margin:0 auto; }
-    .city-card { padding:1.5rem; border-radius:1rem; text-align:center; text-decoration:none; color:white; display:block; transition:0.3s; }
-    .city-card:hover { transform:scale(1.05); }
-    .badge { background:#25D366; color:white; font-size:0.75rem; padding:0.25rem 0.75rem; border-radius:9999px; }
-    .cta-section { background:linear-gradient(135deg,#3C3C8A 0%,#1C1C3A 40%,#F72585 100%); background-size:200% 200%; padding:5rem 1rem; text-align:center; }
-    .cta-title { font-size:1.875rem; font-weight:bold; margin-bottom:1.5rem; }
-    .cta-text { font-size:1.125rem; color:rgba(234,234,234,0.8); margin-bottom:2.5rem; max-width:42rem; margin-left:auto; margin-right:auto; }
-    footer { background:#0f0f0f; padding:2rem 1rem; text-align:center; color:#B3B3B3; }
-    footer strong { color:white; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#121212;color:white;font-family:system-ui,sans-serif;overflow-x:hidden}
+    canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.6}
+    .hero-bg{position:fixed;inset:0;background:linear-gradient(135deg,#3C3C8A,#1C1C3A 40%,#F72585);background-size:200%;animation:g 20s ease infinite;z-index:-2}
+    @keyframes g{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+    header{padding:1.5rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+    .logo{font-weight:bold;font-size:1.8rem}
+    .logo-sub{font-size:0.9rem;color:#B3B3B3}
+    .btn{background:linear-gradient(90deg,#F72585,#FFB703);color:white;font-weight:bold;padding:1rem 3rem;border-radius:9999px;text-decoration:none;display:inline-block;transition:.3s;box-shadow:0 8px 20px rgba(247,37,133,.3)}
+    .btn:hover{transform:translateY(-4px);box-shadow:0 15px 30px rgba(247,37,133,.5)}
+    .btn-large{padding:1.5rem 4.5rem;font-size:1.4rem}
+    .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative}
+    .inner{max-width:50rem;width:100%}
+    .emoji{font-size:4.5rem;margin-bottom:1rem}
+    .title{font-size:3.5rem;font-weight:900;line-height:1.1;margin-bottom:1rem}
+    .grad{background:linear-gradient(90deg,#FFB703,#F72585);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{font-size:1.4rem;opacity:0.9;margin-bottom:4rem}
+    .secondary{margin:2rem 0 4rem} /* ESPACIO ENTRE BOTONES Y TÍTULO SUPERIOR */
+    .about{margin-top:4rem} /* ESPACIO SIMÉTRICO ENTRE BOTONES Y “DESCUBRE...” */
   </style>
 </head>
-
 <body>
-  <header class="container">
+
+  <div class="hero-bg"></div>
+  <canvas id="stars"></canvas>
+
+  <header>
     <div>
       <div class="logo">EstaNoche.es</div>
-      <div class="logo-subtitle">Tu agenda de ocio</div>
+      <div class="logo-sub">Tu agenda de ocio</div>
     </div>
-    <a href="mailto:proebac25@estanoche.es" class="btn-gradiente btn-header">📧 Contacto</a>
+    <a href="mailto:proebac25@estanoche.es" class="btn" style="padding:.8rem 2rem;font-size:.9rem">Contacto</a>
   </header>
 
-  <section class="hero animate-gradient" style="position:relative; min-height: 50vh; padding: 4rem 1rem 2rem 1rem;">
-  <div style="position:absolute; top:30%; left:50%; transform:translate(-50%, -50%); pointer-events:none; opacity:0.20; color:white; font-weight:800; font-size:clamp(2rem, 12vw, 6rem); line-height:1.1; text-align:center;">
-    <br> Especial <br> Zambombas de Jerez.<br>Disponible en Breve
-  </div>
+  <section class="hero">
+    <div class="inner">
 
-  <div class="hero-content">
-    <div class="hero-inner">
-      <div class="hero-emoji">🌙 <img src="/Icon_Zambomba.png" alt="Zambomba" style="width:2.0em; height:2.0em; vertical-align:bottom;"></div>
-
-      <h1 class="hero-title">
-        <strong>Descubre el ocio<br><span class="gradient-text">de tu ciudad</span></strong>
-      </h1>
-
-      <p class="hero-subtitle">Conciertos, eventos y planes únicos.<br>Sin descargas. Sin complicaciones.</p>
-
-      <div class="hero-cta">
-        <a href="agenda.html" class="btn-gradiente btn-hero">🎉 Ver eventos</a>
+      <!-- MARCA DE AGUA -->
+      <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);pointer-events:none;opacity:0.20;color:white;font-weight:800;font-size:clamp(2rem,12vw,6rem);line-height:1.1;text-align:center;width:100%">
+        Especial <br>Zambombas de Jerez.<br>Disponible en Breve
       </div>
-    </div>
-  </div>
-</section>
 
-  <section class="cities-section" style="position:relative;">
-    <div class="container" style="text-align:center;">
-      <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; text-align:center; padding:1rem;">
-        <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; text-align:center; padding:1rem;">
-        <div style="display:flex; justify-content:space-between; width:100%; max-width:600px; gap:1rem;">
-          <a href="registro.html?tipo=usuario" class="btn-gradiente btn-cta" style="border-radius:1rem; padding:0.6rem 0.9rem; font-size:0.9rem; white-space:nowrap;">📝 Date de alta</a>
-          <a href="registro.html?tipo=creador" class="btn-gradiente btn-cta" style="border-radius:1rem; padding:0.6rem 0.9rem; font-size:0.9rem; white-space:nowrap;">🚀 Publica tu evento</a>
-        </div>
-        <h2 class="cta-title" style="margin:0; font-size:1.5rem;">Publica tus eventos en la<br>Agenda del Ocio.</h2>
+      <div class="emoji">🌙 <img src="/assets/Icon_Zambomba.png" alt="Zambomba" style="width:2.2em;height:2.2em, vertical-align:middle"></div>
+      
+      <h1 class="title">Descubre el ocio<br><span class="grad">de tu ciudad</span></h1>
+      <p class="sub">Conciertos, eventos y planes únicos. Sin descargas. Sin complicaciones.</p>
+      
+      <a href="/pages/agenda.html" class="btn btn-large">Ver eventos</a>
+
+      <div class="secondary" style="display:flex;gap:2rem;justify-content:center;flex-wrap:wrap">
+        <a href="/pages/alta_usuario.html" class="btn">Registrarse</a>
+        <a href="/pages/registro-usuario.html" class="btn">Iniciar sesión</a>
+      </div>
+
+      <div class="about">
+        <h2 style="font-size:2.2rem;margin-bottom:2rem">Descubre quiénes somos y por qué lo hacemos</h2>
+        <a href="/pages/sobre.html" class="btn" style="padding:1.2rem 3.5rem;font-size:1.2rem">Sobre nosotros</a>
       </div>
 
     </div>
   </section>
-
-  <section id="registro-creador" class="cta-section animate-gradient">
-    <div class="container">
-      <h2 class="cta-title">Descubre quiénes somos y por qué lo hacemos</h2>
-      <p class="cta-text">Somos una plataforma independiente que conecta a personas con los mejores planes de su ciudad. Eventos únicos, creados por locales, artistas y promotores que apuestan por un ocio diferente.</p>
-
-      <div style="display:flex; justify-content:center;">
-        <a href="/sobre.html" class="btn-gradiente btn-cta">📘 Sobre nosotros</a>
-      </div>
-
-    </div>
-  </section>
-
-  <footer>
-    <p class="footer-main"><strong>www.estanoche.es. © Proebac25</strong></p>
-  </footer>
 
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 
+  <script>
+    const c=document.getElementById('stars'),x=c.getContext('2d');
+    c.width=innerWidth;c.height=innerHeight;
+    const s=Array.from({length:150},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.5,a:Math.random()}));
+    (function d(){x.clearRect(0,0,c.width,c.height);x.fillStyle='#FFB703';s.forEach(t=>{x.globalAlpha=t.a;x.beginPath();x.arc(t.x,t.y,t.r,0,Math.PI*2);x.fill();t.a=0.5+Math.sin(Date.now()*0.001+t.x)*0.5});requestAnimationFrame(d)})();
+    addEventListener('resize',()=>{c.width=innerWidth;c.height=innerHeight});
+  </script>
 </body>
 </html>
