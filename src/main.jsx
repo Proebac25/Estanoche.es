@@ -1,13 +1,10 @@
-// import './index.css' Anulada Grok
- 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './app.jsx'   //  a min�scula forzada
-
+import App from './App.jsx'          // ← ahora con A mayúscula
+import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 )
-

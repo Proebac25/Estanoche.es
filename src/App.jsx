@@ -1,25 +1,11 @@
-# Corregir el import en app.jsx (una sola línea)
-@'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AltaUsuario from "./pages/AltaUsuario.jsx";
-import CrearLocalOGrupo from "./pages/CrearLocalOGrupo.jsx";
-import Agenda from "./pages/Agenda.jsx";
-import StaticPage from "./pages/StaticPage.jsx";
+import { BrowserRouter } from 'react-router-dom'
+import Router from './Router.jsx'    // ← si usas Router separado
+// o si tienes las rutas aquí directamente, no cambies nada más
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AltaUsuario />} />
-        <Route path="/crear_local_o_grupo" element={<CrearLocalOGrupo />} />
-        <Route path="/agenda" element={<Agenda />} />
-        <Route path="/sobre" element {<StaticPage />} />
-        <Route path="/legal" element={<StaticPage />} />
-        <Route path="/privacidad" element={<StaticPage />} />
-        <Route path="/cookies" element={<StaticPage />} />
-        <Route path="/terminos"  element={<StaticPage />} />
-      </Routes>
+      <Router />   // o <Routes> aquí directamente
     </BrowserRouter>
-  );
+  )
 }
-'@ > src/app.jsx
