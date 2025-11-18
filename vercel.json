@@ -3,7 +3,9 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "rewrites": [
@@ -13,15 +15,23 @@
     { "source": "/ficha_usuario.html", "destination": "/perfil" },
     { "source": "/registro-usuario.html", "destination": "/registro" },
     { "source": "/sobre.html", "destination": "/sobre" },
-    { "source": "/legal.html", "destination": "/legal" },
-    { "source": "/privacidad.html", "destination": "/privacidad" },
+    
+    { "source": "/aviso-legal.html", "destination": "/legal/aviso-legal.html" },
+    { "source": "/cookies.html", "destination": "/legal/cookies.html" },
+    { "source": "/politica-privacidad.html", "destination": "/legal/politica-privacidad.html" },
+    { "source": "/terminos-uso.html", "destination": "/legal/terminos-uso.html" },
+    { "source": "/legal.html", "destination": "/legal/aviso-legal.html" },
+
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
       ]
     }
   ]

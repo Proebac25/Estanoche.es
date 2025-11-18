@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import App from './App';
 import AvisoLegal from './pages/legal/AvisoLegal';
@@ -11,3 +11,5 @@ const AppRoutes = () => (
 );
 
 export default AppRoutes;
+
+

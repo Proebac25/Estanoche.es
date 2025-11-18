@@ -1,0 +1,104 @@
+// src/pages/FichaEvento.jsx
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+
+const provincias = [
+  '', 'Álava', 'Albacete', 'Alicante', 'Almería', 'Asturias', 'Ávila', 'Badajoz', 'Baleares', 'Barcelona',
+  'Bizkaia', 'Burgos', 'Cáceres', 'Cádiz', 'Cantabria', 'Castellón', 'Ceuta', 'Ciudad Real', 'Córdoba',
+  'A Coruña', 'Cuenca', 'Gipuzkoa', 'Girona', 'Granada', 'Guadalajara', 'Huelva', 'Huesca', 'Jaén',
+  'León', 'Lleida', 'Lugo', 'Madrid', 'Málaga', 'Melilla', 'Murcia', 'Navarra', 'Ourense', 'Palencia',
+  'Las Palmas', 'Pontevedra', 'La Rioja', 'Salamanca', 'Santa Cruz de Tenerife', 'Segovia', 'Sevilla',
+  'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Zamora', 'Zaragoza'
+]
+
+export default function FichaEvento() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-rose-900 relative">
+      <div className="fixed inset-0 bg-gradient-to-br from-[#3C3C8A] via-[#1C1C3A] to-[#F72585] bg-[length:200%_200%] animate-gradient -z-10" />
+
+      <Header />
+
+      <main className="pt-32 pb-20 px-4">
+        <div className="max-w-4xl mx-auto bg-black/50 backdrop-blur-lg rounded-3xl p-8 md:p-12 text-white shadow-2xl">
+          <h1 className="text-5xl md:text-6xl font-bold text-center mb-8 font-['Playfair_Display']">
+            Completa tu perfil
+          </h1>
+          <p className="text-green-400 text-xl text-center font-bold mb-12">
+            ¡Móvil verificado! Rellena tus datos
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Columna izquierda */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Nombre completo</label>
+                <input type="text" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg" placeholder="Tu nombre" />
+              </div>
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Dirección (calle y número)</label>
+                <input type="text" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg" placeholder="Calle y número" />
+              </div>
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Población / Ciudad</label>
+                <input type="text" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg" placeholder="Ej. Jerez de la Frontera" />
+              </div>
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Código postal</label>
+                <input type="text" maxLength="5" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg" placeholder="11540" />
+              </div>
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Provincia</label>
+                <select className="w-full p-4 rounded-2xl bg-white/10 border-none text-white text-lg appearance-none" style={{backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'white\'%3e%3cpath d=\'M7 10l5 5 5-5z\'/%3e%3c/svg%3e")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '12px'}}>
+                  {provincias.map(p => (
+                    <option key={p} value={p} selected={p === 'Cádiz'}>
+                      {p || 'Selecciona provincia'}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Columna derecha */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Instagram</label>
+                <input type="text" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg" placeholder="@tuperfil" />
+              </div>
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Facebook</label>
+                <input type="text" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg" placeholder="facebook.com/tuperfil" />
+              </div>
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">TikTok</label>
+                <input type="text" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg" placeholder="@tuperfil" />
+              </div>
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Web</label>
+                <input type="url" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg" placeholder="https://tuweb.com" />
+              </div>
+              <div>
+                <label className="block text-yellow-400 font-bold mb-2">Foto de perfil</label>
+                <input type="file" accept="image/*" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white text-lg file:bg-gradient-to-r file:from-pink-600 file:to-orange-500 file:border-none file:px-6 file:py-3 file:rounded-full file:text-white file:font-bold" />
+              </div>
+            </div>
+          </div>
+
+          {/* Bio */}
+          <div className="mt-12">
+            <label className="block text-yellow-400 font-bold mb-2">Descripción / bio</label>
+            <textarea rows="6" className="w-full p-4 rounded-2xl bg-white/10 border-none text-white placeholder-white/60 text-lg resize-vertical" placeholder="Ej. Amante del flamenco y las zambombas de Jerez"></textarea>
+          </div>
+
+          {/* Botón guardar */}
+          <div className="text-center mt-12">
+            <button className="bg-gradient-to-r from-pink-600 to-orange-500 px-16 py-6 rounded-full text-2xl font-bold hover:scale-105 transition">
+              Guardar perfil
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}

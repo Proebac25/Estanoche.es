@@ -4,3 +4,4 @@ const supabaseUrl = 'https://tu-proyecto.supabase.co'  // ← Cambia por tu URL 
 const supabaseAnonKey = 'tu-anon-key-aquí'             // ← Cambia por tu anon key real
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
