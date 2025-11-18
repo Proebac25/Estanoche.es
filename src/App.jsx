@@ -10,6 +10,7 @@ export default function App() {
         <Route path="/" element={<altausuario />} />
         <Route path="/crear_local_o_grupo" element={<crearlocalogrupo />} />
         <Route path="/agenda" element={<agenda />} />
+	<Route path="/sobre" element={<Sobre />} />
       </Routes>
     </BrowserRouter>
   )
