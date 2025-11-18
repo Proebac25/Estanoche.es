@@ -52,40 +52,59 @@
     <a href="mailto:proebac25@estanoche.es" class="btn-gradiente btn-header">📧 Contacto</a>
   </header>
 
-  <section class="hero animate-gradient" style="position:relative;">
-    <div style="position:absolute; top:30%; left:50%; transform:translate(-50%, -50%); pointer-events:none; opacity:0.20; color:white; font-weight:800; font-size:clamp(2rem, 12vw, 6rem); line-height:1.1; text-align:center;">
-        Especial<br>Zambombas de Jerez
+  <section class="hero animate-gradient" style="position:relative; min-height: 50vh; padding: 4rem 1rem 2rem 1rem;">
+  <div style="position:absolute; top:30%; left:50%; transform:translate(-50%, -50%); pointer-events:none; opacity:0.20; color:white; font-weight:800; font-size:clamp(2rem, 12vw, 6rem); line-height:1.1; text-align:center;">
+    <br> Especial <br> Zambombas de Jerez.<br>Disponible en Breve
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-inner">
+      <div class="hero-emoji">
+        🌙 <img src="/Icon_Zambomba.png" alt="Zambomba" style="width:2.0em; height:2.0em; vertical-align:bottom;">
+      </div>
+
+      <h1 class="hero-title">
+        <strong>Descubre el ocio<br><span class="gradient-text">de tu ciudad</span></strong>
+      </h1>
+
+      <p class="hero-subtitle">Conciertos, eventos y planes únicos.<br>Sin descargas. Sin complicaciones.</p>
+
+      <div class="hero-cta">
+        <a href="agenda.html" class="btn-gradiente btn-hero">🎉 Ver eventos</a>
       </div>
     </div>
-    <div class="hero-content">
-      <div class="hero-inner">
-        <div class="hero-emoji">🌙 <img src="/Icon_Zambomba.png" alt="Zambomba" width="1.0em" height="1.0em" style="vertical-align:middle;"></div>
-        <h1 class="hero-title">Descubre el ocio<br><span class="gradient-text">de tu ciudad</span></h1>
-        <p class="hero-subtitle">Conciertos, eventos y planes únicos.<br><strong>Sin descargas. Sin complicaciones.</strong></p>
-        <div class="hero-cta">
-          <a href="agenda.html" class="btn-gradiente btn-hero">🎉 Ver eventos</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  </div>
+</section>
+
 
   <section class="cities-section" style="position:relative;">
     <div class="container" style="text-align:center;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
-        <a href="registro.html?tipo=usuario" class="btn-gradiente btn-cta" style="border-radius:1rem; padding:0.6rem 0.9rem; font-size:0.9rem; white-space:nowrap;">📝 Darte de alta</a>
-        <h2 class="cta-title" style="flex:1; margin:0; text-align:center;">¿Creas o protagonizas eventos? <br>Compártelo en la Agenda del Ocio </h2>
-        <a href="registro.html?tipo=creador" class="btn-gradiente btn-cta" style="border-radius:1rem; padding:0.6rem 0.9rem; font-size:0.9rem; white-space:nowrap;">🚀 Publica tu evento</a>
-      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; text-align:center; padding:1rem;">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; text-align:center; padding:1rem;">
+  <div style="display:flex; justify-content:space-between; width:100%; max-width:600px; gap:1rem;">
+    <a href="registro.html?tipo=usuario" class="btn-gradiente btn-cta" style="border-radius:1rem; padding:0.6rem 0.9rem; font-size:0.9rem; white-space:nowrap;">📝 Date de alta</a>
+    <a href="registro.html?tipo=creador" class="btn-gradiente btn-cta" style="border-radius:1rem; padding:0.6rem 0.9rem; font-size:0.9rem; white-space:nowrap;">🚀 Publica tu evento</a>
+  </div>
+  <h2 class="cta-title" style="margin:0; font-size:1.5rem;">Publica tus eventos en la<br>Agenda del Ocio.</h2>
+</div>
+  
     </div>
   </section>
 
   <section id="registro-creador" class="cta-section animate-gradient">
     <div class="container">
       <h2 class="cta-title">Descubre quiénes somos y por qué lo hacemos</h2>
-      <p class="cta-text">Somos una plataforma independiente que conecta a personas con los mejores planes de su ciudad. Eventos únicos, creados por locales, artistas y promotores que apuestan por un ocio diferente. Si quieres saber cómo funciona el proyecto y por qué está creciendo tan rápido, aquí te lo contamos.</p>
-      <div style="display:flex; justify-content:center;">
-        <a href="README.html" class="btn-gradiente btn-cta" style="text-align:center; border-radius:1rem; padding:0.85rem 1rem; min-width:220px;">📘 Sobre nosotros</a>
-      </div>
+      <p class="cta-text">Somos una plataforma independiente que conecta a personas con los mejores planes de su ciudad. Eventos únicos, creados por locales, artistas y promotores que apuestan por un ocio diferente. Si quieres saber cómo funciona el proyecto, aquí te lo contamos.</p>
+     
+	<div style="display:flex; justify-content:center;">
+  <a href="sobre.html"
+     class="btn-gradiente btn-cta"
+     style="text-align:center; border-radius:1rem; padding:0.85rem 1rem; min-width:220px;">
+    📘 Sobre nosotros
+  </a>
+</div>
+
+
     </div>
   </section>
 
@@ -95,5 +114,8 @@
 
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
+
+
+
 </body>
 </html>

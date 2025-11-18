@@ -1,10 +1,16 @@
-import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import altausuario from './pages/altausario.jsx'
+import crearlocalogrupo from './pages/crearlocalogrupo.jsx'
+import agenda from './pages/agenda.jsx'
 
-function App() {
+export default function App() {
   return (
-    <div style={{fontFamily: 'sans-serif', color: 'white', background: '#121212', padding: '2rem'}}>
-    </div>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<altausuario />} />
+        <Route path="/crear_local_o_grupo" element={<crearlocalogrupo />} />
+        <Route path="/agenda" element={<agenda />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
-
-export default App;
