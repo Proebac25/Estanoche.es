@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import altausuario from './pages/altausario.jsx'
+import altausuario from './pages/altausuario.jsx' 
 import crearlocalogrupo from './pages/crearlocalogrupo.jsx'
 import agenda from './pages/agenda.jsx'
 

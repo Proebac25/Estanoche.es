@@ -5,16 +5,14 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      input: './index.html',
-      output: {
-        // Esto evita que Vite genere el export default basura
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
-      }
+      input: './index.html'
     },
-    emptyOutDir: true
+    assetsInlineLimit: 0,  // No inlinizar nada
+    emptyOutDir: true,
+    copyPublicDir: true
   },
-  // Esto es clave: evita que Vite toque tu index.html bonito
-  publicDir: false
+  server: {
+    port: 3000,
+    open: true
+  }
 })
