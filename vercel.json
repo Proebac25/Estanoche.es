@@ -3,25 +3,25 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "config": { "distDir": "dist" }
     }
   ],
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/agenda.html", "destination": "/agenda" },
+    { "source": "/alta_usuario.html", "destination": "/alta-usuario" },
+    { "source": "/ficha_evento.html", "destination": "/evento" },
+    { "source": "/ficha_usuario.html", "destination": "/perfil" },
+    { "source": "/registro-usuario.html", "destination": "/registro" },
+    { "source": "/sobre.html", "destination": "/sobre" },
+    { "source": "/legal.html", "destination": "/legal" },
+    { "source": "/privacidad.html", "destination": "/privacidad" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     }
   ]
