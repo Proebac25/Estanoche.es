@@ -111,7 +111,7 @@ export default function altausuario() {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-rose-900">
       <Header />
 
-      <div className="pt-32 pb-40 px-4">
+      <div className="pt-32 pb-40 px-4 flex-1 w-full">
         <div className="max-w-3xl mx-auto bg-white/10 backdrop-blur-lg rounded-3xl p-10">
           <h1 className="text-4xl font-bold text-center mb-8 text-white">Completa tu perfil</h1>
           <p className="text-center text-green-400 font-bold mb-10">¡Móvil verificado! Rellena tus datos</p>
