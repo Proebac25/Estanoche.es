@@ -1,0 +1,106 @@
+S D:\rec> tree /F
+Listado de rutas de carpetas
+El número de serie del volumen es 8452-3CEB
+D:.
+│   .env
+│   .gitignore
+│   Directorio.txt
+│   eslint.config.js
+│   Estanoche.es-main.zip
+│   estructura_pwa.txt
+│   index.html
+│   inline-scripts.js
+│   manifest.json
+│   package-lock.json
+│   package.json
+│   README.md
+│   vercel.json
+│   vite.config.js
+│
+├───public
+│   │   favicon.ico
+│   │   icon-192.png
+│   │   icon-512.png
+│   │   Logo_Zambomba.png
+│   │   manifest.json
+│   │   vite.svg
+│   │
+│   ├───imagenes
+│   │       Icon_Zambomba.png
+│   │       Logo.png
+│   │
+│   └───pages
+│           agenda.html
+│           alta_usuario.html
+│           aviso-legal.html
+│           cookies.html
+│           crear-evento.html
+│           ficha-evento.html
+│           ficha_evento.html
+│           ficha_usuario.html
+│           politica-privacidad.html
+│           registro-usuario.html
+│           sobre.html
+│           terminos-uso.html
+│
+└───src
+    │   App.jsx
+    │   app.jsx_backup
+    │   GPTApp.jsx
+    │   index.css
+    │   Main.jsx
+    │   routes.jsx
+    │   supabase.js
+    │   supabaseClient.js
+    │
+    ├───api
+    │       auth.js
+    │       events.js
+    │       supabaseClient.js
+    │       users.js
+    │
+    ├───assets
+    │   │   react.svg
+    │   │
+    │   └───images
+    ├───components
+    │       EventCard.jsx
+    │       Footer.jsx
+    │       FormField.jsx
+    │       Header.jsx
+    │       Landing.jsx
+    │       NavBar.jsx
+    │
+    ├───pages
+    │   │   StaticPage.jsx
+    │   │
+    │   ├───agenda
+    │   │       Agenda.jsx
+    │   │       AgendaDay.jsx
+    │   │       AgendaFilters.jsx
+    │   │       AgendaList.jsx
+    │   │
+    │   ├───events
+    │   │       EventCard.jsx
+    │   │       EventDetail.jsx
+    │   │       EventoDetalle.jsx
+    │   │
+    │   ├───ficha
+    │   │       FichaEvento.jsx
+    │   │       FichaLocal.jsx
+    │   │       FichaNegocio.jsx
+    │   │
+    │   ├───legal
+    │   │       AvisoLegal.jsx
+    │   │
+    │   └───registro
+    │           Registro.jsx
+    │           RegistroCreador.jsx
+    │           RegistroUsuario.jsx
+    │
+    └───styles
+            agenda.css
+            eventos.css
+            ficha.css
+            global.css
+            registro.css

@@ -1,0 +1,15 @@
+/* src/index.css */
+
+/* Aplicamos la fuente a toda la estructura, incluyendo el elemento raíz HTML */
+html, body {
+    /* Aquí se define la fuente Roboto y la fallback genérica */
+    font-family: 'Roboto', sans-serif !important; 
+}
+
+/* También puedes añadir una regla universal si hay componentes que anulan el estilo */
+/* Descomenta esto si ves que algunos elementos NO cambian de fuente. */
+/*
+* {
+    font-family: 'Roboto', sans-serif !important;
+}
+*/
