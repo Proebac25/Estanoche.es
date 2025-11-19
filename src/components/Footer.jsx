@@ -1,16 +1,16 @@
 // src/components/Footer.jsx
 export default function Footer() {
   return (
-    <footer className="bg-black/80 backdrop-blur-lg py-12 mt-24 border-t border-white/10">
-      <div className="container max-w-6xl mx-auto px-4 text-center">
-        <div className="flex flex-wrap justify-center gap-8 mb-8 text-sm">
-          <a href="/pages/aviso-legal.html" className="text-yellow-400 hover:underline">Aviso legal</a>
-          <a href="/pages/politica-privacidad.html" className="text-yellow-400 hover:underline">Política de privacidad</a>
-          <a href="/pages/cookies.html" className="text-yellow-400 hover:underline">Política de cookies</a>
-          <a href="/pages/terminos-uso.html" className="text-yellow-400 hover:underline">Términos y condiciones</a>
+    <footer style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', padding: '4rem 1rem 2rem', marginTop: '8rem', textAlign: 'center' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+          <a href="/pages/aviso-legal.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Aviso legal</a>
+          <a href="/pages/politica-privacidad.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Política de privacidad</a>
+          <a href="/pages/cookies.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Política de cookies</a>
+          <a href="/pages/terminos-uso.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Términos y condiciones</a>
         </div>
-        <p className="text-white text-sm font-medium">
-          www.estanoche.es. © Proebac25 Todos los derechos reservados
+        <p style={{ color: 'white', fontWeight: 'bold' }}>
+          www.estanoche.es © Proebac25 Todos los derechos reservados
         </p>
       </div>
     </footer>
