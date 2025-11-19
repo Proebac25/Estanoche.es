@@ -81,8 +81,8 @@ export default function Landing() {
             <a href="/pages/registro-usuario.html" style={{ background: 'linear-gradient(90deg,#F72585,#FFB703)', color: 'white', fontWeight: 'bold', padding: '1rem 3rem', borderRadius: '9999px', textDecoration: 'none' }}>Iniciar sesión</a>
           </div>
 
-          <div style={{ marginTop: '4rem' }}>
-            <h2 style={{ fontSize: '2.2rem', marginBottom: '2rem' }}>
+          <div style={{ marginTop: '2rem' }}>
+            <h2 style={{ fontSize: '2.0rem', marginBottom: '3rem' }}>
               Descubre quiénes somos y por qué lo hacemos
             </h2>
             <a href="/pages/sobre.html" style={{ background: 'linear-gradient(90deg,#F72585,#FFB703)', color: 'white', fontWeight: 'bold', padding: '1.2rem 3.5rem', borderRadius: '9999px', textDecoration: 'none', fontSize: '1.2rem' }}>
