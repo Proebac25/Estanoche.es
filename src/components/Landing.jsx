@@ -56,11 +56,11 @@ export default function Landing() {
         <div style={{ maxWidth: '50rem', width: '100%', position: 'relative' }}>
 
           <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none', opacity: 0.20, color: 'white', fontWeight: 800, fontSize: 'clamp(2rem,12vw,6rem)', lineHeight: 1.1, textAlign: 'center', width: '100%' }}>
-            <br/>Especial<br/>Zambombas de Jerez.<br/>Disponible en Breve
+            Especial<br/>Zambombas de Jerez.<br/>Disponible en Breve
           </div>
 
           <div style={{ fontSize: '4.5rem', marginBottom: '1rem' }}>
-            🌙 <img src="/assets/Icon_Zambomba.png" alt="Zambomba" style={{ width: '2.2em', height: '2.2em', verticalAlign: 'middle' }} />
+            🌙 <img src="/Assets/Icon_Zambomba.png" alt="Zambomba" style={{ width: '2.2em', height: '2.2em', verticalAlign: 'middle' }} />
           </div>
 
           <h1 style={{ fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.1, marginBottom: '1rem' }}>
