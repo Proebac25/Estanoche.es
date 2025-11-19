@@ -3,7 +3,7 @@ export default function Footer() {
   return (
     <footer style={{
       background: '#000000',           // NEGRO PURO
-      padding: '3rem 1rem 3rem',       // GRANDE
+      padding: '2rem 1rem 2rem',       // GRANDE
       marginTop: '3rem',               // ESPACIO ARRIBA
       textAlign: 'center',
       borderTop: '1px solid #333333',
