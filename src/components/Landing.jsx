@@ -63,7 +63,7 @@ export default function Landing() {
             🌙 <img src="/Assets/Icon_Zambomba.png" alt="Zambomba" style={{ width: '1.8em', height: '1.8em', verticalAlign: 'middle' }} />
           </div>
 
-          <h1 style={{ fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.1, marginBottom: '1rem' }}>
+          <h1 style={{ fontSize: '3rem', fontWeight: 900, lineHeight: 1.1, marginBottom: '1rem' }}>
             Descubre el ocio<br/>
             <span style={{ background: 'linear-gradient(90deg,#FFB703,#F72585)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>de tu ciudad</span>
           </h1>
