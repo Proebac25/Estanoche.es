@@ -4,7 +4,7 @@ export default function Footer() {
     <footer style={{
       background: '#000000',           // NEGRO PURO
       padding: '3rem 1rem 3rem',       // GRANDE
-      marginTop: '1rem',               // ESPACIO ARRIBA
+      marginTop: '2rem',               // ESPACIO ARRIBA
       textAlign: 'center',
       borderTop: '1px solid #333333',
       color: 'white'
