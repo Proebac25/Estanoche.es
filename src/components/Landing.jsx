@@ -1,6 +1,6 @@
 // src/components/Landing.jsx
 import { useEffect, useRef } from 'react'
-import Footer from './Footer.jsx'   // ← IMPORTANTE
+import Footer from './Footer.jsx'  // ← IMPORTADO
 
 export default function Landing() {
   const canvasRef = useRef(null)
@@ -59,11 +59,12 @@ export default function Landing() {
       <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', position: 'relative' }}>
         <div style={{ maxWidth: '50rem', width: '100%', position: 'relative' }}>
 
-          {/* MARCA DE AGUA ZAMBOMBAS */}
+          {/* MARCA DE AGUA */}
           <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none', opacity: 0.20, color: 'white', fontWeight: 800, fontSize: 'clamp(2rem,12vw,6rem)', lineHeight: 1.1, textAlign: 'center', width: '100%' }}>
             <br/>Especial<br/>Zambombas de Jerez.<br/>Disponible en Breve
           </div>
 
+          {/* ICONO ZAMBOMBA – RUTA CORRECTA */}
           <div style={{ fontSize: '4.5rem', marginBottom: '1rem' }}>
             🌙 <img src="/assets/Icon_Zambomba.png" alt="Zambomba" style={{ width: '2.2em', height: '2.2em', verticalAlign: 'middle' }} />
           </div>
@@ -94,8 +95,9 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Footer con copyright y legales */}
+      {/* FOOTER IMPORTADO */}
       <Footer />
+
     </>
   )
 }
