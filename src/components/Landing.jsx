@@ -60,7 +60,7 @@ export default function Landing() {
           </div>
 
           <div style={{ fontSize: '4.5rem', marginBottom: '1rem' }}>
-            🌙 <img src="/Assets/Icon_Zambomba.png" alt="Zambomba" style={{ width: '2.2em', height: '2.2em', verticalAlign: 'middle' }} />
+            🌙 <img src="/Assets/Icon_Zambomba.png" alt="Zambomba" style={{ width: '1.8em', height: '1.8em', verticalAlign: 'middle' }} />
           </div>
 
           <h1 style={{ fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.1, marginBottom: '1rem' }}>
