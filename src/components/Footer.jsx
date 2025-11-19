@@ -15,7 +15,7 @@ export default function Footer() {
           justifyContent: 'center', 
           gap: '3rem', 
           flexWrap: 'wrap', 
-          marginBottom: '3rem',
+          marginBottom: '2rem',
           fontSize: '1.1rem'
         }}>
           <a href="/pages/aviso-legal.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Aviso legal</a>
@@ -25,7 +25,7 @@ export default function Footer() {
         </div>
 
         <p style={{ 
-          fontSize: '1.4rem', 
+          fontSize: '1.0rem', 
           fontWeight: 'bold', 
           color: 'white',
           letterSpacing: '0.5px'
