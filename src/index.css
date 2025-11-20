@@ -1,0 +1,51 @@
+/* src/index.css */
+
+/* --- 1. ESTILOS GLOBALES (Aplica Roboto y fondo) --- */
+body {
+    font-family: 'Roboto', sans-serif; /* APLICACIÓN DE LA FUENTE ROBOTO */
+    margin: 0; 
+    padding: 0;
+    color: white; 
+    background-color: #121212; 
+    overflow-x: hidden; /* Evita el scroll horizontal por el ticker */
+}
+
+/* --- 2. ANIMACIÓN DE FONDO (@keyframes g) --- */
+@keyframes g {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* --- 3. CÓDIGO DEL TICKER (Texto Deslizante) --- */
+
+/* Keyframes para la animación continua */
+@keyframes marquee {
+  /* CORRECCIÓN CLAVE: Empieza en 100vw (100% del ancho de la pantalla) */
+  0% { transform: translateX(100vw); } 
+  /* Se mueve hacia la izquierda en -100% de su propio ancho (muy largo) */
+  100% { transform: translateX(-100%); } 
+}
+
+.ticker-container {
+  overflow: hidden; 
+  position: relative;
+  /* Z-index alto para arrancar de inmediato */
+  z-index: 100; 
+  padding: 0.5rem 0;
+  background-color: transparent; 
+}
+
+.ticker-content {
+  display: inline-flex; 
+  white-space: nowrap;
+  /* Velocidad lenta y continua (50s) */
+  animation: marquee 80s linear infinite; 
+  width: max-content; 
+}
+
+.ticker-text {
+  padding: 0 2rem;
+  font-weight: 900; 
+  font-size: 2.0rem;
+  color: #FFB703; /* Color naranja */
+}

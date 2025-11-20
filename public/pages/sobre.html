@@ -11,14 +11,16 @@
       background:#121212; 
       color:white; 
       min-height:100vh; 
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Inter',sans-serif;
+      /* Asumimos que la fuente Roboto ya está cargada globalmente en index.html o index.css */
+      font-family:'Roboto',-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif;
     }
     /* Degradado oficial en movimiento */
     @keyframes gradient { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
     .hero-bg {
       background: linear-gradient(135deg, #3C3C8A 0%, #1C1C3A 40%, #F72585 100%);
       background-size: 200% 200%;
-      animation: gradient 15s ease infinite;
+      /* Reducimos la velocidad a 10s para que sea más dinámico (como el Landing) */
+      animation: gradient 10s ease infinite; 
       position: fixed;
       inset: 0;
       z-index: -1;
@@ -41,7 +43,7 @@
     }
     .btn-header { font-size:0.75rem; padding:0.5rem 1rem; }
     .content { max-width:48rem; margin:4rem auto; text-align:center; background:rgba(18,18,18,0.85); padding:3rem 2rem; border-radius:1.5rem; backdrop-filter:blur(12px); }
-    h1 { font-size:2.8rem; margin-bottom:2rem; font-family:'Playfair Display',serif; }
+    h1 { font-size:2.8rem; margin-bottom:2rem; font-family:'Roboto',serif; }
     .text { font-size:1.25rem; line-height:1.9; text-align:justify; } /* JUSTIFICADO */
     h2 { margin:2.5rem 0 1rem; text-align:left; } /* A LA IZQUIERDA */
     ul { max-width:36rem; margin:2rem auto; text-align:left; } /* A LA IZQUIERDA */
@@ -51,10 +53,8 @@
   </style>
 </head>
 <body>
-  <!-- Fondo degradado en movimiento -->
   <div class="hero-bg"></div>
 
-  <!-- Cabecera universal -->
   <header class="container">
     <div>
       <div class="logo">EstaNoche.es</div>
@@ -81,22 +81,16 @@
           <li> Acceso inmediato sin redes dispersas</li>
         </ul>
 
-        <h2 style="color:#F72585">Conclusión</h2>
-        <p>EstaNoche.es la agenda definitiva para controlar el ocio local, con actualización en tiempo real y usabilidad sin fricciones.</p>
-
+ 
         <h2 style="color:#FFB703">Instálala en tu dispositivo</h2>
         <p>Ábrela en el navegador → toca los tres puntos → "Añadir a pantalla de inicio".</p>
       </div>
 
-      <!-- Los dos botones en la misma línea -->
       <div class="buttons">
         <a href="registro-usuario.html" class="btn-gradiente">📝 Date de alta</a>
-        <a href="index.html" class="btn-gradiente">← Volver al inicio</a>
+        <a href="/" class="btn-gradiente">← Volver al inicio</a>
       </div>
     </div>
   </div>
 </body>
 </html>
-
-
- 
