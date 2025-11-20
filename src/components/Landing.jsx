@@ -9,6 +9,7 @@ export default function Landing() {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    if (!ctx) return // Nueva verificación por si el navegador falla
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
