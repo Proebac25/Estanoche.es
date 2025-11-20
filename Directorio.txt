@@ -1,3 +1,44 @@
+PS D:\dropbox\rec\src\pages> tree /F
+Listado de rutas de carpetas
+El número de serie del volumen es 8452-3CEB
+D:.
+│   Sobre.jsx
+│   StaticPage.jsx
+│
+├───agenda
+│       Agenda.jsx
+│       AgendaDay.jsx
+│       AgendaFilters.jsx
+│       AgendaList.jsx
+│
+├───events
+│       EventCard.jsx
+│       EventDetail.jsx
+│       EventoDetalle.jsx
+│
+├───ficha
+│       FichaEvento.jsx
+│       FichaLocal.jsx
+│       FichaNegocio.jsx
+│       FichaUsuario.jsx
+│
+├───legal
+│       AvisoLegal.jsx
+│       PoliticaCookies.jsx
+│       PoliticaPrivacidad.jsx
+│       TerminosUso.jsx
+│
+└───registro
+        AltaUsuario.jsx
+        Registro.jsx
+        RegistroCreador.jsx
+        RegistroUsuario.jsx
+
+
+-------------------------------------
+
+PS D:\dropbox\rec\src\pages>
+
 Listado de rutas de carpetas
 El número de serie del volumen es 8452-3CEB
 D:.
