@@ -1,0 +1,99 @@
+import React from 'react';
+import Header from '../components/Header.jsx'; // Ajusta la ruta si es necesario
+import Footer from '../components/Footer.jsx'; // Ajusta la ruta si es necesario
+
+// =================================================================
+// ESTILOS: Migración del CSS de sobre.html a objetos de JS (camelCase)
+// =================================================================
+
+// Fondo degradado en movimiento. Requiere el @keyframes 'gradient' en index.css
+const heroBgStyle = {
+  background: 'linear-gradient(135deg, #3C3C8A 0%, #1C1C3A 40%, #F72585 100%)',
+  backgroundSize: '200% 200%',
+  animation: 'gradient 10s ease infinite', // Nombre del keyframe usado en sobre.html
+  position: 'fixed',
+  inset: 0,
+  zIndex: -1,
+};
+
+// Contenedor principal del texto
+const contentStyle = {
+  maxWidth: '48rem',
+  margin: '4rem auto',
+  textAlign: 'center',
+  background: 'rgba(18,18,18,0.85)',
+  padding: '3rem 2rem',
+  borderRadius: '1.5rem',
+  backdropFilter: 'blur(12px)',
+};
+
+// Estilo del texto justificado
+const textStyle = {
+  fontSize: '1.25rem',
+  lineHeight: '1.9',
+  textAlign: 'justify',
+};
+
+// Estilo para el botón de gradiente (reutilizado)
+const btnGradienteStyle = {
+  background: 'linear-gradient(90deg,#F72585,#FFB703)',
+  padding: '1rem 3rem',
+  border: 'none',
+  borderRadius: '9999px',
+  color: 'white',
+  fontWeight: 'bold',
+  textDecoration: 'none',
+  display: 'inline-block',
+  cursor: 'pointer',
+  fontSize: '1rem',
+  minWidth: '10rem'
+};
+
+export default function Sobre() {
+  return (
+    // Estilo base del <body>
+    <div style={{ minHeight: '100vh', background: '#121212', color: 'white', fontFamily: "'Roboto',-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif" }}>
+      
+      {/* 1. Fondo degradado */}
+      <div style={heroBgStyle} />
+
+      {/* 2. Cabecera (Componente reutilizado) */}
+      <Header /> 
+
+      <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem', position: 'relative', zIndex: 1 }}>
+        <div style={contentStyle}>
+          <h1 style={{ fontSize: '2.8rem', marginBottom: '2rem' }}>EstaNoche.es</h1>
+          
+          <div style={textStyle}>
+            <p>EstaNoche.es es una plataforma independiente que conecta a personas con los mejores planes de su ciudad. Eventos creados por locales, artistas y promotores que apuestan por un ocio diferente. </p>
+            <p>Una <strong>PWA innovadora</strong> dedicada a centralizar y facilitar el descubrimiento de opciones de ocio nocturno y cultural, lanzada como una herramienta <strong>gratuita y accesible.</strong></p>
+            <p>Su propósito principal es actuar como una <strong>agenda unificada de eventos</strong>, eliminando la necesidad de navegar por múltiples apps o sitios dispersos.</p>
+            <p>Dirigida a todos los públicos interesados en planes locales –desde conciertos y fiestas hasta actividades culturales o deportivas–, promueve el entretenimiento sin barreras: <strong>no requiere registro, descargas ni pagos</strong> para explorar contenido.</p>
+            <p>Por su desarrollo permite una experiencia fluida en móviles, tablet y desktops, con instalación opcional para acceso offline.</p>
+
+            <h2 style={{ color: '#FFB703', margin: '2.5rem 0 1rem', textAlign: 'left' }}>Características clave</h2>
+            <ul style={{ maxWidth: '36rem', margin: '2rem auto', textAlign: 'left', listStyleType: 'disc', paddingLeft: '20px' }}>
+              <li style={{ marginBottom: '1rem' }}> Agenda de eventos con todo tipo de ocio</li>
+              <li style={{ marginBottom: '1rem' }}> Búsquedas selectivas con filtros</li>
+              <li style={{ marginBottom: '1rem' }}> Formulario gratuito para creadores</li>
+              <li style={{ marginBottom: '1rem' }}> Acceso inmediato sin redes dispersas</li>
+            </ul>
+
+            {/* Este h2 ha sido modificado ligeramente, ya que el original de sobre.html no tenía color */}
+            <h2 style={{ color: '#FFB703', margin: '2.5rem 0 1rem', textAlign: 'left' }}>Instálala en tu dispositivo</h2>
+            <p>Ábrela en el navegador → toca los tres puntos → "Añadir a pantalla de inicio".</p>
+          </div>
+
+          {/* Botones */}
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '3rem auto 0', gap: '1rem', flexWrap: 'wrap' }}>
+            <a href="/pages/registro-usuario.html" style={btnGradienteStyle}>📝 Date de alta</a>
+            <a href="/" style={btnGradienteStyle}>← Volver al inicio</a>
+          </div>
+        </div>
+      </div>
+      
+      {/* 3. Pie de página (Componente reutilizado) */}
+      <Footer />
+    </div>
+  );
+}
