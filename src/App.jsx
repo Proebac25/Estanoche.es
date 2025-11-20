@@ -1,16 +1,20 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-// Importa aquí tus páginas reales cuando las migremos
-// Por ahora solo mostramos la landing perfecta
-import Landing from './components/Landing.jsx'   // ← lo crearemos en 2 minutos
+// Importa tus páginas
+import Landing from './components/Landing.jsx'
+// 🔑 Importar el componente Sobre.jsx (Ajusta la ruta si es necesario)
+import Sobre from './pages/Sobre.jsx' // Asumiendo que está en src/pages/
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
-        {/* Aquí irán el resto de rutas cuando las migremos */}
+        
+        {/* 🔑 RUTA AÑADIDA: Conecta /sobre-nosotros con el componente Sobre */}
+        <Route path="/sobre-nosotros" element={<Sobre />} /> 
+        
       </Routes>
     </BrowserRouter>
   )
