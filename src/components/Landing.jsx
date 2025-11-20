@@ -1,6 +1,6 @@
 // src/components/Landing.jsx
 import { useEffect, useRef } from 'react'
-import Footer from './Footer.jsx'   // ← IMPORTANTE
+// import Footer from './Footer.jsx'   // ← IMPORTANTE
 
 export default function Landing() {
   const canvasRef = useRef(null)
@@ -115,7 +115,7 @@ export default function Landing() {
       </section>
 
       {/* Footer se colocará justo después del padding-bottom de 4rem de la sección */}
-      <Footer />
+     // <Footer />
     </>
   )
 }
