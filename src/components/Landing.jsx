@@ -103,8 +103,8 @@ export default function Landing() {
             <h2 style={{ fontSize: '2.0rem', marginBottom: '3rem' }}>
               Descubre quiénes somos y por qué lo hacemos
             </h2>
-            <a href="/pages/sobre.html" style={{ background: 'linear-gradient(90deg,#F72585,#FFB703)', color: 'white', fontWeight: 'bold', padding: '1.2rem 3.5rem', borderRadius: '9999px', textDecoration: 'none', fontSize: '1.2rem' }}>
-              Sobre nosotros
+          <a href="/sobre-nosotros" style={{ background: 'linear-gradient(90deg,#F72585,#FFB703)', color: 'white', fontWeight: 'bold', padding: '1.2rem 3.5rem', borderRadius: '9999px', textDecoration: 'none', fontSize: '1.2rem' }}>
+          Sobre nosotros
             </a>
           </div>
 

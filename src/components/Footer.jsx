@@ -18,10 +18,10 @@ export default function Footer() {
           marginBottom: '2rem',
           fontSize: '1.1rem'
         }}>
-          <a href="/pages/aviso-legal.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Aviso legal</a>
-          <a href="/pages/politica-privacidad.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Política de privacidad</a>
-          <a href="/pages/cookies.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Política de cookies</a>
-          <a href="/pages/terminos-uso.html" style={{ color: '#FFB703', textDecoration: 'underline' }}>Términos y condiciones</a>
+          <a href="/aviso-legal" style={{ color: '#FFB703', textDecoration: 'underline' }}>Aviso legal</a>
+          <a href="/politica-privacidad" style={{ color: '#FFB703', textDecoration: 'underline' }}>Política de privacidad</a>
+          <a href="/politica-cookies" style={{ color: '#FFB703', textDecoration: 'underline' }}>Política de cookies</a>
+          <a href="/terminos-uso" style={{ color: '#FFB703', textDecoration: 'underline' }}>Términos y condiciones</a>
         </div>
 
         <p style={{ 
