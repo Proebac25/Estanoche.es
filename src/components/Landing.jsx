@@ -14,6 +14,9 @@ export default function Landing() {
     }}>
       <h1>¡HOLA! Landing de Prueba Simple</h1>
       <p style={{fontSize: '1.5rem'}}>Si ves este mensaje, React se inicializa correctamente.</p>
+// ...
+      <h1 style={{color: 'yellow', fontSize: '50px'}}>¡PRUEBA GLOBAL: SI VES ESTO, FALLA APP.JSX!!!</h1> 
+// ...
     </div>
   );
 }
