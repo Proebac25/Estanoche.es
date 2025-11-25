@@ -131,7 +131,7 @@ export default function Fondo({ children, showHeader = true, showFooter = true }
         pointerEvents: 'none',
         opacity: 0.95
       }}>
-        🚫<br/>CERrado<br/>TEMPORALMENTE
+        🚫<br/>CERRADO<br/>TEMPORALMENTE
       </div>
 
       <style>{`
