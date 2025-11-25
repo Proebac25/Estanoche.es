@@ -1,0 +1,122 @@
+S D:\dropbox\rec> # 1. FUNCIÓN DE POWERSHELL PARA GENERAR EL ÁRBOL Y EXCLUIR CARPETAS GRANDES
+>>
+>> function Get-TreeProject {
+>>     param(
+
+D:\dropbox\rec
+|-- .env
+|-- .env.local
+|-- .gitignore
+|-- 1 Conversación.txt
+|-- Dir.txt
+|-- Directorio.txt
+|-- eslint.config.js
+|-- estructura_pwa.txt
+|-- index.html
+|-- inline-scripts.js
+|-- manifest.json
+|-- package.json
+|-- package-lock.json
+|-- README.md
+|-- tree.txt
+|-- vercel.json
+|-- vite.config.js
+|-- .vercel
+|-- public
+    |-- favicon.ico
+    |-- icon-192.png
+    |-- icon-512.png
+    |-- Logo_Zambomba.png
+    |-- manifest.json
+    |-- vite.svg
+    |-- Assets
+        |-- Icon_Zambomba.png
+        |-- Logo.png
+        `-- Logo2.png
+    |-- history
+    `-- pages
+        |-- agenda.html
+        |-- alta_us_ comp.html
+        |-- Alta-usuario.html
+        |-- aviso-legal.html
+        |-- Cartas.html
+        |-- ficha_usuario.html
+        |-- politica-privacidad.html
+        `-- terminos-uso.html
+`-- src
+    |-- App.jsx
+    |-- app.jsx_backup
+    |-- GPTApp.jsx
+    |-- index.css
+    |-- Main.jsx
+    |-- Routes.jsx
+    |-- supabase.js
+    |-- .history
+        `-- components
+            |-- Header_20251120055720.jsx
+            |-- Header_20251120061709.jsx
+            |-- Landing_20251120053551.jsx
+            `-- Landing_20251120061207.jsx
+    |-- api
+        |-- auth.js
+        |-- events.js
+        |-- supabaseClient.js
+        `-- users.js
+    |-- assets
+        |-- react.svg
+        `-- images
+            `-- Icon_Zambomba - copia.png
+    |-- components
+        |-- Cerrado.jsx
+        |-- EventCard.jsx
+        |-- Fondo.jsx
+        |-- Footer.jsx
+        |-- FormField.jsx
+        |-- Header.jsx
+        |-- Landing.jsx
+        |-- NavBar.jsx
+        |-- PlanoFondo.jsx
+        `-- SimpleFondo.jsx
+    |-- pages
+        |-- Sobre.jsx
+        |-- StaticPage.jsx
+        |-- agenda
+            |-- Agenda - copia.jsx
+            |-- Agenda.jsx
+            |-- AgendaContent.jsx
+            |-- AgendaDay.jsx
+            |-- AgendaFilters.jsx
+            |-- AgendaList - copia.jsx
+            `-- AgendaList.jsx
+        |-- events
+            |-- EventCard.jsx
+            |-- EventDetail.jsx
+            `-- EventoDetalle.jsx
+        |-- ficha
+            |-- FichaEvento.jsx
+            |-- FichaLocal.jsx
+            |-- FichaNegocio.jsx
+            |-- FichaUsuario.jsx
+            `-- InicarSesion.jsx
+        |-- home
+            `-- Home.jsx
+        |-- layouts
+            |-- Importar Layout.txt
+            `-- MainLayout.jsx
+        |-- legal
+            |-- AvisoLegal.jsx
+            |-- LegalBase.jsx
+            |-- PoliticaCookies.jsx
+            |-- PoliticaPrivacidad.jsx
+            `-- TerminosUso.jsx
+        `-- registro
+            |-- AltaUsuario.jsx
+            |-- Registro.jsx
+            |-- RegistroCreador.jsx
+            `-- RegistroUsuario.jsx
+    `-- styles
+        |-- agenda.css
+        |-- eventos.css
+        |-- ficha.css
+        |-- global.css
+        `-- registro.css

@@ -1,0 +1,53 @@
+/* D:\dropbox\rec\src\pages\Agenda.css */
+
+/* === CLASES DE CAJA (Reemplazan bg-white, shadow-md, rounded-xl) === */
+.evento-caja {
+    background-color: white; /* bg-white */
+    border-radius: 0.75rem; /* rounded-xl (12px) */
+    /* Sombra media (shadow-md) */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); 
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.evento-caja:hover {
+    /* Sombra grande al pasar el ratón (hover:shadow-lg) */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05); 
+}
+
+/* === CONTENEDOR PRINCIPAL Y ESPACIADO (Reemplazan max-w-4xl, mx-auto, space-y-4) === */
+.lista-eventos {
+    max-width: 1024px; /* max-w-4xl */
+    margin-left: auto; /* mx-auto */
+    margin-right: auto; /* mx-auto */
+    padding: 1rem; /* p-4 */
+    
+    /* Para reemplazar space-y-4 (espacio vertical entre cajas) */
+    display: flex; 
+    flex-direction: column;
+    gap: 1rem; /* 1rem = 16px de separación entre cada caja */
+}
+
+/* === CORRECCIÓN DEL CONTENIDO PRINCIPAL Y HEADER === */
+.contenido-principal {
+    min-height: 100vh;
+    background-color: transparent; /* Fondo transparente para ver PlanoFondo */
+    padding-bottom: 5rem; /* pb-20 */
+    
+    /* CORRECCIÓN VITAL: Espacio superior para respetar el Header fijo (64px) */
+    padding-top: 64px; 
+}
+
+/* === BADGE DE PUBLICIDAD (Reemplaza la clase inline/Tailwind) === */
+.publicidad-badge {
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}

@@ -1,0 +1,10 @@
+// Desde cualquier página
+import MainLayout from '../layouts/MainLayout.jsx';
+
+export default function OtraPagina() {
+  return (
+    <MainLayout>
+      {/* Tu contenido aquí */}
+    </MainLayout>
+  );
+}

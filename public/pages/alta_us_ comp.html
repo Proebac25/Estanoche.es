@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi perfil - EstaNoche.es</title>
+  <link rel="manifest" href="/manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#121212;color:white;min-height:100vh;font-family:'Inter',sans-serif}
+    @keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .hero-bg{background:linear-gradient(135deg,#3C3C8A,#1C1C3A 40%,#F72585);background-size:200% 200%;animation:gradient 15s ease infinite;position:fixed;inset:0;z-index:-1}
+    .container{max-width:1280px;margin:0 auto;padding:0 1rem;position:relative;z-index:1}
+    header{display:flex;justify-content:space-between;align-items:center;padding:1rem;position:fixed;top:0;left:0;right:0;backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.1);z-index:1000}
+    .logo{font-weight:bold;font-size:1.25rem}
+    .logo-subtitle{font-size:0.875rem;color:#B3B3B3}
+    .btn-gradiente{background:linear-gradient(90deg,#F72585,#FFB703);padding:0.9rem 2.5rem;border:none;border-radius:9999px;color:white;font-weight:bold;cursor:pointer;transition:all .3s;text-decoration:none}
+    .content{max-width:56rem;margin:4rem auto;background:rgba(18,18,18,0.95);padding:3rem 3rem;border-radius:1.8rem;backdrop-filter:blur(14px);box-shadow:0 20px 40px rgba(0,0,0,0.3);position:relative;padding-bottom:8rem}
+    h1{font-family:'Playfair Display',serif;font-size:3rem;margin-bottom:2rem;text-align:center}
+    .form{max-width:48rem;margin:0 auto}
+    .form-group{margin-bottom:2.2rem}
+    .label{font-size:1.1rem;color:#FFB703;margin-bottom:0.6rem;font-weight:600}
+    input,select,textarea{width:100%;padding:1.1rem;border-radius:1.2rem;background:rgba(255,255,255,0.1);border:none;color:white;font-size:1.1rem}
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.6)}
+    textarea{resize:vertical;min-height:140px}
+    .success{color:#25D366;font-weight:bold;margin-bottom:1.5rem;text-align:center}
+    footer{position:absolute;bottom:0;left:0;right:0;padding:1.5rem 3rem;background:rgba(0,0,0,0.3);backdrop-filter:blur(10px)}
+    footer .buttons{display:flex;justify-content:space-between;align-items:center}
+    footer .copyright{text-align:center;margin-top:0.5rem;font-size:0.9rem;color:#B3B3B3}
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 12px;
+    }
+    select option {
+      background:#121212;
+      color:white;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-bg"></div>
+
+  <header class="container">
+    <div>
+      <div class="logo">EstaNoche.es</div>
+      <div class="logo-subtitle">Tu agenda de ocio</div>
+    </div>
+    <a href="mailto:proebac25@estanoche.es" class="btn-gradiente btn-header">Contacto</a>
+  </header>
+
+  <div class="container content">
+    <h1>Completa tu perfil</h1>
+    <p class="success">¡Móvil verificado! Rellena tus datos</p>
+
+    <div class="form">
+      <div class="form-group">
+        <div class="label">Nombre completo *</div>
+        <input type="text" id="nombre" required>
+      </div>
+
+      <div class="form-group">
+        <div class="label">Dirección (calle y número)</div>
+        <input type="text" id="calle">
+      </div>
+
+      <div class="form-group">
+        <div class="label">Población / Ciudad</div>
+        <input type="text" id="poblacion" maxlength="60">
+      </div>
+
+      <div class="form-group">
+        <div class="label">Código postal</div>
+        <input type="text" id="cp" maxlength="10">
+      </div>
+
+      <div class="form-group">
+        <div class="label">Provincia</div>
+        <select id="provincia">
+          <option value="">Selecciona provincia</option>
+          <option value="Álava">Álava</option>
+          <option value="Albacete">Albacete</option>
+          <option value="Alicante">Alicante</option>
+          <option value="Almería">Almería</option>
+          <option value="Asturias">Asturias</option>
+          <option value="Ávila">Ávila</option>
+          <option value="Badajoz">Badajoz</option>
+          <option value="Baleares">Baleares</option>
+          <option value="Barcelona">Barcelona</option>
+          <option value="Bizkaia">Bizkaia</option>
+          <option value="Burgos">Burgos</option>
+          <option value="Cáceres">Cáceres</option>
+          <option value="Cádiz" selected>Cádiz</option>
+          <option value="Cantabria">Cantabria</option>
+          <option value="Castellón">Castellón</option>
+          <option value="Ceuta">Ceuta</option>
+          <option value="Ciudad Real">Ciudad Real</option>
+          <option value="Córdoba">Córdoba</option>
+          <option value="A Coruña">A Coruña</option>
+          <option value="Cuenca">Cuenca</option>
+          <option value="Gipuzkoa">Gipuzkoa</option>
+          <option value="Girona">Girona</option>
+          <option value="Granada">Granada</option>
+          <option value="Guadalajara">Guadalajara</option>
+          <option value="Huelva">Huelva</option>
+          <option value="Huesca">Huesca</option>
+          <option value="Jaén">Jaén</option>
+          <option value="León">León</option>
+          <option value="Lleida">Lleida</option>
+          <option value="Lugo">Lugo</option>
+          <option value="Madrid">Madrid</option>
+          <option value="Málaga">Málaga</option>
+          <option value="Melilla">Melilla</option>
+          <option value="Murcia">Murcia</option>
+          <option value="Navarra">Navarra</option>
+          <option value="Ourense">Ourense</option>
+          <option value="Palencia">Palencia</option>
+          <option value="Las Palmas">Las Palmas</option>
+          <option value="Pontevedra">Pontevedra</option>
+          <option value="La Rioja">La Rioja</option>
+          <option value="Salamanca">Salamanca</option>
+          <option value="Santa Cruz de Tenerife">Santa Cruz de Tenerife</option>
+          <option value="Segovia">Segovia</option>
+          <option value="Sevilla">Sevilla</option>
+          <option value="Soria">Soria</option>
+          <option value="Tarragona">Tarragona</option>
+          <option value="Teruel">Teruel</option>
+          <option value="Toledo">Toledo</option>
+          <option value="Valencia">Valencia</option>
+          <option value="Valladolid">Valladolid</option>
+          <option value="Zamora">Zamora</option>
+          <option value="Zaragoza">Zaragoza</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <div class="label">Email</div>
+        <input type="email" id="email" disabled>
+      </div>
+
+      <div class="form-group">
+        <div class="label">Teléfono</div>
+        <input type="tel" id="telefono" disabled>
+      </div>
+
+      <div class="form-group">
+        <div class="label">Instagram</div>
+        <input type="url" id="instagram">
+      </div>
+
+      <div class="form-group">
+        <div class="label">Facebook</div>
+        <input type="url" id="facebook">
+      </div>
+
+      <div class="form-group">
+        <div class="label">TikTok</div>
+        <input type="url" id="tiktok">
+      </div>
+
+      <div class="form-group">
+        <div class="label">Web</div>
+        <input type="url" id="web">
+      </div>
+
+      <div class="form-group">
+        <div class="label">Foto de perfil</div>
+        <input type="file" accept="image/*">
+      </div>
+
+      <div class="form-group">
+        <div class="label">Descripción / bio</div>
+        <textarea></textarea>
+      </div>
+
+      <div class="form-group">
+        <div class="label">¿Quieres publicar eventos?</div>
+        <select id="publicar">
+          <option value="no">No, solo quiero ver eventos</option>
+          <option value="si">Sí, quiero crear locales y eventos</option>
+        </select>
+      </div>
+    </div>
+
+    <footer>
+      <div class="buttons">
+        <a href="index.html" class="btn-gradiente">Salir</a>
+        <button class="btn-gradiente" onclick="guardar()">Guardar</button>
+      </div>
+      <div class="copyright">© 2025 Proebac · Todos los derechos reservados</div>
+    </footer>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('email')) {
+      document.getElementById('email').value = params.get('email');
+      document.getElementById('telefono').value = params.get('telefono') || '';
+      document.getElementById('nombre').value = params.get('nombre') || '';
+    }
+
+    function guardar() {
+      if (!document.getElementById('nombre').value.trim()) return alert('El nombre es obligatorio');
+      alert('¡Perfil guardado con éxito!');
+      if (document.getElementById('publicar').value === 'si') {
+        location.href = 'crear_local_o_grupo.html';
+      } else {
+        location.href = 'agenda.html';
+      }
+    }
+  </script>
+</body>
+</html>
