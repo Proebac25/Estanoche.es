@@ -58,9 +58,7 @@ export default function Fondo({ children, showHeader = true, showFooter = true }
       minHeight: '100vh',
       margin: 0,
       padding: 0,
-      background: 'transparent',
-      marginBottom: '0', // ← AÑADIDO
-      paddingBottom: '0' // ← AÑADIDO
+      background: 'transparent'
     }}>
       {/* Fondo gradiente */}
       <div 
@@ -107,7 +105,7 @@ export default function Fondo({ children, showHeader = true, showFooter = true }
         <main style={{ 
           flex: 1,
           paddingTop: showHeader ? '0rem' : '0',
-          paddingBottom: '0.5rem',
+          paddingBottom: '3rem',
           background: 'transparent'
         }}>
           {children}

@@ -8,8 +8,8 @@ export default function Footer() {
   return (
     <footer style={{
       background: '#000000',
-      padding: '0.5rem 1rem 0.3rem', // ← REDUCIDO AL MÍNIMO
-      marginTop: '0', // ← CERO
+      padding: '2rem 1rem 1rem',
+      marginTop: '3rem',
       textAlign: 'center',
       borderTop: '1px solid #333333',
       color: 'white'
@@ -17,17 +17,17 @@ export default function Footer() {
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         {/* Botón Inicio en el footer - SOLO si NO estamos en la página de inicio */}
         {!isHomePage && (
-          <div style={{ marginBottom: '0.5rem' }}> {/* ← REDUCIDO */}
+          <div style={{ marginBottom: '2rem' }}>
             <Link 
               to="/" 
               style={{ 
                 background: 'linear-gradient(90deg,#F72585,#FFB703)', 
                 color: 'white', 
                 fontWeight: 'bold', 
-                padding: '0.6rem 1.5rem', // ← REDUCIDO
+                padding: '0.8rem 2rem', 
                 borderRadius: '9999px', 
                 textDecoration: 'none', 
-                fontSize: '0.9rem' // ← REDUCIDO
+                fontSize: '1rem' 
               }}
             >
               Inicio
@@ -38,10 +38,10 @@ export default function Footer() {
         <div style={{ 
           display: 'flex', 
           justifyContent: 'center', 
-          gap: '2rem', // ← REDUCIDO
+          gap: '3rem', 
           flexWrap: 'wrap', 
-          marginBottom: '0.5rem', // ← REDUCIDO
-          fontSize: '0.9rem' // ← REDUCIDO
+          marginBottom: '2rem',
+          fontSize: '1.1rem'
         }}>
           <Link to="/aviso-legal" style={{ color: '#FFB703', textDecoration: 'underline' }}>Aviso legal</Link>
           <Link to="/politica-privacidad" style={{ color: '#FFB703', textDecoration: 'underline' }}>Política de privacidad</Link>
@@ -50,13 +50,12 @@ export default function Footer() {
         </div>
 
         <p style={{ 
-          fontSize: '0.8rem', // ← REDUCIDO
+          fontSize: '1.0rem', 
           fontWeight: 'bold', 
           color: 'white',
-          letterSpacing: '0.5px',
-          margin: '0' // ← AÑADIDO
+          letterSpacing: '0.5px'
         }}>
-          www.estanoche.es © Proebac25. Todos los derechos reservados
+          www.estanoche.es © Proebac25 Todos los derechos reservados
         </p>
       </div>
     </footer>
