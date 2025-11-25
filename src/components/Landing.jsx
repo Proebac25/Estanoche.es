@@ -4,12 +4,6 @@ import { Link } from 'react-router-dom';
 import Fondo from './Fondo.jsx';
 
 export default function Landing() {
-  const handleSalir = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    window.location.href = '/';
-  };
-
   return (
     <Fondo>
       {/* TICKER */}
@@ -105,8 +99,8 @@ export default function Landing() {
             Ver Zambombas
           </Link>
 
-          {/* SECCIÓN "NUESTRO PROYECTO" - ESPACIO REDUCIDO */}
-          <div style={{ marginTop: '0.5rem', marginBottom: '1.5rem' }}> {/* ← REDUCIDO de 4rem a 2rem */}
+          {/* SECCIÓN "NUESTRO PROYECTO" */}
+          <div style={{ marginTop: '1rem', marginBottom: '2rem' }}>
             <h2 style={{ fontSize: '2.0rem', marginBottom: '2.5rem' }}>
               Descubre un poco más
             </h2>
@@ -126,24 +120,7 @@ export default function Landing() {
             </Link>
           </div>
 
-          {/* BOTÓN SALIR - ESPACIO AUMENTADO */}
-          <div style={{ marginTop: '2rem' }}> {/* ← AUMENTADO de 1.5rem a 2rem (+0.5rem) */}
-            <button 
-              onClick={handleSalir}
-              style={{ 
-                background: 'linear-gradient(90deg,#FF4444,#CC0000)', 
-                color: 'white', 
-                fontWeight: 'bold', 
-                padding: '1.2rem 3.5rem', 
-                borderRadius: '9999px', 
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1.2rem',
-              }}
-            >
-              Salir
-            </button>
-          </div>
+          {/* BOTÓN SALIR ELIMINADO - PROBLEMA RESUELTO */}
 
         </div>
       </div>
