@@ -1,9 +1,11 @@
 // src/components/Landing.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Fondo from './Fondo.jsx';
 
 export default function Landing() {
+  const [showPWAInstructions, setShowPWAInstructions] = useState(false);
+
   return (
     <Fondo>
       {/* TICKER */}
@@ -93,15 +95,140 @@ export default function Landing() {
               borderRadius: '9999px', 
               textDecoration: 'none', 
               fontSize: '1.4rem', 
-              display: 'inline-block' 
+              display: 'inline-block',
+              marginBottom: '1.5rem'
             }}
           >
             Ver Zambombas
           </Link>
 
+          {/* BOTÓN DE INSTRUCCIONES PWA */}
+          <div style={{ marginBottom: '2rem' }}>
+            <button
+              onClick={() => setShowPWAInstructions(!showPWAInstructions)}
+              style={{
+                background: 'transparent',
+                color: '#FFB703',
+                fontWeight: 'bold',
+                padding: '1rem 2rem',
+                borderRadius: '9999px',
+                border: '2px solid #FFB703',
+                fontSize: '1.1rem',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = '#FFB703';
+                e.target.style.color = '#3C3C8A';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.color = '#FFB703';
+              }}
+            >
+              📱 ¿Cómo instalar la app?
+            </button>
+
+            {/* DESPLEGABLE CON INSTRUCCIONES */}
+            {showPWAInstructions && (
+              <div style={{
+                background: 'rgba(60, 60, 138, 0.95)',
+                borderRadius: '12px',
+                padding: '1.5rem',
+                marginTop: '1rem',
+                textAlign: 'left',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '2px solid #FFB703',
+                position: 'relative'
+              }}>
+                {/* BOTÓN DE CERRAR */}
+                <button
+                  onClick={() => setShowPWAInstructions(false)}
+                  style={{
+                    position: 'absolute',
+                    top: '0.5rem',
+                    right: '0.5rem',
+                    background: '#F72585',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '2rem',
+                    height: '2rem',
+                    cursor: 'pointer',
+                    fontSize: '1.2rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  ×
+                </button>
+
+                <h3 style={{ 
+                  color: '#FFB703', 
+                  marginBottom: '1rem',
+                  fontSize: '1.3rem',
+                  textAlign: 'center',
+                  marginTop: '0.5rem'
+                }}>
+                  Instala EstaNoche.es en tu móvil
+                </h3>
+                
+                <div style={{ marginBottom: '1rem' }}>
+                  <strong style={{ color: '#FFB703' }}>📱 Chrome, Firefox... (Android):</strong>
+                  <ol style={{ 
+                    paddingLeft: '1.5rem', 
+                    margin: '0.5rem 0',
+                    color: 'white'
+                  }}>
+                    <li>Abre el menú (3 puntos)</li>
+                    <li>Selecciona "Añadir a la pantalla de inicio"</li>
+                    <li>Confirma la instalación.</li>
+                  </ol>
+                </div>
+
+                <div style={{ marginBottom: '1rem' }}>
+                  <strong style={{ color: '#FFB703' }}>🍎 Safari (iPhone):</strong>
+                  <ol style={{ 
+                    paddingLeft: '1.5rem', 
+                    margin: '0.5rem 0',
+                    color: 'white'
+                  }}>
+                    <li>Toca el icono de compartir (cuadrado con flecha)</li>
+                    <li>Desplaza y selecciona "Añadir a pantalla de inicio"</li>
+                    <li>Pulsa "Añadir"</li>
+                  </ol>
+                </div>
+
+                <div style={{ marginBottom: '1rem' }}>
+                  <strong style={{ color: '#FFB703' }}>⚡ Samsung Internet:</strong>
+                  <ol style={{ 
+                    paddingLeft: '1.5rem', 
+                    margin: '0.5rem 0',
+                    color: 'white'
+                  }}>
+                    <li>Abre el menú (3 líneas)</li>
+                    <li>Selecciona "Añadir página a"</li>
+                    <li>Elige "Pantalla de inicio"</li>
+                  </ol>
+                </div>
+
+                <p style={{ 
+                  fontSize: '0.9rem', 
+                  color: '#FFB703', 
+                  textAlign: 'center',
+                  marginBottom: '0',
+                  fontStyle: 'italic'
+                }}>
+                  ¡Tendrás acceso rápido como una app nativa!
+                </p>
+              </div>
+            )}
+          </div>
+
           {/* SECCIÓN "NUESTRO PROYECTO" */}
           <div style={{ marginTop: '1rem', marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '2.0rem', marginBottom: '2.5rem' }}>
+            <h2 style={{ fontSize: '2.0rem', marginBottom: '2.5rem', color: 'white' }}>
               Descubre un poco más
             </h2>
             <Link 
@@ -119,8 +246,6 @@ export default function Landing() {
               Nuestro proyecto
             </Link>
           </div>
-
-          {/* BOTÓN SALIR ELIMINADO - PROBLEMA RESUELTO */}
 
         </div>
       </div>
