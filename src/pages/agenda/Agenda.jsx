@@ -11,6 +11,26 @@ const ZAMBOMBA_ICON_PATH = '/Assets/Icon_Zambomba.png';
 const SUPABASE_URL = 'https://grehdbulpfgtphrvemup.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_NY3z8RN2s1lH3d4qV6JsMg_cPuTnehx';
 
+// ANUNCIOS FIJOS - SERVICIOS PÚBLICOS
+const anunciosFijos = [
+    { 
+        id: 'anuncio1', 
+        header_titulo: '🚌 SERVICIO ESPECIAL LANZADERA ZAMBOMBAS 2025 🚌',
+        titulo: 'Zona NORTE: RECORRIDO 1: EXPLANADA ATRACCIONES FERIA → ALAMEDA CRISTINA\nZona Sur: RECORRIDO 2: PARKING ESTADIO PEDRO S. GARRIDO → ALCÁZAR', 
+        descripcion: 'El servicio está operativo los Viernes, Sábados, y víspera de Festivos, desde el 21 de noviembre hasta el 20 de diciembre.', 
+        tipo: 'anuncio_fijo',
+        organizador: 'Ayuntamiento de Jerez'
+    },
+    { 
+        id: 'anuncio2', 
+        header_titulo: '🚻 ASEOS PÚBLICOS CON MÓDULO P.M.R. ♿',
+        titulo: 'Ubicaciones de baños portátiles', 
+        descripcion: '• Plaza Belén\n• Plaza Estévez\n• Alameda del Banco\n\ Estos baños portátiles serán móviles, es decir, se desplazarán en función de las necesidades de cada jornada, ajustándose a la afluencia de público o la celebración de zambombas específicas.', 
+        tipo: 'anuncio_fijo',
+        organizador: 'Ayuntamiento de Jerez'
+    }
+];
+
 // El link de los demos ahora es '/'
 const eventosDemo = [
     { 
@@ -170,6 +190,14 @@ function Agenda() {
         }
         return resultado;
     }, [zambombasFiltradas]);
+
+    // 3. AÑADIR ANUNCIOS FIJOS AL PRINCIPIO
+    const eventosConAnuncios = useMemo(() => {
+        if (zambombasFiltradas.length === 0) {
+            return [];
+        }
+        return [...anunciosFijos, ...eventosMezclados];
+    }, [eventosMezclados, zambombasFiltradas]);
     
 
     return (
@@ -218,7 +246,7 @@ function Agenda() {
                             <div className="text-6xl mb-4">⏳</div>
                             <h3 style={{ color: '#2d3748' }} className="text-xl font-semibold mb-2">Cargando eventos...</h3>
                         </div>
-                    ) : eventosMezclados.length === 0 ? (
+                    ) : eventosConAnuncios.length === 0 ? (
                         <div className="text-center py-12 evento-caja" style={{ background: 'white', borderRadius: '12px' }}>
                             <div className="text-6xl mb-4">😔</div>
                             <h3 style={{ color: '#2d3748' }} className="text-xl font-semibold mb-2">No hay eventos</h3>
@@ -229,11 +257,81 @@ function Agenda() {
                             </a>
                         </div>
                     ) : (
-                        eventosMezclados.map((evento, index) => {
+                        eventosConAnuncios.map((evento, index) => {
                             
+                            // PLANTILLA PARA ANUNCIOS FIJOS - SERVICIOS PÚBLICOS
+                            if (evento.tipo === 'anuncio_fijo') {
+                                return (
+                                    <div 
+                                        key={evento.id} 
+                                        style={{ 
+                                            display: 'flex', 
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            padding: '1.5rem 1rem',
+                                            borderRadius: '12px',
+                                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', 
+                                            background: 'linear-gradient(135deg, #E3F2FD 0%, #B3E5FC 100%)',
+                                            color: '#01579B',
+                                            textAlign: 'center',
+                                            marginBottom: '1rem',
+                                            border: '2px solid #0288D1'
+                                        }}
+                                    >
+                                        {/* Cabecera */}
+                                        <div style={{ 
+                                            fontSize: '1.4rem', 
+                                            fontWeight: 'bold', 
+                                            marginBottom: '1rem', 
+                                            paddingBottom: '0.5rem',
+                                            borderBottom: '2px solid #0288D1', 
+                                            width: '100%',
+                                            textAlign: 'center'
+                                        }}>
+                                            {evento.header_titulo}
+                                        </div>
+
+                                        {/* Título con saltos de línea */}
+                                        <div style={{ 
+                                            fontSize: '1.3rem', 
+                                            fontWeight: '700', 
+                                            marginBottom: '1rem', 
+                                            lineHeight: '1.4',
+                                            color: '#0277BD',
+                                            whiteSpace: 'pre-line'
+                                        }}>
+                                            {evento.titulo}
+                                        </div>
+                                        
+                                        {/* Descripción con saltos de línea */}
+                                        <div style={{ 
+                                            fontSize: '1.1rem', 
+                                            marginBottom: '1.5rem', 
+                                            lineHeight: '1.6',
+                                            textAlign: 'center',
+                                            whiteSpace: 'pre-line'
+                                        }}>
+                                            {evento.descripcion}
+                                        </div>
+
+                                        {/* Organizador */}
+                                        <div style={{ 
+                                            display: 'inline-block',
+                                            background: '#0288D1', 
+                                            color: 'white', 
+                                            padding: '8px 16px', 
+                                            borderRadius: '6px',
+                                            fontWeight: 'bold',
+                                            fontSize: '0.9rem'
+                                        }}>
+                                            {evento.organizador}
+                                        </div>
+                                    </div>
+                                );
+                            }
+
                             // PLANTILLA DE EVENTOS DEMO
                             if (evento.tipo === 'demo') {
-                                
                                 return (
                                     <a 
                                         key={evento.id + '-' + index} 
