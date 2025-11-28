@@ -78,7 +78,7 @@ const fetchZambombas = async () => {
 function Agenda() {
     const [zambombas, setZambombas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [filtro, setFiltro] = useState('Hoy'); // Por defecto "Hoy"
+    const [filtro, setFiltro] = useState('Todos'); 
 
     useEffect(() => {
         const cargarZambombas = async () => {
@@ -90,65 +90,38 @@ function Agenda() {
         cargarZambombas();
     }, []);
 
-    // 1. FILTRAR Y ORDENAR - LÓGICA CORREGIDA
+    // 1. ORDENAR Y FILTRAR 
     const zambombasFiltradas = useMemo(() => {
         const now = new Date();
-        
-        // Fechas para los filtros
-        const hoyInicio = new Date(now);
-        hoyInicio.setHours(0, 0, 0, 0);
-        
-        const hoyFin = new Date(now);
-        hoyFin.setHours(23, 59, 59, 999);
-        
+        now.setHours(0, 0, 0, 0); 
         const unaSemana = new Date(now);
         unaSemana.setDate(now.getDate() + 7);
-        unaSemana.setHours(23, 59, 59, 999);
-
-        // Primero filtramos eventos que NO han terminado (usando hora_fin)
-        const eventosNoTerminados = zambombas.filter(evento => {
-            try {
-                // Para determinar si el evento terminó: nos fijamos en hora_fin
-                const eventEnd = evento.hora_fin ? 
-                    new Date(`${evento.fecha_evento}T${evento.hora_fin}`) : 
-                    // Si no hay hora_fin, asumimos que termina al final del día
-                    new Date(`${evento.fecha_evento}T23:59:59`);
-                
-                // Solo incluir eventos que NO han terminado
-                return eventEnd > now;
-            } catch (e) {
-                return false; // Excluir eventos con fechas inválidas
-            }
-        });
-
-        // Lógica de ordenación por fecha y hora de INICIO (para mostrar)
-        const sorted = eventosNoTerminados.sort((a, b) => {
+        unaSemana.setHours(23, 59, 59, 999); 
+        
+        // Lógica de ordenación por fecha y hora combinadas
+        const sorted = [...zambombas].sort((a, b) => {
+            // Crea objetos Date robustos combinando fecha y hora
             const dateA = new Date(`${a.fecha_evento}T${a.hora_evento || '00:00'}`);
             const dateB = new Date(`${b.fecha_evento}T${b.hora_evento || '00:00'}`);
+            
+            // Usa getTime() para una comparación numérica fiable
             return dateA.getTime() - dateB.getTime();
         });
 
-        // Aplicar filtros específicos (basados en fecha de INICIO)
         return sorted.filter(evento => {
-            const eventStart = new Date(`${evento.fecha_evento}T${evento.hora_evento || '00:00'}`);
+            if (filtro === 'Todos') return true; 
             
-            if (isNaN(eventStart.getTime())) return false;
+            // Re-evalúa la fecha del evento para el filtro
+            const eventDate = new Date(`${evento.fecha_evento}T${evento.hora_evento || '00:00'}`);
+            if (isNaN(eventDate.getTime())) return false;
 
             if (filtro === 'Hoy') {
-                // Eventos que INICIAN hoy
-                return eventStart >= hoyInicio && eventStart <= hoyFin;
+                return eventDate.toDateString() === now.toDateString();
             }
 
             if (filtro === 'Semana') {
-                // Eventos que INICIAN esta semana
-                return eventStart >= hoyInicio && eventStart <= unaSemana;
+                return eventDate >= now && eventDate <= unaSemana;
             }
-
-            if (filtro === 'Todos') {
-                // Todos los eventos NO TERMINADOS (ya filtrados arriba)
-                return true;
-            }
-            
             return true;
         });
     }, [zambombas, filtro]);
@@ -222,7 +195,7 @@ function Agenda() {
                         <div className="text-center py-12 evento-caja" style={{ background: 'white', borderRadius: '12px' }}>
                             <div className="text-6xl mb-4">😔</div>
                             <h3 style={{ color: '#2d3748' }} className="text-xl font-semibold mb-2">No hay eventos</h3>
-                            <p style={{ color: '#4a5568' }} className="mb-4">No hay eventos para la selección <strong>{filtro}</strong>.</p>
+                            <p style={{ color: '#4a5568' }} className="mb-4">No hay eventos para la selección **{filtro}**.</p>
                             {/* Botón de fallback redirige a inicio */}
                             <a href="/" className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700">
                                 🚀 Volver a inicio
@@ -300,13 +273,14 @@ function Agenda() {
                             const ciudad = evento.localidad || evento.ciudad || evento.provincia || 'Jerez'; 
                             const direccion = evento.direccion || evento.lugar || evento.direccion_evento;
                             
-                            // 🟢 LÓGICA DE MAPAS
+                            // 🟢 NUEVA LÓGICA DE MAPAS
                             const addressDisplay = direccion || 'Sin dirección';
                             const cityDisplay = direccion && ciudad ? `, ${ciudad}` : ciudad || '';
                             const fullAddressQuery = direccion ? `${direccion} ${ciudad}` : '';
                             const mapQuery = encodeURIComponent(fullAddressQuery);
                             const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
                             const hasValidAddress = !!direccion;
+                            // 🟢 FIN NUEVA LÓGICA DE MAPAS
 
                             let fechaHoraStr = 'Fecha/Hora no disponible';
                             if (evento.fecha_evento && evento.hora_evento) {
@@ -315,12 +289,6 @@ function Agenda() {
                                     const fechaStr = fecha.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.', '');
                                     const horaStr = evento.hora_evento.substring(0, 5);
                                     fechaHoraStr = `${fechaStr} • ${horaStr}h`;
-                                    
-                                    // Añadir hora de fin si existe
-                                    if (evento.hora_fin) {
-                                        const horaFinStr = evento.hora_fin.substring(0, 5);
-                                        fechaHoraStr += ` - ${horaFinStr}h`;
-                                    }
                                 } catch (e) {
                                     fechaHoraStr = 'Fecha/Hora Inválida';
                                 }
@@ -408,6 +376,7 @@ function Agenda() {
                                                 fontWeight: 'normal', 
                                                 color: '#4a5568', 
                                                 marginBottom: '0',
+                                                // 🟢 NUEVO: Estilos Flex para centrar el texto y el icono
                                                 display: 'flex',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
@@ -419,7 +388,7 @@ function Agenda() {
                                                     {cityDisplay}
                                                 </span>
                                                 
-                                                {/* Icono de Google Maps */}
+                                                {/* 🟢 NUEVO: Icono de Google Maps */}
                                                 {hasValidAddress && (
                                                     <a 
                                                         href={mapUrl} 
@@ -431,7 +400,7 @@ function Agenda() {
                                                             fontSize: '1.75rem', 
                                                             lineHeight: '1',
                                                             textDecoration: 'none',
-                                                            color: '#4c51bf',
+                                                            color: '#4c51bf', // Color Índigo/Maps
                                                             cursor: 'pointer'
                                                         }}
                                                     >
