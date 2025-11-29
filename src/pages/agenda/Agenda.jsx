@@ -15,7 +15,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_NY3z8RN2s1lH3d4qV6JsMg_cPuTnehx';
 const botonVillancicos = {
     id: 'boton_villancicos', 
     tipo: 'boton_descarga',
-    url: 'https://drive.google.com/file/d/1-Z7N1Wf2RYV-PwIyOphxHewzD9V3tTpr/view?usp=sharing',
+    url: 'https://static.grupojoly.com/joly/public/content/file/original/2025/1121/08/cuadernillo-villancicos-25-web-ok-pdf.pdf',
     texto: 'Descarga el libreto de Villancicos'
 };
 
