@@ -11,6 +11,14 @@ const ZAMBOMBA_ICON_PATH = '/Assets/Icon_Zambomba.png';
 const SUPABASE_URL = 'https://grehdbulpfgtphrvemup.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_NY3z8RN2s1lH3d4qV6JsMg_cPuTnehx';
 
+// BOTÓN DE DESCARGA DE VILLANCICOS
+const botonVillancicos = {
+    id: 'boton_villancicos', 
+    tipo: 'boton_descarga',
+    url: 'https://drive.google.com/file/d/1-Z7N1Wf2RYV-PwIyOphxHewzD9V3tTpr/view?usp=drive_link',
+    texto: 'Descarga el libreto de Villancicos'
+};
+
 // ANUNCIOS FIJOS - SERVICIOS PÚBLICOS
 const anunciosFijos = [
     { 
@@ -23,9 +31,9 @@ const anunciosFijos = [
     },
     { 
         id: 'anuncio2', 
-        header_titulo: '🚻 ASEOS PÚBLICOS CON MÓDULO P.M.R. ♿',
+        header_titulo: '🚻 ASEOS PÚBLICOS CON MÓDULO PMR 🚻',
         titulo: 'Ubicaciones de baños portátiles', 
-        descripcion: '• Plaza Belén\n• Plaza Estévez\n• Alameda del Banco\n\ Estos baños portátiles serán móviles, es decir, se desplazarán en función de las necesidades de cada jornada, ajustándose a la afluencia de público o la celebración de zambombas específicas.', 
+        descripcion: '• Plaza Belén\n• Plaza Estévez\n• Alameda del Banco\n\nEstos baños portátiles serán móviles, es decir, se desplazarán en función de las necesidades de cada jornada, ajustándose a la afluencia de público o la celebración de zambombas específicas.', 
         tipo: 'anuncio_fijo',
         organizador: 'Ayuntamiento de Jerez'
     }
@@ -98,7 +106,7 @@ const fetchZambombas = async () => {
 function Agenda() {
     const [zambombas, setZambombas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [filtro, setFiltro] = useState('Hoy'); // Por defecto "Hoy"
+    const [filtro, setFiltro] = useState('Hoy');
 
     useEffect(() => {
         const cargarZambombas = async () => {
@@ -110,11 +118,10 @@ function Agenda() {
         cargarZambombas();
     }, []);
 
-    // 1. FILTRAR Y ORDENAR - LÓGICA CORREGIDA
+    // FILTRAR Y ORDENAR
     const zambombasFiltradas = useMemo(() => {
         const now = new Date();
         
-        // Fechas para los filtros
         const hoyInicio = new Date(now);
         hoyInicio.setHours(0, 0, 0, 0);
         
@@ -125,47 +132,40 @@ function Agenda() {
         unaSemana.setDate(now.getDate() + 7);
         unaSemana.setHours(23, 59, 59, 999);
 
-        // Primero filtramos eventos que NO han terminado (usando hora_fin)
+        // Filtrar eventos que NO han terminado
         const eventosNoTerminados = zambombas.filter(evento => {
             try {
-                // Para determinar si el evento terminó: nos fijamos en hora_fin
                 const eventEnd = evento.hora_fin ? 
                     new Date(`${evento.fecha_evento}T${evento.hora_fin}`) : 
-                    // Si no hay hora_fin, asumimos que termina al final del día
                     new Date(`${evento.fecha_evento}T23:59:59`);
-                
-                // Solo incluir eventos que NO han terminado
                 return eventEnd > now;
             } catch (e) {
-                return false; // Excluir eventos con fechas inválidas
+                return false;
             }
         });
 
-        // Lógica de ordenación por fecha y hora de INICIO (para mostrar)
+        // Ordenar por fecha y hora de inicio
         const sorted = eventosNoTerminados.sort((a, b) => {
             const dateA = new Date(`${a.fecha_evento}T${a.hora_evento || '00:00'}`);
             const dateB = new Date(`${b.fecha_evento}T${b.hora_evento || '00:00'}`);
             return dateA.getTime() - dateB.getTime();
         });
 
-        // Aplicar filtros específicos (basados en fecha de INICIO)
+        // Aplicar filtros específicos
         return sorted.filter(evento => {
             const eventStart = new Date(`${evento.fecha_evento}T${evento.hora_evento || '00:00'}`);
             
             if (isNaN(eventStart.getTime())) return false;
 
             if (filtro === 'Hoy') {
-                // Eventos que INICIAN hoy
                 return eventStart >= hoyInicio && eventStart <= hoyFin;
             }
 
             if (filtro === 'Semana') {
-                // Eventos que INICIAN esta semana
                 return eventStart >= hoyInicio && eventStart <= unaSemana;
             }
 
             if (filtro === 'Todos') {
-                // Todos los eventos NO TERMINADOS (ya filtrados arriba)
                 return true;
             }
             
@@ -173,7 +173,7 @@ function Agenda() {
         });
     }, [zambombas, filtro]);
 
-    // 2. INTERCALAR Y CICLAR EVENTOS DEMO CADA 5 ZAMBOMBAS
+    // INTERCALAR EVENTOS DEMO CADA 5 ZAMBOMBAS
     const eventosMezclados = useMemo(() => {
         const resultado = [];
         let insertionCount = 0;
@@ -191,15 +191,6 @@ function Agenda() {
         return resultado;
     }, [zambombasFiltradas]);
 
-    // 3. AÑADIR ANUNCIOS FIJOS AL PRINCIPIO
-    const eventosConAnuncios = useMemo(() => {
-        if (zambombasFiltradas.length === 0) {
-            return [];
-        }
-        return [...anunciosFijos, ...eventosMezclados];
-    }, [eventosMezclados, zambombasFiltradas]);
-    
-
     return (
         <div style={{
             minHeight: '100vh',
@@ -210,7 +201,7 @@ function Agenda() {
 
             <div className="contenido-principal">
                 
-                {/* DISCRIMINADOR/FILTRO HOY / SEMANA / TODOS */}
+                {/* FILTROS */}
                 <div style={{ 
                     display: 'flex', 
                     justifyContent: 'center', 
@@ -240,102 +231,128 @@ function Agenda() {
                     ))}
                 </div>
 
+                {/* CONTENIDO PRINCIPAL - BOTÓN Y ANUNCIOS SIEMPRE VISIBLES */}
+                <div style={{ padding: '0 1rem' }}>
+                    
+                    {/* BOTÓN DE VILLANCICOS - SIEMPRE VISIBLE */}
+                    <div style={{ marginBottom: '1rem' }}>
+                        <a 
+                            href={botonVillancicos.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                display: 'block',
+                                background: 'linear-gradient(135deg, #FFB703 0%, #F72585 100%)',
+                                color: 'white',
+                                textAlign: 'center',
+                                padding: '1.2rem 1rem',
+                                borderRadius: '12px',
+                                textDecoration: 'none',
+                                fontWeight: 'bold',
+                                fontSize: '1.3rem',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                                border: '2px solid transparent'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.background = 'linear-gradient(135deg, #F72585 0%, #FFB703 100%)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.background = 'linear-gradient(135deg, #FFB703 0%, #F72585 100%)';
+                            }}
+                        >
+                            {botonVillancicos.texto}
+                        </a>
+                    </div>
+
+                    {/* ANUNCIOS FIJOS - SIEMPRE VISIBLES */}
+                    {anunciosFijos.map(anuncio => (
+                        <div 
+                            key={anuncio.id} 
+                            style={{ 
+                                display: 'flex', 
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                padding: '1.5rem 1rem',
+                                borderRadius: '12px',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', 
+                                background: 'linear-gradient(135deg, #E3F2FD 0%, #B3E5FC 100%)',
+                                color: '#01579B',
+                                textAlign: 'center',
+                                marginBottom: '1rem',
+                                border: '2px solid #0288D1'
+                            }}
+                        >
+                            <div style={{ 
+                                fontSize: '1.4rem', 
+                                fontWeight: 'bold', 
+                                marginBottom: '1rem', 
+                                paddingBottom: '0.5rem',
+                                borderBottom: '2px solid #0288D1', 
+                                width: '100%',
+                                textAlign: 'center'
+                            }}>
+                                {anuncio.header_titulo}
+                            </div>
+
+                            <div style={{ 
+                                fontSize: '1.3rem', 
+                                fontWeight: '700', 
+                                marginBottom: '1rem', 
+                                lineHeight: '1.4',
+                                color: '#0277BD',
+                                whiteSpace: 'pre-line'
+                            }}>
+                                {anuncio.titulo}
+                            </div>
+                            
+                            <div style={{ 
+                                fontSize: '1.1rem', 
+                                marginBottom: '1.5rem', 
+                                lineHeight: '1.6',
+                                textAlign: 'center',
+                                whiteSpace: 'pre-line'
+                            }}>
+                                {anuncio.descripcion}
+                            </div>
+
+                            <div style={{ 
+                                display: 'inline-block',
+                                background: '#0288D1', 
+                                color: 'white', 
+                                padding: '8px 16px', 
+                                borderRadius: '6px',
+                                fontWeight: 'bold',
+                                fontSize: '0.9rem'
+                            }}>
+                                {anuncio.organizador}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* LISTA DE EVENTOS */}
                 <div className="lista-eventos">
                     {loading ? (
                         <div className="text-center py-12 evento-caja" style={{ background: 'white', borderRadius: '12px' }}> 
                             <div className="text-6xl mb-4">⏳</div>
                             <h3 style={{ color: '#2d3748' }} className="text-xl font-semibold mb-2">Cargando eventos...</h3>
                         </div>
-                    ) : eventosConAnuncios.length === 0 ? (
+                    ) : eventosMezclados.length === 0 ? (
                         <div className="text-center py-12 evento-caja" style={{ background: 'white', borderRadius: '12px' }}>
                             <div className="text-6xl mb-4">😔</div>
                             <h3 style={{ color: '#2d3748' }} className="text-xl font-semibold mb-2">No hay eventos</h3>
                             <p style={{ color: '#4a5568' }} className="mb-4">No hay eventos para la selección <strong>{filtro}</strong>.</p>
-                            {/* Botón de fallback redirige a inicio */}
                             <a href="/" className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700">
                                 🚀 Volver a inicio
                             </a>
                         </div>
                     ) : (
-                        eventosConAnuncios.map((evento, index) => {
-                            
-                            // PLANTILLA PARA ANUNCIOS FIJOS - SERVICIOS PÚBLICOS
-                            if (evento.tipo === 'anuncio_fijo') {
-                                return (
-                                    <div 
-                                        key={evento.id} 
-                                        style={{ 
-                                            display: 'flex', 
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            padding: '1.5rem 1rem',
-                                            borderRadius: '12px',
-                                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', 
-                                            background: 'linear-gradient(135deg, #E3F2FD 0%, #B3E5FC 100%)',
-                                            color: '#01579B',
-                                            textAlign: 'center',
-                                            marginBottom: '1rem',
-                                            border: '2px solid #0288D1'
-                                        }}
-                                    >
-                                        {/* Cabecera */}
-                                        <div style={{ 
-                                            fontSize: '1.4rem', 
-                                            fontWeight: 'bold', 
-                                            marginBottom: '1rem', 
-                                            paddingBottom: '0.5rem',
-                                            borderBottom: '2px solid #0288D1', 
-                                            width: '100%',
-                                            textAlign: 'center'
-                                        }}>
-                                            {evento.header_titulo}
-                                        </div>
-
-                                        {/* Título con saltos de línea */}
-                                        <div style={{ 
-                                            fontSize: '1.3rem', 
-                                            fontWeight: '700', 
-                                            marginBottom: '1rem', 
-                                            lineHeight: '1.4',
-                                            color: '#0277BD',
-                                            whiteSpace: 'pre-line'
-                                        }}>
-                                            {evento.titulo}
-                                        </div>
-                                        
-                                        {/* Descripción con saltos de línea */}
-                                        <div style={{ 
-                                            fontSize: '1.1rem', 
-                                            marginBottom: '1.5rem', 
-                                            lineHeight: '1.6',
-                                            textAlign: 'center',
-                                            whiteSpace: 'pre-line'
-                                        }}>
-                                            {evento.descripcion}
-                                        </div>
-
-                                        {/* Organizador */}
-                                        <div style={{ 
-                                            display: 'inline-block',
-                                            background: '#0288D1', 
-                                            color: 'white', 
-                                            padding: '8px 16px', 
-                                            borderRadius: '6px',
-                                            fontWeight: 'bold',
-                                            fontSize: '0.9rem'
-                                        }}>
-                                            {evento.organizador}
-                                        </div>
-                                    </div>
-                                );
-                            }
-
-                            // PLANTILLA DE EVENTOS DEMO
+                        eventosMezclados.map((evento, index) => {
                             if (evento.tipo === 'demo') {
                                 return (
                                     <a 
                                         key={evento.id + '-' + index} 
-                                        href={evento.link || '/'} // Redirige a inicio
+                                        href={evento.link || '/'}
                                         style={{ 
                                             display: 'flex', 
                                             flexDirection: 'column',
@@ -349,9 +366,7 @@ function Agenda() {
                                             textDecoration: 'none',
                                             cursor: 'pointer'
                                         }}
-                                        className="evento-caja-demo"
                                     >
-                                        {/* Cabecera: Icono + Texto en una sola línea (más grande) */}
                                         <div style={{ 
                                             fontSize: '1.75rem', 
                                             fontWeight: 'bold', 
@@ -364,17 +379,14 @@ function Agenda() {
                                             {evento.imagen} {evento.header_titulo} 
                                         </div>
 
-                                        {/* Título (Contenido principal del anuncio) */}
                                         <div style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '0.25rem', lineHeight: '1.2' }}>
                                             {evento.titulo}
                                         </div>
                                         
-                                        {/* Descripción (Font size 1.5rem) */}
                                         <div style={{ fontSize: '1.5rem', marginBottom: '1rem', opacity: 0.9 }}>
                                             {evento.descripcion}
                                         </div>
 
-                                        {/* Etiqueta promocional con degradado y texto "EstaNoche.es" */}
                                         <span style={{ 
                                             display: 'inline-block',
                                             background: 'linear-gradient(90deg, #F72585, #FFB703)', 
@@ -392,13 +404,12 @@ function Agenda() {
                                 );
                             }
 
-                            // --- LÓGICA PARA EVENTOS OFICIALES (ZAMBOMBAS) ---
+                            // EVENTOS DE ZAMBOMBA
                             const creador = evento.organizador || evento.creador_nombre || evento.lugar || 'Organizador no especificado'; 
                             const artistas = evento.artistas;
                             const ciudad = evento.localidad || evento.ciudad || evento.provincia || 'Jerez'; 
                             const direccion = evento.direccion || evento.lugar || evento.direccion_evento;
                             
-                            // 🟢 LÓGICA DE MAPAS
                             const addressDisplay = direccion || 'Sin dirección';
                             const cityDisplay = direccion && ciudad ? `, ${ciudad}` : ciudad || '';
                             const fullAddressQuery = direccion ? `${direccion} ${ciudad}` : '';
@@ -414,7 +425,6 @@ function Agenda() {
                                     const horaStr = evento.hora_evento.substring(0, 5);
                                     fechaHoraStr = `${fechaStr} • ${horaStr}h`;
                                     
-                                    // Añadir hora de fin si existe
                                     if (evento.hora_fin) {
                                         const horaFinStr = evento.hora_fin.substring(0, 5);
                                         fechaHoraStr += ` - ${horaFinStr}h`;
@@ -427,7 +437,6 @@ function Agenda() {
                             const amenizanTexto = artistas ? artistas : 'Grupo propio';
                             const tipoEventoStr = 'Zambomba';
 
-
                             return (
                                 <div 
                                     key={evento.id} 
@@ -435,8 +444,6 @@ function Agenda() {
                                     style={{ background: 'white', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}
                                 >
                                     <div style={{ padding: '0.5rem 1rem' }}> 
-                                        
-                                        {/* CABECERA: Zambomba | Fecha/Hora */}
                                         <div style={{ 
                                             display: 'flex', 
                                             alignItems: 'center', 
@@ -444,8 +451,6 @@ function Agenda() {
                                             paddingTop: '5px', 
                                             marginBottom: '0.2rem' 
                                         }}>
-                                            
-                                            {/* COL 1: ICONO ZAMBOMBA + TIPO DE EVENTO */}
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                                 <img 
                                                     src={ZAMBOMBA_ICON_PATH} 
@@ -461,7 +466,6 @@ function Agenda() {
                                                 </span>
                                             </div>
                                             
-                                            {/* COL 2: FECHA Y HORA (Derecha con espaciado) */}
                                             <div style={{ 
                                                 fontWeight: 'bold', 
                                                 color: '#4c51bf', 
@@ -472,7 +476,6 @@ function Agenda() {
                                             </div>
                                         </div>
 
-                                        {/* CONVOCANTE/ORGANIZADOR */}
                                         <h1 style={{ 
                                             fontSize: '1.75rem', 
                                             fontWeight: '900', 
@@ -483,7 +486,6 @@ function Agenda() {
                                             {creador}
                                         </h1>
 
-                                        {/* ARTISTAS (AMENIZAN) */}
                                         <div style={{ textAlign: 'center', 
                                             marginBottom: '1rem' 
                                         }}>
@@ -499,7 +501,6 @@ function Agenda() {
                                             </span>
                                         </div>
                                         
-                                        {/* UBICACIÓN */}
                                         <div style={{ textAlign: 'center' }}>
                                             <p style={{ 
                                                 fontSize: '1.5rem', 
@@ -511,13 +512,11 @@ function Agenda() {
                                                 alignItems: 'center',
                                                 lineHeight: '1.2'
                                             }}>
-                                                {/* Texto de la Dirección y Ciudad */}
                                                 <span>
                                                     {addressDisplay}
                                                     {cityDisplay}
                                                 </span>
                                                 
-                                                {/* Icono de Google Maps */}
                                                 {hasValidAddress && (
                                                     <a 
                                                         href={mapUrl} 
