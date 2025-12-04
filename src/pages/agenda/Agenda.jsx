@@ -532,7 +532,7 @@ function Agenda() {
                                                             cursor: 'pointer'
                                                         }}
                                                     >
-                                                        📍
+                                                        📍 Vamos?
                                                     </a>
                                                 )}
                                             </p>
