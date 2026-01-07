@@ -216,7 +216,7 @@ const Sobre = () => {
         {/* SECCIÓN CONTENIDO (del Sobre.jsx original) */}
         < section style={{
           padding: '0 1rem 2rem 1rem', // Reduced top padding to 0 to be "pegado"
-          maxWidth: '768px',
+          maxWidth: '1000px', // Increased from 768px to fit larger text better
           margin: '0 auto'
         }}>
           <div style={{
@@ -225,7 +225,7 @@ const Sobre = () => {
           }}>
             <h1 style={{
               color: '#FFB703',
-              fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+              fontSize: 'clamp(3rem, 10vw, 5rem)', // Doubled: was 1.5rem, 5vw, 2.5rem
               marginBottom: '1rem',
               textAlign: 'center',
               fontWeight: 900
@@ -234,7 +234,7 @@ const Sobre = () => {
             </h1>
 
             <div style={{
-              fontSize: 'clamp(1rem, 3vw, 1.25rem)',
+              fontSize: 'clamp(2rem, 6vw, 2.5rem)', // Doubled: was 1rem, 3vw, 1.25rem
               lineHeight: 1.6
             }}>
               <p>
@@ -281,7 +281,7 @@ const Sobre = () => {
 
               <h2 style={{
                 color: '#FFB703',
-                fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
+                fontSize: 'clamp(2.6rem, 8vw, 3.6rem)', // Doubled: was 1.3rem, 4vw, 1.8rem
                 margin: '1.5rem 0 1rem',
                 fontWeight: 700
               }}>
