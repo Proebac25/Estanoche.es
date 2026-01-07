@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proebac — Core UI System V11 (Especificación completa)</title>
+  <style>
+    :root{
+      /* CORE TOKENS - V11 (Modern Organic) */
+      --font-display: 'Roboto', serif;
+      --font-ui: 'Inter', sans-serif;
+      --font-cta: 'Montserrat', sans-serif;
+      --radius: 14px;
+      --btn-h: 44px;
+      --btn-w: 220px;
+      --space: 16px;
+      --grid: 8px;
+
+      /* Modern Organic palette */
+      --mo-bg: #F4F1EE; /* Neutral warm background */
+      --mo-surface: #FFFFFF; /* Cards / surfaces */
+      --mo-muted: #9AA19A; /* Muted text */
+      --mo-text: #1E2933; /* Primary text */
+      --mo-sage: #7A9A7E; /* Primary organic accent */
+      --mo-olive: #4B744D; /* Deep organic */
+      --mo-coral: #FF6B6B; /* Accent (sparingly) */
+      --mo-spot: #F72585; /* Brand accent (minimal) */
+      --mo-amber: #FFB703; /* Secondary accent */
+
+      /* Legacy brand tokens (kept for compatibility) */
+      --en-blue-light: #3C3C8A;
+      --en-pink: #F72585;
+
+      /* Shadows & surfaces */
+      --shadow-soft: 0 6px 18px rgba(30,40,40,0.08);
+      --glass: rgba(255,255,255,0.6);
+
+      /* Accessibility helpers */
+      --focus-outline: 3px solid rgba(75,116,77,0.18);
+    }
+
+    /* Reset & layout */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:var(--font-ui);background:var(--mo-bg);color:var(--mo-text);margin:0;padding:28px;display:flex;flex-direction:column;align-items:center;gap:24px}
+    .container{width:100%;max-width:1200px}
+    section.card{background:var(--mo-surface);border-radius:12px;padding:20px;border:1px solid rgba(30,40,40,0.04);box-shadow:var(--shadow-soft)}
+    h2{font-family:var(--font-display);margin:0 0 12px 0}
+    p.small{color:var(--mo-muted);margin:0 0 12px 0}
+
+    /* Grid / spacing visual */
+    .grid-ex{display:flex;gap:12px;flex-wrap:wrap}
+    .box{background:rgba(30,40,40,0.03);padding:12px;border-radius:8px}
+
+    /* Typography samples */
+    .type-samples{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .type-samples .sample{padding:12px;background:linear-gradient(180deg,rgba(75,116,77,0.04),rgba(255,255,255,0.02));border-radius:8px}
+    .sample h1{font-family:var(--font-display);font-size:30px;margin:0;color:var(--mo-olive)}
+    .sample h2{font-family:var(--font-display);font-size:22px;margin:6px 0}
+    .sample p{font-family:var(--font-ui);font-size:16px;color:var(--mo-muted);margin:6px 0}
+    .cta-sample{font-family:var(--font-cta);font-weight:700}
+
+    /* Button catalog */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:0 16px;height:var(--btn-h);border-radius:var(--radius);cursor:pointer;border:none;font-family:var(--font-cta);font-weight:700}
+    .btn--primary{background:linear-gradient(90deg,var(--mo-olive),var(--mo-sage));color:white}
+    .btn--accent{background:var(--mo-coral);color:white}
+    .btn--ghost{background:transparent;border:1px solid rgba(30,40,40,0.06);color:var(--mo-text)}
+    .btn--outline{background:transparent;border:2px solid rgba(75,116,77,0.14);color:var(--mo-olive)}
+    .btn:focus{outline:var(--focus-outline);outline-offset:4px}
+    .btn-row{display:flex;flex-wrap:wrap;gap:12px}
+
+    /* Card visual (event card sample) */
+    .event-card{width:320px;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(245,243,241,0.98));box-shadow:var(--shadow-soft);border:1px solid rgba(30,40,40,0.04)}
+    .event-cover{height:160px;background-size:cover;background-position:center}
+    .event-body{padding:14px}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700}
+    .badge--vip{background:linear-gradient(90deg,var(--mo-spot),var(--mo-amber));color:white}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+
+    /* Swatches */
+    .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+    .swatch{height:72px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .token-label{font-size:13px;color:var(--mo-muted);margin-top:8px}
+
+    /* Themes preview */
+    .preview{display:flex;gap:12px;flex-wrap:wrap}
+    .preview .card{flex:1 1 360px}
+
+    /* Small utilities */
+    .flex{display:flex;align-items:center;gap:12px}
+    .muted{color:var(--mo-muted)}
+
+    @media (max-width:760px){.type-samples{grid-template-columns:1fr}.preview{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <section class="card">
+      <h2>1. Resumen — Core UI System V11 (Modern Organic)</h2>
+      <p class="small">V11 actualiza la biblioteca visual a la dirección "Modern Organic" preservando compatibilidad con tokens previos (V10). Incluye paletas, componentes, demos de cards, hero adaptativo día/noche y pautas de accesibilidad. Este documento sirve como UI Kit para EstaNoche / Agendatelo.</p>
+
+      <div class="preview">
+        <div class="card en-theme">
+          <h3 style="margin-top:0">EstaNoche — Preview (modo night suave)</h3>
+          <div style="background:linear-gradient(135deg,rgba(30,40,40,0.02),rgba(245,243,241,0.02));padding:14px;border-radius:8px;color:var(--mo-text)">
+            <div style="font-family:var(--font-display);font-size:20px">🌿 EstaNoche — Night (soft)</div>
+            <div style="margin-top:8px;color:var(--mo-muted)">Un tono nocturno menos agresivo, conservando identidad y mejor legibilidad.</div>
+            <div style="margin-top:12px" class="btn-row">
+              <button class="btn btn--primary">🎉 Ver eventos</button>
+              <button class="btn btn--ghost">📍 Ver mapa</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card ag-theme">
+          <h3 style="margin-top:0">Agendatelo — Preview (modo day)</h3>
+          <div style="background:linear-gradient(180deg,rgba(122,154,126,0.06),rgba(255,255,255,0.02));padding:14px;border-radius:8px;color:var(--mo-text)">
+            <div style="font-family:var(--font-display);font-size:20px">📅 Agendatelo — Day</div>
+            <div style="margin-top:8px;color:var(--mo-muted)">Interfaz clara y cálida para creadores y gestores.</div>
+            <div style="margin-top:12px" class="btn-row">
+              <button class="btn btn--accent">🚀 Crear evento</button>
+              <button class="btn btn--outline">✉️ Contactar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2>2. Tipografía y escala</h2>
+      <p class="small">Familias: <strong>Roboto</strong> (titulares), <strong>Inter</strong> (cuerpo) y <strong>Montserrat</strong> (CTAs). Escala modular recomendada: 30 / 22 / 18 / 16 / 14.</p>
+      <div class="type-samples">
+        <div class="sample">
+          <h1>H1 — Roboto 30px</h1>
+          <h2>H2 — Roboto 22px</h2>
+          <p>Lead / cuerpo — Inter 16px. Ejemplo: "Encuentra y gestiona eventos con confianza y simplicidad."</p>
+        </div>
+        <div class="sample">
+          <div class="type-title">Botones / CTAs</div>
+          <div class="type-body cta-sample">Montserrat, 15px, 700 — Texto claro y directo.</div>
+          <p style="margin-top:8px;color:var(--mo-muted)">Recomendaciones: usar display solo en hero y títulos importantes; Inter en todo el resto para legibilidad.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Componentes — Hero, Card y Badge</h2>
+      <p class="small">Ejemplos visuales para implementación inmediata (React/Tailwind tokens debajo).</p>
+
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <div style="min-width:320px">
+          <h4 style="margin:0 0 8px 0">Hero adaptativo (día / noche)</h4>
+          <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(30,40,40,0.04);">
+            <div style="background:linear-gradient(135deg,rgba(122,154,126,0.12),rgba(255,255,255,0.02));padding:18px">
+              <div style="font-size:18px;font-family:var(--font-display)">Explora hoy — descubre esta noche</div>
+              <p class="small">Hero progresivo con CTA fijo y microinteracción al hacer scroll.</p>
+              <div class="btn-row" style="margin-top:10px">
+                <button class="btn btn--primary">Buscar eventos</button>
+                <button class="btn btn--ghost">Filtrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="min-width:320px">
+          <h4 style="margin:0 0 8px 0">Event Card (demo)</h4>
+          <div class="event-card">
+            <div class="event-cover" style="background-image:url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80');"></div>
+            <div class="event-body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-weight:800;color:var(--mo-olive)">Concierto al aire libre</div>
+                  <div class="muted">Sala La Terraza — 21:30</div>
+                </div>
+                <div>
+                  <span class="badge badge--vip">VIP</span>
+                </div>
+              </div>
+              <div class="meta">
+                <div class="muted">Entradas desde 12€</div>
+                <button class="btn btn--primary" style="height:36px;padding:0 12px;border-radius:10px">Ver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. Iconografía — especificación</h2>
+      <p class="small">Conservar set outline. Ajustes para V11: usar stroke 1.6–2.2 px y preferir iconos con formas redondeadas y grosores consistentes para mejorar lectura en pantallas retina y móviles.</p>
+      <table>
+        <thead><tr><th>Propiedad</th><th>Especificación</th></tr></thead>
+        <tbody>
+          <tr><td>Tamaño lienzo</td><td>24 × 24 px (con variantes 32 / 44 para badges)</td></tr>
+          <tr><td>Grosor trazo</td><td>1.6–2.2 px</td></tr>
+          <tr><td>Formato</td><td>SVG (stroke) — usar <code>currentColor</code> y system-tint variables</td></tr>
+          <tr><td>Export</td><td>SVG optimizado + PNG 2×</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>5. Paletas y tokens (V11)</h2>
+      <p class="small">Tokens listos para llevar a CSS / Tailwind config.</p>
+      <div class="swatches">
+        <div>
+          <div class="swatch" style="background:var(--mo-sage)">Sage</div>
+          <div class="token-label">--mo-sage — #7A9A7E</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--mo-olive)">Olive</div>
+          <div class="token-label">--mo-olive — #4B744D</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--mo-coral)">Coral</div>
+          <div class="token-label">--mo-coral — #FF6B6B</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--mo-spot)">Brand spot</div>
+          <div class="token-label">--mo-spot — #F72585 (uso mínimo)</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--mo-amber)">Amber</div>
+          <div class="token-label">--mo-amber — #FFB703</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>6. Accesibilidad y contraste</h2>
+      <p class="small">Reglas: texto principal mínimo AA; CTAs contrast ratio ≥ 4.5:1; tamaños táctiles ≥ 44×44 px; enfoque claro y visible; comprobar en modo noche y brillo bajo.</p>
+      <div class="grid-ex" style="margin-top:8px">
+        <div class="box">Probar con axe y contrast checkers</div>
+        <div class="box">Asegurar focus styles para teclado y lector de pantalla</div>
+        <div class="box">Animaciones: reduce-motion respect</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>7. Tokens CSS y Tailwind example</h2>
+      <p class="small">Ejemplo rápido para integrar en <code>tailwind.config.js</code> y variables CSS.</p>
+      <pre style="background:#f6f6f6;padding:12px;border-radius:8px;color:#222;overflow:auto">module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        'mo-sage': '#7A9A7E',
+        'mo-olive': '#4B744D',
+        'mo-coral': '#FF6B6B',
+        'mo-spot': '#F72585',
+        'mo-amber': '#FFB703'
+      },
+      borderRadius: { 'lg': '14px' }
+    }
+  }
+}</pre>
+    </section>
+
+    <section class="card">
+      <h2>8. Entregables y export</h2>
+      <p class="small">Archivos a generar:</p>
+      <ul style="color:var(--mo-muted)">
+        <li>UI Kit V11 — <code>core-ui-v11.css</code> y <code>core-ui-v11.tailwind</code></li>
+        <li>Set SVG icons + PNG fallbacks</li>
+        <li>Brand sheet PDF (paletas, tipografías, ejemplos)
+        <li>Mockups hero / card / ficha en PNG 1440px</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>9. Demos visuales (código rápido)</h2>
+      <p class="small">Snippets listos para copiar: Hero, Card y Button.</p>
+      <pre style="background:#f6f6f6;padding:12px;border-radius:8px;color:#222;overflow:auto">/* Hero (React JSX) */
+function Hero(){
+  return (
+    <section className="hero bg-gradient-to-br from-mo-sage/10 to-white p-6 rounded-lg">
+      <h1 className="text-2xl font-display text-mo-olive">Explora hoy — descubre esta noche</h1>
+      <p className="text-sm text-muted">Encuentra eventos, gestiona tu espacio y conecta con tu público.</p>
+      <div className="mt-4 flex gap-3">
+        <button className="btn-primary">Buscar eventos</button>
+        <button className="btn-ghost">Filtrar</button>
+      </div>
+    </section>
+  )
+}
+
+/* Event Card (JSX) */
+function EventCard(){
+  return (
+    <article className="event-card">
+      <div className="event-cover" style={{backgroundImage:'url(/assets/cover.jpg)'}}></div>
+      <div className="event-body">
+        <h3 className="font-bold text-mo-olive">Concierto al aire libre</h3>
+        <p className="text-sm text-muted">Sala La Terraza — 21:30</p>
+      </div>
+    </article>
+  )
+}
+</pre>
+    </section>
+
+    <section class="card">
+      <h2>10. Migración desde V10 → V11</h2>
+      <p class="small">Pasos recomendados:</p>
+      <ol style="color:var(--mo-muted)">
+        <li>Generar <code>core-ui-v11.css</code> a partir de tokens CSS provistos.</li>
+        <li>Agregar colores a <code>tailwind.config.js</code> y ejecutar build.</li>
+        <li>Revisar componentes críticos (hero, card, botones) y adaptar variables CSS (nombres compatibles).</li>
+        <li>Prueba de contraste y performance (Lighthouse, axe).</li>
+        <li>Deploy gradual por feature-flag en staging, validar analytics y feedback.</li>
+      </ol>
+    </section>
+
+    <footer>Documento: Core UI System V11 — © 2025 Proebac · Todos los derechos reservados</footer>
+  </div>
+</body>
+</html>

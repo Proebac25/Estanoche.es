@@ -1,0 +1,559 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import { useTheme } from '../../context/ThemeContext';
+import { FaArrowLeft, FaSave, FaTrash, FaPlus, FaCamera } from 'react-icons/fa';
+import { supabase } from '../../lib/supabase';
+import {
+    FaInstagram,
+    FaTiktok,
+    FaTwitter,
+    FaGlobe,
+    FaFacebook,
+    FaWhatsapp,
+    FaShareAlt
+} from 'react-icons/fa';
+import '../../styles/core/core-ui-v11.css';
+
+const FichaPromotor = () => {
+    const { theme } = useTheme();
+    const { user, loginManual } = useAuth();
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        nombre_usuario: '',
+        email: '',
+        nombre: '',
+        apellidos: '',
+        telefono: '',
+        calle: '',
+        numero: '',
+        ciudad: '',
+        provincia: '',
+        codigo_postal: '',
+        avatar_url: ''
+    });
+
+    const [redes, setRedes] = useState([]);
+    const [nuevaRed, setNuevaRed] = useState({ tipo_red: 'Instagram', url: '', customName: '' });
+    const [showAddRed, setShowAddRed] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [message, setMessage] = useState({ type: '', text: '' });
+
+    useEffect(() => {
+        if (user) {
+            cargarDatos();
+        } else {
+            // Si no hay usuario, redirigir al login
+            // navigate('/login');
+        }
+    }, [user]);
+
+    const cargarDatos = async () => {
+        if (!user) return;
+
+        // 1. Cargar datos del perfil con RLS (query directa)
+        try {
+            const { data: userData, error } = await supabase
+                .from('usuarios')
+                .select('id, nombre_usuario, email, telefono, tipo, nombre, apellidos, calle, numero, ciudad, provincia, codigo_postal, avatar_url')
+                .eq('id', user.id)
+                .single();
+
+            if (error) {
+                console.error('❌ Error al cargar perfil:', error);
+            } else {
+                // Ya no usamos datos_negocio, leemos directo de columnas
+                setFormData(prev => ({
+                    ...prev,
+                    nombre: userData.nombre || user.nombre || '',
+                    apellidos: userData.apellidos || user.apellidos || '',
+                    email: userData.email || user.email || '',
+                    telefono: userData.telefono || user.telefono || '',
+                    calle: userData.calle || '',
+                    numero: userData.numero || '',
+                    ciudad: userData.ciudad || '',
+                    provincia: userData.provincia || '',
+                    // CP es numérico en DB, lo convertimos a string para el input y mostramos padded si es necesario
+                    codigo_postal: userData.codigo_postal ? userData.codigo_postal.toString().padStart(5, '0') : '',
+                    avatar_url: userData.avatar_url || user.avatar_url || ''
+                }));
+            }
+        } catch (fetchError) {
+            console.error('💥 Error al cargar perfil:', fetchError);
+        }
+
+        // 2. Cargar redes sociales con RLS (query directa)
+        try {
+            console.log('🔍 Cargando redes sociales para:', user.id);
+            const { data: redesData, error: redesError } = await supabase
+                .from('redes_sociales')
+                .select('*')
+                .eq('propietario_id', user.id)
+                .eq('tipo_propietario', 'promotor')
+                .order('created_at', { ascending: false });
+
+            if (redesError) {
+                console.error('❌ Error cargando redes sociales:', redesError);
+            } else {
+                console.log('✅ Redes sociales cargadas:', redesData.length, 'redes');
+                setRedes(redesData || []);
+            }
+        } catch (redesError) {
+            console.error('💥 Error al cargar redes sociales:', redesError);
+        }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        // Validación estricta para código postal
+        if (name === 'codigo_postal') {
+            // Solo permitir números y máximo 5 dígitos
+            const numericValue = value.replace(/\D/g, '').slice(0, 5);
+            setFormData({ ...formData, [name]: numericValue });
+            return;
+        }
+
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleAddRed = async () => {
+        if (!nuevaRed.url) {
+            console.warn('⚠️ URL vacía, abortando');
+            return;
+        }
+
+        if (nuevaRed.tipo_red === 'Otra' && !nuevaRed.customName.trim()) {
+            setMessage({ type: 'error', text: 'Por favor, especifica el nombre de la red social' });
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        const redData = {
+            propietario_id: user.id,
+            tipo_propietario: 'promotor',
+            tipo_red: nuevaRed.tipo_red === 'Otra' ? nuevaRed.customName : nuevaRed.tipo_red,
+            url: nuevaRed.url,
+            es_principal: false
+        };
+
+        try {
+            const { data, error } = await supabase
+                .from('redes_sociales')
+                .insert([redData])
+                .select()
+                .single();
+
+            if (error) {
+                console.error('❌ Error al añadir red social:', error);
+                setMessage({ type: 'error', text: `Error: ${error.message}` });
+            } else {
+                console.log('✅ Red social añadida:', data);
+                setNuevaRed({ tipo_red: 'Instagram', url: '', customName: '' });
+                setShowAddRed(false);
+                setMessage({ type: 'success', text: 'Red social añadida correctamente' });
+                await cargarDatos();
+            }
+        } catch (error) {
+            console.error('💥 Error al añadir red social:', error);
+            setMessage({ type: 'error', text: 'Error de conexión' });
+        }
+
+        setIsSubmitting(false);
+    };
+
+    const handleDeleteRed = async (redId) => {
+        if (!window.confirm('¿Seguro que quieres eliminar esta red social?')) return;
+
+        try {
+            const { error } = await supabase
+                .from('redes_sociales')
+                .delete()
+                .eq('id', redId);
+
+            if (error) {
+                console.error('❌ Error al eliminar:', error);
+                setMessage({ type: 'error', text: 'Error al eliminar red social' });
+            } else {
+                setMessage({ type: 'success', text: 'Red social eliminada' });
+                await cargarDatos();
+            }
+        } catch (error) {
+            console.error('💥 Error al eliminar:', error);
+            setMessage({ type: 'error', text: 'Error de conexión' });
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setMessage({ type: '', text: '' });
+
+        try {
+
+
+            // 2. Actualizar directamente en Supabase (Columnas Planas)
+            const updateData = {
+                nombre: formData.nombre,
+                apellidos: formData.apellidos,
+                calle: formData.calle,
+                numero: formData.numero,
+                ciudad: formData.ciudad,
+                provincia: formData.provincia,
+                // Aseguramos que CP sea entero o null
+                codigo_postal: formData.codigo_postal ? parseInt(formData.codigo_postal, 10) : null,
+                avatar_url: formData.avatar_url,
+                updated_at: new Date().toISOString()
+            };
+
+            const { data, error } = await supabase
+                .from('usuarios')
+                .update(updateData)
+                .eq('id', user.id)
+                .select()
+                .single();
+
+            if (error) {
+                console.error('❌ Error al actualizar:', error);
+                setMessage({ type: 'error', text: `Error al guardar: ${error.message}` });
+            } else {
+                console.log('✅ Perfil actualizado (Supabase Directo):', data);
+                // Actualizar contexto local para reflejar cambios inmediatos
+                const updatedUser = { ...user, ...formData };
+                if (loginManual) loginManual(updatedUser);
+
+                setMessage({ type: 'success', text: 'Ficha actualizada correctamente' });
+            }
+        } catch (error) {
+            console.error('💥 Error al actualizar perfil:', error);
+            setMessage({ type: 'error', text: 'Error de conexión' });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const getRedIcon = (tipo) => {
+        switch (tipo?.toLowerCase()) {
+            case 'instagram': return <FaInstagram size={18} />;
+            case 'tiktok': return <FaTiktok size={18} />;
+            case 'twitter': case 'x': return <FaTwitter size={18} />;
+            case 'facebook': return <FaFacebook size={18} />;
+            case 'whatsapp': return <FaWhatsapp size={18} />;
+            case 'web': return <FaGlobe size={18} />;
+            default: return <FaShareAlt size={18} />;
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-mo-bg dark:bg-gray-900 flex flex-col transition-colors duration-300">
+            <Header theme={theme} />
+
+            <main className="flex-1 w-full max-w-2xl mx-auto p-3 md:p-6">
+                <div className="p-2">
+
+                    {/* Avatar compacto con opción de editar */}
+                    <div className="mb-3 text-center">
+                        <div className="relative inline-block group">
+                            <div
+                                onClick={() => document.getElementById('avatar-input').click()}
+                                className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-mo-muted dark:text-gray-500 border-2 border-mo-surface dark:border-gray-800 shadow-sm overflow-hidden cursor-pointer relative z-10"
+                            >
+                                {formData.avatar_url ? (
+                                    <img src={formData.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                ) : (
+                                    <FaCamera size={20} />
+                                )}
+
+                                {/* Overlay Hover */}
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <FaCamera className="text-white" size={16} />
+                                </div>
+                            </div>
+
+                            {/* Indicador "+" mejor posicionado */}
+                            <div className="absolute -bottom-1 -right-1 z-20 bg-mo-sage text-white rounded-full w-6 h-6 flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-sm pointer-events-none">
+                                <FaPlus size={10} />
+                            </div>
+                        </div>
+
+                        <input
+                            type="file"
+                            id="avatar-input"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={async (e) => {
+                                const file = e.target.files[0];
+                                if (!file) return;
+
+                                try {
+                                    setMessage({ type: '', text: '' });
+                                    // 1. Validar tamaño (max 256KB)
+                                    if (file.size > 256 * 1024) {
+                                        setMessage({ type: 'error', text: 'La imagen no puede superar los 256KB' });
+                                        return;
+                                    }
+
+                                    // 2. Subir a Server (Bypass RLS)
+                                    const formDataPayload = new FormData();
+                                    formDataPayload.append('file', file);
+                                    formDataPayload.append('userId', user.id);
+
+                                    const response = await fetch('http://localhost:3001/api/upload-avatar', {
+                                        method: 'POST',
+                                        body: formDataPayload
+                                    });
+
+                                    const result = await response.json();
+
+                                    if (!result.success) {
+                                        throw new Error(result.error);
+                                    }
+
+                                    // 3. Actualizar estado local
+                                    setFormData(prev => ({ ...prev, avatar_url: result.publicUrl }));
+                                    setMessage({ type: 'success', text: 'Imagen cargada. Recuerda guardar cambios.' });
+
+                                } catch (error) {
+                                    console.error('Error subiendo imagen:', error);
+                                    setMessage({ type: 'error', text: 'Error al subir la imagen' });
+                                }
+                            }}
+                        />
+
+                        <h1 className="font-display text-lg font-bold text-mo-text dark:text-white mt-2 capitalize">
+                            {user?.nombre_usuario || 'Ficha Promotor'}
+                        </h1>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-2">
+                        {message.text && (
+                            <div className={`p-2 rounded-mo font-ui text-center text-xs font-bold ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                {message.text}
+                            </div>
+                        )}
+
+                        {/* DATOS PERSONALES */}
+                        <div className="space-y-2">
+                            <div className="grid grid-cols-2 gap-2">
+                                <input
+                                    type="text"
+                                    name="nombre"
+                                    value={formData.nombre}
+                                    onChange={handleChange}
+                                    className="w-full p-2 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-mo font-ui outline-none text-mo-text dark:text-white transition-all text-sm"
+                                    placeholder="Nombre"
+                                />
+                                <input
+                                    type="text"
+                                    name="apellidos"
+                                    value={formData.apellidos}
+                                    onChange={handleChange}
+                                    className="w-full p-2 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-mo font-ui outline-none text-mo-text dark:text-white transition-all text-sm"
+                                    placeholder="Apellidos"
+                                />
+                            </div>
+                            <input
+                                type="email"
+                                value={formData.email}
+                                disabled
+                                className="w-full p-2 bg-gray-50 dark:bg-gray-900 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-mo font-ui text-mo-muted dark:text-gray-500 text-xs cursor-not-allowed"
+                            />
+                            {/* Teléfono con botón Cambiar */}
+                            <div className="flex gap-2">
+                                <input
+                                    type="tel"
+                                    name="telefono"
+                                    value={formData.telefono}
+                                    onChange={handleChange}
+                                    disabled={user?.telefono && user.telefono.length > 5}
+                                    className={`flex-1 p-3 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-xl outline-none text-mo-text dark:text-white transition-all shadow-sm text-sm ${user?.telefono && user.telefono.length > 5 ? 'opacity-60 cursor-not-allowed bg-gray-50' : ''}`}
+                                    placeholder="Teléfono móvil (+34...)"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => navigate('/RegistroEmail')}
+                                    className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-mo-text dark:text-white text-xs font-bold rounded-mo hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    Cambiar
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* DIRECCIÓN */}
+                        <div className="space-y-2">
+                            <div className="grid grid-cols-[3fr_1fr] gap-2">
+                                <input
+                                    type="text"
+                                    name="calle"
+                                    value={formData.calle}
+                                    onChange={handleChange}
+                                    className="w-full p-3 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-xl outline-none text-mo-text dark:text-white transition-all shadow-sm text-sm"
+                                    placeholder="Calle / Av. / Plaza"
+                                />
+                                <input
+                                    type="text"
+                                    name="numero"
+                                    value={formData.numero}
+                                    onChange={handleChange}
+                                    className="w-full p-3 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-xl outline-none text-mo-text dark:text-white transition-all shadow-sm text-sm"
+                                    placeholder="Nº"
+                                />
+                            </div>
+                            <div className="grid grid-cols-[2fr_2fr_1fr] gap-2">
+                                <input
+                                    type="text"
+                                    name="ciudad"
+                                    value={formData.ciudad}
+                                    onChange={handleChange}
+                                    className="w-full p-2 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-mo font-ui outline-none text-mo-text dark:text-white transition-all text-sm"
+                                    placeholder="Ciudad"
+                                />
+                                <input
+                                    type="text"
+                                    name="provincia"
+                                    value={formData.provincia}
+                                    onChange={handleChange}
+                                    className="w-full p-2 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-mo font-ui outline-none text-mo-text dark:text-white transition-all text-sm"
+                                    placeholder="Provincia"
+                                />
+                                <input
+                                    type="text"
+                                    name="codigo_postal"
+                                    value={formData.codigo_postal}
+                                    onChange={handleChange}
+                                    className="w-full p-2 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-mo font-ui outline-none text-mo-text dark:text-white transition-all text-sm"
+                                    placeholder="C.P."
+                                />
+                            </div>
+                        </div>
+
+                        {/* REDES SOCIALES */}
+                        <div className="space-y-2">
+                            <div className="grid grid-cols-1">
+                                {redes.length > 0 && (
+                                    <div className="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-mo overflow-hidden">
+                                        {redes.map((red, index) => (
+                                            <div key={red.id} className={`flex items-center p-2 gap-3 ${index !== redes.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : ''}`}>
+                                                <div className="shrink-0 w-8 h-8 rounded-mo font-ui bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-mo-sage">
+                                                    {getRedIcon(red.tipo_red)}
+                                                </div>
+
+                                                <div className="font-bold text-sm min-w-[70px]">
+                                                    {red.tipo_red}
+                                                </div>
+
+                                                <div className="text-sm text-mo-muted truncate flex-1">
+                                                    {red.url}
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDeleteRed(red.id)}
+                                                    className="shrink-0 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors"
+                                                    title="Eliminar"
+                                                >
+                                                    <FaTrash size={12} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {showAddRed ? (
+                                <div className="p-4 bg-mo-sage/5 dark:bg-mo-sage/10 rounded-mo border-2 border-dashed border-mo-sage/30 animate-in fade-in slide-in-from-top-2">
+                                    <div className="flex flex-col gap-3">
+                                        <select
+                                            value={nuevaRed.tipo_red}
+                                            onChange={(e) => setNuevaRed({ ...nuevaRed, tipo_red: e.target.value, customName: '' })}
+                                            className="p-3 bg-white dark:bg-gray-800 border-none rounded-xl outline-none text-xs font-bold uppercase tracking-widest text-mo-text dark:text-white shadow-soft"
+                                        >
+                                            <option>Instagram</option>
+                                            <option>TikTok</option>
+                                            <option>X</option>
+                                            <option>Web</option>
+                                            <option>Facebook</option>
+                                            <option>WhatsApp</option>
+                                            <option>Otra</option>
+                                        </select>
+
+                                        {/* Campo de nombre personalizado (solo si es "Otra") */}
+                                        {nuevaRed.tipo_red === 'Otra' && (
+                                            <input
+                                                type="text"
+                                                value={nuevaRed.customName}
+                                                onChange={(e) => setNuevaRed({ ...nuevaRed, customName: e.target.value })}
+                                                className="p-3 bg-white dark:bg-gray-800 border-none rounded-xl outline-none text-sm text-mo-text dark:text-white shadow-soft"
+                                                placeholder="Nombre de la red (ej: LinkedIn, YouTube...)"
+                                            />
+                                        )}
+
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={nuevaRed.url}
+                                                onChange={(e) => setNuevaRed({ ...nuevaRed, url: e.target.value })}
+                                                className="flex-1 p-3 bg-white dark:bg-gray-800 border-none rounded-xl outline-none text-sm text-mo-text dark:text-white shadow-soft"
+                                                placeholder="@usuario o url..."
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleAddRed}
+                                                disabled={isSubmitting}
+                                                className="p-3 bg-mo-sage text-white rounded-mo shadow-mo-soft active:scale-95"
+                                            >
+                                                <FaPlus size={14} />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAddRed(false)}
+                                                className="p-3 bg-gray-200 dark:bg-gray-700 text-gray-500 rounded-mo shadow-mo-softmd active:scale-95"
+                                            >
+                                                X
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAddRed(true)}
+                                    className="w-full py-3 bg-mo-sage hover:bg-mo-olive text-white rounded-mo shadow-mo-soft flex items-center justify-center gap-2 group hover:scale-[1.02] transition-all"
+                                >
+                                    <FaPlus className="group-hover:rotate-90 transition-transform" size={12} />
+                                    <span className="text-xs font-bold uppercase tracking-wider">Añadir red social</span>
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Botones de acción */}
+                        <div className="flex gap-2 mt-3">
+                            <button
+                                type="button"
+                                onClick={() => navigate(-1)}
+                                className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-mo-text dark:text-white rounded-mo font-cta font-bold text-base shadow-mo-soft active:scale-95 transition-all flex items-center justify-center gap-2"
+                            >
+                                <FaArrowLeft size={16} />
+                                Volver
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="flex-1 py-3 bg-mo-olive hover:opacity-90 text-white rounded-mo font-cta font-bold text-base shadow-mo-soft active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                            >
+                                <FaSave size={16} />
+                                {isSubmitting ? 'Guardando...' : 'Guardar'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    );
+};
+
+export default FichaPromotor;

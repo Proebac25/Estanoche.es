@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proebac25 — Core UI System V10 (Especificación completa)</title>
+  <style>
+    :root{
+      /* CORE TOKENS */
+      --font-display: 'Roboto', serif;
+      --font-ui: 'Inter', sans-serif;
+      --font-cta: 'Montserrat', sans-serif;
+      --radius: 12px;
+      --btn-h: 44px;
+      --btn-w: 220px;
+      --space: 16px;
+      --grid: 8px;
+      --bg-core: #121212;
+      --card: #1e1e1e;
+      --text-core: #EAEAEA;
+      --muted-core: #B3B3B3;
+      --shadow: 0 8px 20px rgba(0,0,0,0.25);
+
+      /* EstaNoche */
+      --en-blue-light: #3C3C8A;
+      --en-blue-dark: #16223D;
+      --en-pink: #F72585;
+      --en-amber: #FFB703;
+      --en-bg: linear-gradient(135deg,var(--en-blue-light) 0%,var(--en-blue-dark) 40%,var(--en-pink) 100%);
+      --en-cta: linear-gradient(90deg,var(--en-pink) 0%,var(--en-amber) 100%);
+
+      /* Agendatelo */
+      --ag-blue: #1E3A8A;
+      --ag-dark: #16223D;
+      --ag-amber: #FFB703;
+      --ag-bg: linear-gradient(135deg,var(--ag-blue) 0%,var(--ag-dark) 40%,var(--ag-amber) 100%);
+      --ag-cta: linear-gradient(90deg,var(--ag-dark) 0%,var(--ag-amber) 100%);
+
+      /* Accessibility helpers */
+      --focus-outline: 3px solid rgba(255,255,255,0.06);
+    }
+
+    /* Reset & layout */
+    *{box-sizing:border-box}
+    body{font-family:var(--font-ui);background:var(--bg-core);color:var(--text-core);margin:0;padding:28px;display:flex;flex-direction:column;align-items:center;gap:28px}
+    .container{width:100%;max-width:1200px}
+    section.card{background:var(--card);border-radius:14px;padding:20px;border:1px solid rgba(255,255,255,0.03);box-shadow:var(--shadow)}
+    h2{font-family:var(--font-display);margin:0 0 12px 0}
+    p.small{color:var(--muted-core);margin:0 0 12px 0}
+
+    /* Grid / spacing visual */
+    .grid-ex{display:flex;gap:12px;flex-wrap:wrap}
+    .box{background:rgba(255,255,255,0.03);padding:12px;border-radius:8px}
+
+    /* Typography samples */
+    .type-samples{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .type-samples .sample{padding:12px;background:rgba(0,0,0,0.2);border-radius:8px}
+    .sample h1{font-family:var(--font-display);font-size:28px;margin:0}
+    .sample h2{font-family:var(--font-display);font-size:22px;margin:6px 0}
+    .sample p{font-family:var(--font-ui);font-size:16px;color:var(--muted-core);margin:6px 0}
+    .cta-sample{font-family:var(--font-cta);font-weight:700}
+
+    /* Button catalog */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:0 16px;height:var(--btn-h);border-radius:var(--radius);cursor:pointer;border:none;font-family:var(--font-cta);font-weight:700}
+    .btn--grad{background:var(--en-cta);color:white}
+    .ag-theme .btn--grad{background:var(--ag-cta)}
+    .btn--white{background:rgba(255,255,255,0.95);color:#121212}
+    .btn--outline{background:transparent;border:2px solid rgba(255,255,255,0.14);color:var(--text-core)}
+    .btn--ghost{background:rgba(255,255,255,0.03);color:var(--text-core)}
+    .btn--solid{background:var(--en-pink);color:white}
+    .ag-theme .btn--solid{background:var(--ag-amber);color:var(--ag-dark)}
+    .btn:focus{outline:var(--focus-outline);outline-offset:4px}
+
+    .btn-row{display:flex;flex-wrap:wrap;gap:12px}
+
+    /* Icon specs table */
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:10px;border-top:1px solid rgba(255,255,255,0.03);text-align:left;color:var(--muted-core)}
+    th{color:white;font-family:var(--font-display)}
+
+    /* Tokens visual */
+    .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+    .swatch{height:72px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .token-label{font-size:13px;color:var(--muted-core);margin-top:8px}
+
+    footer{color:var(--muted-core);font-size:13px;text-align:center;margin-top:6px}
+
+    /* Themes preview */
+    .preview{display:flex;gap:12px;flex-wrap:wrap}
+    .preview .card{flex:1 1 360px}
+
+    @media (max-width:760px){.type-samples{grid-template-columns:1fr}.preview{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <section class="card">
+      <h2>1. Resumen — Core UI System V09</h2>
+      <p class="small">Este documento consolida tokens, tipografía, sistema de botones, iconografía y reglas de uso para el ecosistema Proebac25. El Core es neutral; los temas (EstaNoche / Agendatelo) se aplican visualmente.</p>
+
+      <div class="preview">
+        <div class="card en-theme">
+          <h3 style="margin-top:0">EstaNoche — Preview</h3>
+          <div style="background:var(--en-bg);padding:14px;border-radius:8px;color:white">
+            <div style="font-family:var(--font-display);font-size:20px">🌙 EstaNoche.es</div>
+            <div style="margin-top:8px">Descubre el ocio de tu ciudad con energía neón.</div>
+            <div style="margin-top:12px" class="btn-row">
+              <button class="btn btn--grad">🎉 Ver eventos</button>
+              <button class="btn btn--white">📍 Ver mapa</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card ag-theme">
+          <h3 style="margin-top:0">Agendatelo — Preview</h3>
+          <div style="background:var(--ag-bg);padding:14px;border-radius:8px;color:white">
+            <div style="font-family:var(--font-display);font-size:20px">📅 Agendatelo.es</div>
+            <div style="margin-top:8px">Organiza tus oportunidades con estilo profesional.</div>
+            <div style="margin-top:12px" class="btn-row">
+              <button class="btn btn--grad">🚀 Crear evento</button>
+              <button class="btn btn--white">✉️ Contactar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2>2. Tipografía y escala</h2>
+      <p class="small">Familias: <strong>Roboto</strong> para titulares, <strong>Inter</strong> para cuerpo y <strong>Montserrat</strong> para CTAs y microcopy.</p>
+      <div class="type-samples">
+        <div class="sample">
+          <h1>H1 — Playfair Display 28px</h1>
+          <h2>H2 — Playfair Display 22px</h2>
+          <p>Lead / cuerpo — Inter 16px. Ejemplo de texto de cuerpo: "Una breve descripción ayuda al usuario a entender el propósito."</p>
+        </div>
+        <div class="sample">
+          <div class="type-title">Botones / CTAs</div>
+          <div class="type-body cta-sample">Montserrat, 15px, 700 — Texto breve y directo.</div>
+          <p style="margin-top:8px;color:var(--muted-core)">Recomendaciones: H1–H3 con Playfair solo en contextos hero o fichas. Inter como sistema principal para formularios y listas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Sistema de botones (catálogo)</h2>
+      <p class="small">Variables: altura 44px, radio 12px, padding horizontal adaptable. Todos los botones deben tener un objetivo claro y texto con verbo en imperativo.</p>
+
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <div style="min-width:260px">
+          <h4 style="margin:0 0 8px 0">Botones principales</h4>
+          <div class="btn-row">
+            <button class="btn btn--grad">🎉 Ver eventos</button>
+            <button class="btn btn--solid">💬 Contactar</button>
+          </div>
+          <p class="small">Uso: CTAs principales en hero y fichas.</p>
+        </div>
+
+        <div style="min-width:260px">
+          <h4 style="margin:0 0 8px 0">Botones secundarios</h4>
+          <div class="btn-row">
+            <button class="btn btn--white">📍 Ver mapa</button>
+            <button class="btn btn--outline">🔗 Compartir</button>
+            <button class="btn btn--ghost">⭐ Favorito</button>
+          </div>
+          <p class="small">Uso: acciones secundarias, estados y herramientas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. Iconografía — especificaciones</h2>
+      <p class="small">Decisión: unificar iconos básicos en un set outline adaptable. Recomendadas: Lucide / Feather / Heroicons (outline).</p>
+      <table>
+        <thead><tr><th>Propiedad</th><th>Especificación</th></tr></thead>
+        <tbody>
+          <tr><td>Tamaño lienzo</td><td>24 × 24 px</td></tr>
+          <tr><td>Grosor trazo</td><td>1.5–2 px</td></tr>
+          <tr><td>Formato</td><td>SVG sin relleno (stroke only) — usar <code>currentColor</code></td></tr>
+          <tr><td>Esquinas</td><td>redondeadas suaves (para levantar peso visual)</td></tr>
+          <tr><td>Proporción</td><td>Cuadrado, centrado</td></tr>
+          <tr><td>Exportación</td><td>SVG optimizado + PNG 2× (44×44, 88×88) para fallback</td></tr>
+        </tbody>
+      </table>
+
+      <p class="small" style="margin-top:8px">Lista mínima sugerida (core icons): calendar, map-pin, share, heart, external-link, user, settings, search, bell, menu.</p>
+    </section>
+
+    <section class="card">
+      <h2>5. Paletas y tokens</h2>
+      <p class="small">Swatches principales — valores para aplicar en CSS variables.</p>
+      <div class="swatches">
+        <div>
+          <div class="swatch" style="background:var(--en-blue-light)">EN Blue</div>
+          <div class="token-label">#3C3C8A</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--en-blue-dark)">EN Dark</div>
+          <div class="token-label">#16223D</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--en-pink)">EN Pink</div>
+          <div class="token-label">#F72585</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--en-amber)">EN Amber</div>
+          <div class="token-label">#FFB703</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--ag-blue)">AG Blue</div>
+          <div class="token-label">#1E3A8A</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--ag-dark)">AG Dark</div>
+          <div class="token-label">#16223D</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:var(--ag-amber)">AG Amber</div>
+          <div class="token-label">#FFB703</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>6. Accesibilidad y contraste</h2>
+      <p class="small">Reglas: texto principal mínimo AA; botones CTAs contrast ratio ≥ 4.5:1; tamaños táctiles ≥ 44×44 px. Verificar colores en entorno real (OLED, móviles con brillo bajo).</p>
+      <div class="grid-ex" style="margin-top:8px">
+        <div class="box">Verificar ratio con herramienta (axe / contrast checker)</div>
+        <div class="box">Asegurar foco visible (outline)</div>
+        <div class="box">Evitar uso estático del índigo en fondos grandes por sensibilidad cultural</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>7. Entregables y export</h2>
+      <p class="small">Archivos a generar para dev y marketing:</p>
+      <ul style="color:var(--muted-core)">
+        <li>UI Kit CSS (ui-core.css) + temas (theme-en.css, theme-ag.css)</li>
+        <li>Fichero SVG icon set (24px) + PNG 2×</li>
+        <li>Brand sheet PDF (paletas, tipografías, ejemplo de uso)</li>
+        <li>Carpeta assets: logos en SVG y PNG</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>8. Tabla rápida — Botón / Icono / Uso</h2>
+      <table>
+        <thead><tr><th>Botón</th><th>Icono sugerido</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td>Ver eventos</td><td>calendar</td><td>CTA principal en landing y fichas</td></tr>
+          <tr><td>Crear evento</td><td>plus-circle</td><td>CTA profesional / crear contenido</td></tr>
+          <tr><td>Favorito</td><td>heart</td><td>Guardar / marcar</td></tr>
+          <tr><td>Compartir</td><td>share</td><td>Compartir enlace o redes</td></tr>
+          <tr><td>Ver mapa</td><td>map-pin</td><td>Abrir geolocalización</td></tr>
+        </tbody>
+      </table>
+    </section>
+<section class="card">
+  <h2>9. Repositorios oficiales</h2>
+  <p class="small">Referencias GitHub para sincronización y control de versiones:</p>
+  <ul style="color:var(--muted-core)">
+    <li><strong>EstaNoche.es</strong> — <a href="https://github.com/Proebac25/estanoche-es" target="_blank">github.com/Proebac25/estanoche-es</a></li>
+    <li><strong>Agendatelo.es</strong> — <a href="https://github.com/Proebac25/Agendatelo.es" target="_blank">github.com/Proebac25/Agendatelo.es</a></li>
+  </ul>
+  <p class="small">Ambos repositorios se mantienen sincronizados con el sistema Core UI. Los cambios visuales o estructurales deben documentarse en la memoria técnica correspondiente.</p>
+</section>
+<section class="card">
+  <h2>10. Correos oficiales</h2>
+  <p class="small">Correos electronicos habilitados para cada dominio:</p>
+  <ul style="color:var(--muted-core)">
+    <li><strong>EstaNoche.es</strong> — < proebac25@estanoche.es"</li>
+    <li><strong>Agendatelo.es</strong> — < proebac25@agendatelo.es"</li>
+    
+  </ul>
+  <p class="small">De momento serán los únicos correos habilitados.</p>
+</section>   
+
+    <!-- AMPLIACIÓN NOVIEMBRE 2025 – Elementos reales en producción -->
+    <section class="card">
+      <h2>11. Novedades noviembre 2025 — Elementos reales en producción</h2>
+      <p class="small">Ampliación oficial del Core V09 con componentes ya implementados en Landing.jsx y en uso real.</p>
+
+      <!-- Nuevos tokens -->
+      <div class="swatches" style="margin-top:12px">
+        <div>
+          <div class="swatch" style="background:#2d2d2d">Gris inactivo</div>
+          <div class="token-label">#2d2d2d — para botones desactivados</div>
+        </div>
+        <div>
+          <div class="swatch" style="background:#d4a15a">Dorado decorativo</div>
+          <div class="token-label">#d4a15a — para texto destacado</div>
+        </div>
+      </div>
+
+      <!-- Ejemplos de botones inactivos -->
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn btn--ghost" style="background:#2d2d2d;color:#888">Registrarse (inactivo)</button>
+        <button class="btn btn--ghost" style="background:#2d2d2d;color:#888">Iniciar sesión (inactivo)</button>
+      </div>
+
+      <!-- Badge y texto destacado -->
+      <div style="margin-top:16px;display:flex;gap:12px;align-items:center">
+        <span style="background:var(--en-pink);color:white;padding:4px 10px;border-radius:6px;font-size:0.8rem;font-weight:700">NUEVO</span>
+        <span style="color:#d4a15a;font-weight:700">Edición especial: entradas limitadas</span>
+      </div>
+
+      <!-- Ticker animado -->
+      <div style="background:#000;padding:1rem;overflow:hidden;border-radius:8px;margin-top:16px">
+        <div style="display:inline-block;padding-left:100%;white-space:nowrap;animation:ticker 25s linear infinite">
+          <span style="padding:0 4rem;font-weight:bold;color:#FFB703;font-size:2rem">
+            ✨ ESPECIAL ZAMBOMBAS DE JEREZ ✨ 🎹 ¿PROMUEVES O PROTAGONIZAS EVENTOS? 🔊 ¿NO ESTÁ EL TUYO? 📧 CONTÁCTANOS 🚀 NOS LANZAMOS EN 2026 🚀
+          </span>
+        </div>
+      </div>
+    </section>
+
+ <footer>Documento: Core UI System V10 — © 2025 Proebac25 · Todos los derechos reservados</footer>
+  </div>
+
+  <style>
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</body>
+</html>

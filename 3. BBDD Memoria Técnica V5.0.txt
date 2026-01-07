@@ -1,0 +1,185 @@
+?? VISIÓN GENERAL
+  
+* PLATAFORMA ESTANOCHES.ES 
+* Plataforma integral de gestión de ocio nocturno que conecta creadores de eventos (negocios, artistas, promotores) con usuarios finales mediante un sistema de verificación, permisos granulares y comunicación segmentada.
+ 
+1. LAS TABLAS
+1.1 TABLAS PRINCIPALES
+1.1.1 USUARIOS. 
+  Personas físicas que interactúan con la plataforma. Todos los demás elementos son producciones o relaciones de los usuarios.
+CAMPOS CLAVE:
+* email - Único, verificación obligatoria
+* telefono - Obligatorio para él promotor si quiere activar
+* tipo_usuario - 'superadmin', 'cliente', 'promotor'
+* estado - 'pendiente', 'activo', 'inactivo'
+1.1.2 ENTIDADES
+ Identidades bajo las cuales los promotores presentan su oferta al público. No son actores, son "máscaras" o "marcas" del promotor.
+ CAMPOS CLAVE:
+* nombre - Nombre público de la entidad
+* tipo_entidad - 'local', 'actividad', 'amenizador' (determina comportamiento)
+* descripcion - Texto libre con toda la información específica
+* direccion - Opcional, solo para tipo 'local'
+* usuario_id - Promotor/productor dueño
+  IMPORTANTE: El campo tipo_entidad es oculto al usuario. En la UI se muestran como tres botones diferentes:
+* ??? LOCAL/ESPACIO FÍSICO
+* ????? ACTIVIDAD SOCIAL/QUEDADA
+* ?? AMENIZADOR/ARTISTA
+1.1.3 EVENTOS
+  Concreción de la oferta de una entidad. Es lo que el público ve y a lo que asiste.
+  CAMPOS CLAVE:
+* titulo - Nombre del evento
+* descripcion - Detalles del evento
+* entidad_id - Entidad que promueve/organiza (referencia a entidades)
+* direccion_evento - Gestión contextual (heredada o manual)
+* es_heredado_direccion - Indica si la dirección viene de la entidad
+* fecha_hora_inicio/fin - Fechas del evento
+* visibilidad - 'publico', 'privado', 'vip'
+1.2 TABLAS SECUNDARIAS
+1.2.1 REDES_SOCIALES
+  No solo redes sociales tradicionales, sino cualquier contacto público que quiera compartirse. Pueden ser redes o Email, Teléfono, web…
+  CAMPOS CLAVE:
+* propietario_id - ID del dueño (usuario, entidad, evento)
+* tipo_propietario - 'usuario', 'entidad', 'evento'
+* tipo_red - 'whatsapp', 'email', 'telefono', 'web', 'instagram', etc.
+* url_o_valor - Valor del contacto (número, email, URL, @usuario)
+1.2.2 relaciones_entidades
+  Todas las relaciones entre elementos del sistema en una sola tabla.
+  Relaciones que maneja:
+* Usuarios ? Entidades (permisos: admin/editor/propietario)
+* Usuarios ? Entidades (seguimiento: cliente/VIP)
+* Usuarios ? Eventos (participación/seguimiento)
+* Entidades ? Eventos (promoción/modificación múltiple)
+  CAMPOS CLAVE:
+* usuario_id - Usuario involucrado
+* entidad_id / evento_id - Elemento relacionado
+* tipo_relacion - 'admin', 'editor', 'cliente', 'vip', 'participante'
+* rol - Rol específico en la relación
+1.2.3 NOTIFICACIONES
+  Es el sistema de comunicaciones para usuarios sobre eventos, entidades o actividades seguidas.
+1.2.4 EVENTOS _H
+  Copia automática de todos los eventos creados/modificados. No se borra nunca.
+1.2.5 CATEGORÍAS
+  Categorías para eventos (ej: "concierto", "teatro", "fiesta", "deporte").
+NO para clasificar entidades.
+  Su uso es para poder asociar iconos con los eventos, poder realizar búsquedas, categorizar…
+ 
+
+
+2. DEFINICIÓN DE ACTORES
+  Los actores de la plataforma son los usuarios, todo lo demás son producciones o relaciones suyas.
+2.1 SUPERADMIN
+  Administrador general con acceso completo a todos los recursos.
+2.2 VISITANTE
+ Es un usuario sin registrar que pasa por la base en busca de eventos sin posibilidad de interactuar y sin derecha a interactuar.
+2.3 CLIENTE
+  Campos principales para registro:
+* Nombre usuario: Obligatorio
+* Nombre y Apellido: Obligatorios (para comunicarnos)
+* email; Obligatorio se usa para validar
+* Teléfono y otros: no obligatorio
+  Visitante registrado y verificado.
+  Puede seguir entidades, pero no puede ser seguido
+  Puede ser VIP de entidades, si estas le dan el título.
+  Recibe notificaciones de sus seguidos
+  Puede denunciar contenido
+2.4 PROMOTOR (PRODUCTOR)
+  Campos principales para registro:
+* Los mismos de usuario
+* Teléfono: Obligatorio, necesario para activar funcionalidades
+  Usuario que produce contenido a través de entidades (pseudónimos).
+  Puede crear múltiples entidades
+  Puede dar permisos a otros usuarios sobre sus entidades
+  Gestiona eventos a través de sus entidades
+  Puede seguir otras entidades
+  El usuario registrado puede acceder a una ficha/listado de sus ENTIDADES para poder seguirlas todas.
+ 
+3. LA ENTIDAD
+  Es el pseudónimo bajo el cual un promotor presenta su oferta.
+3.1 LOS TIPOS (OCULTOS AL USUARIO)
+3.1.1 ESPACIO FÍSICO 
+* Bares, salas, terrazas, locales comerciales…
+* Dirección obligatoria (fija)
+* Dirección se hereda a todos sus eventos (no modificable)
+3.1.2 ACTIVIDAD SOCIAL 
+* Quedadas, tours, senderismo, talleres, actividades sociales
+* Sin dirección fija
+* Dirección se especifica manualmente en cada evento y puede ser de una Entidad Espacio Físico
+3.1.3 AMENIZADOR 
+* Bandas, DJs, monologuistas, shows, espectáculos
+* Sin dirección fija
+* Dirección se especifica manualmente en cada evento y puede ser de una Entidad Espacio Físico
+ 
+
+
+4. EL EVENTO
+  No es un actor, es el resultado de una promoción a través de una entidad.
+  Tiene fecha y hora de principio y fin
+  Es obligatorio rellenar todos los campos básicos.
+4.1 RELACIONES COMPLEJAS
+  Un evento puede tener:
+* Una entidad promotora (la que lo crea/organiza)
+* Una relación con otra entidad de diferente tipo. El animador y el local
+* Múltiples usuarios con permisos de edición
+* Ubicación en entidad diferente a la promotora (ej: Banda actúa en Local)
+4.2 VISIBILIDAD
+* General - Visible para todos los usuarios
+* VIP - Solo visible para VIPs de esa entidad (notificación directa)
+ 
+
+
+5. OPERATIVAS DEL SISTEMA
+5.1 FLUJOS DE CREACIÓN
+5.1.1 CREACIÓN DE USUARIO CLIENTE / PROMOTOR
+CLIENTEPROMOTORRellenar formulario sin marcar promotor.Rellenar formulario marcando promotor.Todos los datos obligatorios, menos teléfono, opcionalDebe tener casilla promotor verificada y todos los datos son obligatorios.Comprobamos que los campos cumplan requisitos básicosPasamos a comprobación de que no existe en base de datos.Se envía desde Resend email verificación (código 6 dígitos)Acceso a ficha de cliente para seguir cumplimentando camposAcceso a ficha de promotor para seguir cumplimentando campos.1. 
+  Si durante su uso quiere modificar datos verificados, debe verificarlos de nuevo antes de darlos como válidos.
+5.1.2 CREACIÓN DE ENTIDAD
+  En la ficha del promotor se mostrarán las fichas de creación de las diferentes opciones, inactivos hasta verificar email
+A. REQUISITO
+* Se advierte al promotor que antes de crear la 1ª Entidad, debe validar su teléfono mediante solicitud vía email y se advierte, que recibirá el código en los próximos días vía Email, SMS o llamada. Será un formulario que debe rellenar y remitirnos, preferible puño y letra
+* Una vez activado, teléfono verificado, el promotor se activan los botones
+B.- OPERATIVA
+* El promotor NO ve "tipos de entidad". Ve tres opciones claras:
+1. ??? "CREAR LOCAL/ESPACIO" - Para dueños de espacios físicos
+2. ????? "CREAR GRUPO SOCIAL" - Para organizadores de actividades
+3. ?? "CREAR AMENIZADOR" - Para artistas y shows
+* Cada opción lleva a un formulario personalizado, pero todos guardan en la misma tabla entidades.
+* Rellena formulario personalizado según selección
+* La dirección:
+o En los locales es visible 100% y heredada en eventos 
+o El resto se pueden marcar como ocultas o visibles (heredables).
+5.1.3 CREACIÓN DE EVENTO
+* Promotor selecciona con qué entidad crea el evento, pueden ser varias si es local.
+* Rellena datos del evento
+* Dirección. Se hace advertencia sobre comportamiento de dirección en cada ficha
+o Si entidad es LOCAL: dirección heredada (no editable)
+o Si entidad es ACTIVIDAD/AMENIZACIÓN: la muestra si lo activa al crearla si no, dirección manual.
+* Puede añadir una entidad de otro tipo, como copromotoras, un local un grupo y viceversa
+* Por defecto el evento es de visible, pero puede marcar VIP para limitarlo a sus VIPS
+5.2 FUNCIONALIDADES DEL SISTEMA
+5.2.1 SISTEMA DE SEGUIMIENTO
+* Un usuario, promotor o no, puede seguir a cualquier entidad o promotor
+* Puede ser catalogado VIP por una entidad a la que siga.
+* Recibirá notificaciones segmentadas según personalice, vía email o al conectar.
+* El promotor dueño ve a los seguidores de la entidad y puede hacerlos VIP.
+* El usuario será notificado del evento si uno de sus  favoritos participa en él.
+5.2.2 GESTIÓN MULTI-PROPIETARIO
+* Una entidad puede tener múltiples usuarios con permisos
+* Roles granulares: admin (todo), editor (solo modificar)
+* El promotor dueño puede transferir la propiedad
+* Si desaparece el último admin, la entidad se desactiva
+5.3 SEGURIDAD Y ACCESOS
+5.3.1 VERIFICACIÓN
+* Email único - Obligatorio para todos los usuarios.
+* Teléfono único - Solo obligatorio promotores antes de crear entidades
+* Admin manual - Para aprobación/rechazo de contenido dudoso
+5.3.2 CONTROL DE ACCESOS
+* RLS (Row Level Security) en Supabase
+* Usuario solo ve: sus datos, las fichas de entidades y eventos, y una ficha resumida de promotores con listado de sus locales
+* Solo se exponen teléfonos/emails de usuarios o promotores, ofrecidos en la lista de redes.  
+5.3.3 PROTECCIÓN DE DATOS
+* No hay posibilidad de Negociaciones económicas en la plataforma
+* Si hay entradas, se puede poner un acceso a la web de venta.  
+* Si hay requisitos particulares se deben informar en el Evento o Entidad.
+* Las Denuncias son manejadas por administración central y en el momento de denunciar, si es por un usuario activo, el evento queda suspendido hasta autorización y se comunica a admin y promotor
+?? BASES DE DATOS - MEMORIA TÉCNICA V5.0
+  
