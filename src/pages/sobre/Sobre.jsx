@@ -169,9 +169,9 @@ const Sobre = () => {
               maxWidth: '800px',
               margin: '0 auto 2rem auto'
             }}>
-              <strong>Estamos trabajando en crear
-                la agenda que centralizará los eventos, conciertos,
-                fiestas y actividades culturales.<br />
+              <strong>Estamos trabajando para crear
+                una agenda que concentre los eventos, conciertos,
+                fiestas y actividades culturales de tu ciudad.<br />
                 Gratis, sin registro, accesible
                 desde cualquier dispositivo.</strong>
             </p>

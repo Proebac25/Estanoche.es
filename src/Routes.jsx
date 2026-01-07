@@ -23,64 +23,103 @@ import FichaPromotor from "./pages/promotor/FichaP.jsx";
 import PanelCliente from "./pages/cliente/Panel.jsx";
 import FichaCliente from "./pages/cliente/FichaC.jsx";
 
+import SEO from "./components/SEO.jsx"; // <-- Importar SEO
+
 export default function AppRoutes() {
   return (
-    <Routes>
-      {/* Ruta principal PÚBLICA (Ahora es Sobre) */}
-      <Route path="/" element={<Sobre />} />
+    <>
+      {/* SEO Global por defecto (si una página no tiene el suyo propio, usará este o se mezclará) */}
+      <SEO />
 
-      {/* Landing Page REAL (Protegida) */}
-      <Route
-        path="/landing"
-        element={
-          <AccessGuard>
-            <Landing />
-          </AccessGuard>
-        }
-      />
+      <Routes>
+        {/* Ruta principal PÚBLICA (Ahora es Sobre) */}
+        <Route path="/" element={
+          <>
+            <SEO
+              title="Sobre Nosotros"
+              description="Bienvenido a EstaNoche.es, tu agenda definitiva de ocio nocturno."
+            />
+            <Sobre />
+          </>
+        } />
 
-      {/* Rutas legales */}
-      <Route path="/legal/cookies" element={<PoliticaCookies />} />
-      <Route path="/legal/aviso-legal" element={<AvisoLegal />} />
-      <Route path="/legal/privacidad" element={<PoliticaPrivacidad />} />
-      <Route path="/legal/terminos" element={<TerminosUso />} />
+        {/* Landing Page REAL (Protegida) */}
+        <Route
+          path="/landing"
+          element={
+            <AccessGuard>
+              <SEO
+                title="Agenda"
+                description="Explora los mejores eventos y fiestas de esta noche."
+              />
+              <Landing />
+            </AccessGuard>
+          }
+        />
 
-      {/* Ruta explícita para Sobre (redirige a /) */}
-      <Route path="/sobre" element={<Navigate to="/" replace />} />
+        {/* Rutas legales */}
+        <Route path="/legal/cookies" element={
+          <>
+            <SEO title="Política de Cookies" />
+            <PoliticaCookies />
+          </>
+        } />
+        <Route path="/legal/aviso-legal" element={
+          <>
+            <SEO title="Aviso Legal" />
+            <AvisoLegal />
+          </>
+        } />
+        <Route path="/legal/privacidad" element={
+          <>
+            <SEO title="Política de Privacidad" />
+            <PoliticaPrivacidad />
+          </>
+        } />
+        <Route path="/legal/terminos" element={
+          <>
+            <SEO title="Términos de Uso" />
+            <TerminosUso />
+          </>
+        } />
 
-      {/* Rutas de registro y acceso */}
-      <Route path="/AltaUsuario" element={<AltaUsuario />} />
-      <Route path="/VerificacionEmail" element={<VerificacionEmail />} />
-      <Route path="/VerificacionSMS" element={<VerificacionSMS />} />
-      <Route path="/ConfirmarTelefono" element={<ConfirmarTelefono />} />
-      <Route path="/RegistroMovil" element={<RegistroMovil />} />
-      <Route path="/RegistroEmail" element={<RegistroEmail />} />
+        {/* Ruta explícita para Sobre (redirige a /) */}
+        <Route path="/sobre" element={<Navigate to="/" replace />} />
 
-      {/* Rutas de Promotor */}
-      <Route path="/RegistroPromotor" element={<PanelPromotor />} />
-      <Route path="/promotor/ficha" element={<FichaPromotor />} />
-      <Route path="/FichaPromotor" element={<FichaPromotor />} /> {/* Alias */}
+        {/* Rutas de registro y acceso */}
+        <Route path="/AltaUsuario" element={<AltaUsuario />} />
+        <Route path="/VerificacionEmail" element={<VerificacionEmail />} />
+        <Route path="/VerificacionSMS" element={<VerificacionSMS />} />
+        <Route path="/ConfirmarTelefono" element={<ConfirmarTelefono />} />
+        <Route path="/RegistroMovil" element={<RegistroMovil />} />
+        <Route path="/RegistroEmail" element={<RegistroEmail />} />
 
-      {/* Rutas de Cliente */}
-      <Route path="/RegistroCliente" element={<PanelCliente />} />
-      <Route path="/FichaUsuario" element={<FichaCliente />} />
+        {/* Rutas de Promotor */}
+        <Route path="/RegistroPromotor" element={<PanelPromotor />} />
+        <Route path="/promotor/ficha" element={<FichaPromotor />} />
+        <Route path="/FichaPromotor" element={<FichaPromotor />} /> {/* Alias */}
 
-      {/* Rutas pendientes de implementar (placeholders) */}
-      {/* 
-      <Route path="/agenda" element={<Agenda />} />
-      <Route path="/eventos" element={<EventosList />} />
-      <Route path="/evento/nuevo" element={<EventoForm />} />
-      <Route path="/evento/:id" element={<EventoDetalle />} />
-      <Route path="/evento/:id/editar" element={<EventoForm />} />
-      <Route path="/entidades" element={<EntidadesList />} />
-      <Route path="/entidad/nueva" element={<EntidadForm />} />
-      <Route path="/entidad/:id" element={<EntidadDetalle />} />
-      <Route path="/entidad/:id/editar" element={<EntidadForm />} />
-      <Route path="/productor/perfil" element={<PerfilProductor />} />
-      <Route path="/productor/eventos" element={<EventosProductor />} />
-      <Route path="/productor/entidades" element={<EntidadesProductor />} />
-      <Route path="/cliente/perfil" element={<PerfilCliente />} />
-      */}
-    </Routes>
+        {/* Rutas de Cliente */}
+        <Route path="/RegistroCliente" element={<PanelCliente />} />
+        <Route path="/FichaUsuario" element={<FichaCliente />} />
+
+        {/* Rutas pendientes de implementar (placeholders) */}
+        {/* 
+        <Route path="/agenda" element={<Agenda />} />
+        <Route path="/eventos" element={<EventosList />} />
+        <Route path="/evento/nuevo" element={<EventoForm />} />
+        <Route path="/evento/:id" element={<EventoDetalle />} />
+        <Route path="/evento/:id/editar" element={<EventoForm />} />
+        <Route path="/entidades" element={<EntidadesList />} />
+        <Route path="/entidad/nueva" element={<EntidadForm />} />
+        <Route path="/entidad/:id" element={<EntidadDetalle />} />
+        <Route path="/entidad/:id/editar" element={<EntidadForm />} />
+        <Route path="/productor/perfil" element={<PerfilProductor />} />
+        <Route path="/productor/eventos" element={<EventosProductor />} />
+        <Route path="/productor/entidades" element={<EntidadesProductor />} />
+        <Route path="/cliente/perfil" element={<PerfilCliente />} />
+        */}
+      </Routes>
+    </>
   );
 }

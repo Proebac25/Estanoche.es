@@ -5,16 +5,18 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 import { ThemeProvider } from './context/ThemeContext.jsx'
-import { AuthProvider } from './context/AuthContext.jsx' // <-- AÑADIR
+import { HelmetProvider } from 'react-helmet-async'; // <-- AÑADIR
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <ThemeProvider>
-        <AuthProvider> {/* <-- AÑADIR ESTA LÍNEA */}
-          <App />
-        </AuthProvider> {/* <-- AÑADIR ESTA LÍNEA */}
-      </ThemeProvider>
-    </BrowserRouter>
+    <HelmetProvider> {/* <-- PROVIDER SEO */}
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <ThemeProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>
 )
