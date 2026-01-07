@@ -46,3 +46,25 @@ export const checkAccess = () => {
 export const grantAccess = () => {
     sessionStorage.setItem('estanoche_access', 'granted');
 };
+
+/**
+ * Genera un código de validación simulado para el móvil.
+ * Lógica: Últimos 4 dígitos del teléfono (o '1234' si es corto).
+ * @param {string} phone - Número de teléfono
+ * @returns {string} Código de 4 dígitos
+ */
+export const getPhoneValidationCode = (phone) => {
+    if (!phone || phone.length < 4) return '1234';
+    const cleanPhone = phone.replace(/\D/g, ''); // Solo números
+    return cleanPhone.slice(-4);
+};
+
+/**
+ * Verifica el código de móvil.
+ * @param {string} phone - Número de teléfono original
+ * @param {string} code - Código introducido
+ * @returns {boolean}
+ */
+export const verifyPhoneCode = (phone, code) => {
+    return code === getPhoneValidationCode(phone);
+};
