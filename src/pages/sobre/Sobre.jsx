@@ -147,7 +147,7 @@ const Sobre = () => {
             padding: '1rem' // Reduced padding here too
           }}>
             <h1 style={{
-              fontSize: 'clamp(2rem, 5vw, 4.5rem)',
+              fontSize: 'clamp(4rem, 10vw, 9rem)', // Doubled: was 2rem, 5vw, 4.5rem
               whiteSpace: 'nowrap',
               fontWeight: 700,
               marginBottom: '1.5rem',
@@ -161,12 +161,12 @@ const Sobre = () => {
             </h1>
 
             <p style={{
-              fontSize: 'clamp(1rem, 3vw, 2rem)',
-              lineHeight: 1.6,
+              fontSize: 'clamp(2rem, 6vw, 4rem)', // Doubled: was 1rem, 3vw, 2rem
+              lineHeight: 1.4, // Adjusted line height for larger text
               marginBottom: '2rem',
-              color: '#FFFFFF', // White for maximum contrast
-              textShadow: '0 2px 8px rgba(0,0,0,0.8)', // Strong shadow for readability on any bg
-              maxWidth: '800px',
+              color: '#FFFFFF',
+              textShadow: '0 2px 8px rgba(0,0,0,0.8)',
+              maxWidth: '90%', // Increased max-width to accommodate larger text
               margin: '0 auto 2rem auto'
             }}>
               <strong>Estamos trabajando para crear
