@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { FaMobileAlt, FaArrowLeft } from 'react-icons/fa';
-import { getMasterCode } from '../../utils/security';
+import { getMasterCode, getPhoneValidationCode } from '../../utils/security';
 
 const VerificacionSMS = () => {
   const { theme } = useTheme();
@@ -39,13 +39,21 @@ const VerificacionSMS = () => {
   const handleVerify = async () => {
     const codeStr = codigo.join('');
 
-    // --- LÓGICA CÓDIGO MAESTRO ---
+    // --- LÓGICA DE VALIDACIÓN ---
     const MASTER_CODE = getMasterCode();
-    console.log('🔐 Código Maestro de hoy:', MASTER_CODE); // Para debug/admin
-    // -----------------------------
+    const VALID_CODE = getPhoneValidationCode(telefono || user?.telefono); // Código basado en fecha/teléfono
 
-    if (codeStr !== MASTER_CODE && codeStr.length !== 6) {
-      setError('Introduce el código correcto');
+    console.log('🔐 Código esperado (Debug):', VALID_CODE);
+
+    // Validar longitud
+    if (codeStr.length !== 6) {
+      setError('El código debe tener 6 dígitos');
+      return;
+    }
+
+    // Comprobar si coincide con el válido
+    if (codeStr !== VALID_CODE) {
+      setError('Código incorrecto. Inténtalo de nuevo.');
       return;
     }
     // -----------------------------
@@ -54,15 +62,7 @@ const VerificacionSMS = () => {
     setError('');
 
     try {
-      // Si es el código maestro, omitimos validación real
-      if (codeStr === MASTER_CODE) {
-        console.log('🔓 Acceso mediante Código Maestro');
-        setSuccess('¡Código maestro aceptado!');
-      } else {
-        // Simulación de verificación SMS
-        console.log('🔐 Verificando código SMS:', codeStr);
-        setSuccess('¡Móvil verificado correctamente!');
-      }
+      setSuccess('¡Móvil verificado correctamente!');
 
       // PASO CRÍTICO: Upgrade a Promotor
       const result = await upgradeToPromoter(user.id);

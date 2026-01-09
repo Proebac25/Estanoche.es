@@ -636,12 +636,43 @@ const HeaderLand = ({ theme = 'day' }) => {
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      padding: '4px'
+                      padding: '4px',
+                      zIndex: 10
                     }}
                   >
                     {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                   </button>
                 </div>
+              </div>
+
+              {/* ENLACE OLVIDÉ MI CONTRASEÑA */}
+              <div style={{
+                marginTop: '12px',
+                marginBottom: '16px',
+                textAlign: 'right'
+              }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowLoginModal(false);
+                    navigate('/ResetPassword');
+                  }}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#4B744D',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    padding: '4px 8px',
+                    display: 'inline-block'
+                  }}
+                  onMouseEnter={(e) => e.target.style.opacity = '0.7'}
+                  onMouseLeave={(e) => e.target.style.opacity = '1'}
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
               </div>
 
               {/* CONTENEDOR DE BOTONES - VERSIÓN SIMPLE */}

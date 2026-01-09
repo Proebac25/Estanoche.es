@@ -17,12 +17,18 @@ import ConfirmarTelefono from "./pages/auth/ConfirmarTelefono.jsx";
 import RegistroMovil from "./pages/auth/RegistroMovil.jsx";
 import RegistroEmail from "./pages/auth/RegistroEmail.jsx";
 import BajaUsuario from "./pages/auth/BajaUsuario.jsx";
+import RecuperarPassword from "./pages/auth/RecuperarPassword.jsx";
+import ResetPassword from "./pages/auth/ResetPassword.jsx";
 
 import PanelPromotor from "./pages/promotor/Panel.jsx";
 import FichaPromotor from "./pages/promotor/FichaP.jsx";
 
 import PanelCliente from "./pages/cliente/Panel.jsx";
 import FichaCliente from "./pages/cliente/FichaC.jsx";
+
+import EntidadesList from "./pages/entidades/EntidadesList.jsx";
+import EntidadForm from "./pages/entidades/EntidadForm.jsx";
+import EntidadDetalle from "./pages/entidades/EntidadDetalle.jsx";
 
 import SEO from "./components/SEO.jsx"; // <-- Importar SEO
 
@@ -95,6 +101,8 @@ export default function AppRoutes() {
         <Route path="/RegistroMovil" element={<RegistroMovil />} />
         <Route path="/RegistroEmail" element={<RegistroEmail />} />
         <Route path="/BajaUsuario" element={<BajaUsuario />} />
+        <Route path="/RecuperarPassword" element={<RecuperarPassword />} />
+        <Route path="/ResetPassword" element={<ResetPassword />} />
 
         {/* Rutas de Promotor */}
         <Route path="/RegistroPromotor" element={<PanelPromotor />} />
@@ -105,6 +113,12 @@ export default function AppRoutes() {
         <Route path="/RegistroCliente" element={<PanelCliente />} />
         <Route path="/FichaUsuario" element={<FichaCliente />} />
 
+        {/* Rutas de Entidades */}
+        <Route path="/entidades" element={<EntidadesList />} />
+        <Route path="/entidad/nueva" element={<EntidadForm />} />
+        <Route path="/entidad/:id" element={<EntidadDetalle />} />
+        <Route path="/entidad/:id/editar" element={<EntidadForm />} />
+
         {/* Rutas pendientes de implementar (placeholders) */}
         {/* 
         <Route path="/agenda" element={<Agenda />} />
@@ -112,10 +126,6 @@ export default function AppRoutes() {
         <Route path="/evento/nuevo" element={<EventoForm />} />
         <Route path="/evento/:id" element={<EventoDetalle />} />
         <Route path="/evento/:id/editar" element={<EventoForm />} />
-        <Route path="/entidades" element={<EntidadesList />} />
-        <Route path="/entidad/nueva" element={<EntidadForm />} />
-        <Route path="/entidad/:id" element={<EntidadDetalle />} />
-        <Route path="/entidad/:id/editar" element={<EntidadForm />} />
         <Route path="/productor/perfil" element={<PerfilProductor />} />
         <Route path="/productor/eventos" element={<EventosProductor />} />
         <Route path="/productor/entidades" element={<EntidadesProductor />} />

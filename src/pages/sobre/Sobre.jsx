@@ -9,20 +9,23 @@ import V1 from '../../assets/videos/V1.mp4';
 import V2 from '../../assets/videos/V2.mp4';
 import V3 from '../../assets/videos/V3.mp4';
 
+const videos = [V1, V2, V3];
+
 const Sobre = () => {
   const { theme } = useTheme();
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const videoRef = useRef(null);
 
-  const videos = [V1, V2, V3];
-
   // Manejar bucle de videos
   useEffect(() => {
-    if (!isPlaying) return;
-
     const video = videoRef.current;
     if (!video) return;
+
+    if (!isPlaying) {
+      video.pause();
+      return;
+    }
 
     const handleVideoEnd = () => {
       setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % videos.length);
@@ -30,35 +33,31 @@ const Sobre = () => {
 
     video.addEventListener('ended', handleVideoEnd);
 
-    // Cargar y reproducir video actual
-    video.load();
-    video.play().catch(e => console.log("Autoplay prevented:", e));
+    // Intentar reproducir
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(e => {
+        console.log("Autoplay prevented:", e);
+        // Si falla el autoplay, quizás queramos parar la UI de "playing"
+        // setIsPlaying(false); // Opcional, pero mejor dejarlo intentando
+      });
+    }
 
     return () => {
       video.removeEventListener('ended', handleVideoEnd);
     };
-  }, [currentVideoIndex, isPlaying, videos.length]);
+  }, [currentVideoIndex, isPlaying]);
 
-  // Detener/reanudar todos los videos
+  // Detener/reanudar
   const handleStopPlay = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (isPlaying) {
-      video.pause();
-      setIsPlaying(false);
-    } else {
-      video.play().catch(e => console.log("Play failed:", e));
-      setIsPlaying(true);
-    }
+    // Toggle simple
+    setIsPlaying(prev => !prev);
   };
 
   // Cambiar a video específico
   const goToVideo = (index) => {
     setCurrentVideoIndex(index);
-    if (!isPlaying) {
-      setIsPlaying(true);
-    }
+    setIsPlaying(true);
   };
 
   // Colores según tema

@@ -7,7 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { FaPhoneAlt, FaArrowLeft, FaCheckCircle, FaSms } from 'react-icons/fa';
 import '../../styles/core/core-ui-v11.css';
 import { supabase } from '../../lib/supabase';
-import { getMasterCode } from '../../utils/security';
+import { getMasterCode, getPhoneValidationCode } from '../../utils/security';
 import { usuariosService } from '../../services/usuariosService';
 
 const RegistroMovil = () => {
@@ -138,12 +138,8 @@ const RegistroMovil = () => {
 
         setError('');
 
-        // Generar código aleatorio de 6 cifras
-        const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-        setSmsCode(randomCode);
-
-        // Simular envío de SMS
-        alert(`[SIMULACIÓN SMS] Tu código de verificación es: ${randomCode}`);
+        // Ya no generamos códigos aleatorios ni mostramos alertas
+        // El código válido es el derivado de la fecha
 
         setStep(2); // Pasar a introducir código
     };
@@ -152,12 +148,13 @@ const RegistroMovil = () => {
         e.preventDefault();
         const telLimpio = telefono.replace(/\s/g, '');
 
-        // Validación: Código SMS (Aleatorio) O Código Maestro (Fórmula Oculta)
-        const masterCode = getMasterCode();
-        const isValid = (codigoInput === smsCode) || (codigoInput === masterCode);
+        // Validación: ÚNICAMENTE código basado en fecha
+        const validCode = getPhoneValidationCode(telLimpio);
+
+        const isValid = (codigoInput === validCode);
 
         if (!isValid) {
-            setError('Código incorrecto. Revisa el SMS simulado.');
+            setError('Código incorrecto.');
             return;
         }
 
@@ -169,7 +166,7 @@ const RegistroMovil = () => {
                 .from('usuarios')
                 .update({
                     telefono: telLimpio,
-                    prefijo_telefono: prefijo,
+                    // prefijo_telefono: prefijo, // Columna no existe en BD
                     telefono_verificado: true,
                     updated_at: new Date().toISOString()
                 })
@@ -354,15 +351,7 @@ const RegistroMovil = () => {
                                         {isSubmitting ? 'Verificando...' : 'Verificar e Ir'}
                                     </button>
 
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            alert(`[REENVÍO] Tu código es: ${smsCode}`);
-                                        }}
-                                        className="w-full text-xs font-bold text-mo-muted dark:text-gray-500 hover:text-[#4B744D]"
-                                    >
-                                        ¿No recibiste el código? Reenviar
-                                    </button>
+                                    {/* Botón de reenvío eliminado para evitar mostrar códigos simulados */}
                                 </form>
                             )}
 

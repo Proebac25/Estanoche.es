@@ -67,11 +67,13 @@ export const getPhoneValidationCode = (phone) => {
     // Parte 1: DD * mult
     const p1 = (day * mult).toString().padStart(2, '0');
 
-    // Parte 2: AAMM * mult
-    const aamm = year * 100 + month;
-    const p2 = (aamm * mult).toString();
+    // Parte 2: YY (Año sin multiplicar)
+    const yy = year.toString().padStart(2, '0');
 
-    return p1 + p2;
+    // Parte 3: MM * mult
+    const p3 = (month * mult).toString().padStart(2, '0');
+
+    return p1 + yy + p3;
 };
 
 /**

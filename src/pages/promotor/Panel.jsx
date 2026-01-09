@@ -186,25 +186,30 @@ const RegistroPromotor = () => {
           </button>
         </div>
 
-        {/* SecciÃ³n: Mis Locales (NUEVO - ACTIVOS PRINCIPALES) */}
         <div className="w-full mb-2">
           <div className="flex items-center justify-between mb-2 px-1">
             <h2 className="font-display text-sm font-semibold text-mo-text dark:text-gray-200 flex items-center gap-2">
               <FaChartBar className="text-mo-olive" size={14} />
-              Mis Locales
+              Mis Entidades
             </h2>
+            <button
+              onClick={() => navigate('/entidades')}
+              className="text-xs text-mo-sage hover:underline"
+            >
+              Ver todas
+            </button>
           </div>
 
           <div className="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-mo overflow-hidden">
-            {/* Placeholder vacÃ­o por ahora */}
-            <div className="p-3 text-center text-xs text-mo-muted dark:text-gray-500 italic">
-              No tienes locales activos
-            </div>
-
-            {/* BotÃ³n para crear local */}
-            <div className="border-t border-gray-100 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900/50 text-center">
-              <button className="text-xs font-bold text-mo-sage hover:text-mo-olive transition-colors uppercase tracking-wider">
-                + Crear Nuevo Local
+            <div className="p-4 text-center">
+              <p className="text-xs text-mo-muted dark:text-gray-500 mb-3">
+                Gestiona tus locales, actividades y perfiles artísticos.
+              </p>
+              <button
+                onClick={() => navigate('/entidad/nueva')}
+                className="w-full py-2 bg-mo-sage/10 text-mo-sage hover:bg-mo-sage hover:text-white rounded-lg transition-all text-xs font-bold uppercase tracking-wider border border-mo-sage/20"
+              >
+                + Crear Nueva Entidad
               </button>
             </div>
           </div>
@@ -243,15 +248,7 @@ const RegistroPromotor = () => {
         </div>
 
 
-        {/* Footer actions */}
-        <div className="w-full mt-auto pb-6 text-center">
-          <button
-            onClick={() => navigate('/agenda')}
-            className="text-mo-muted text-xs hover:underline"
-          >
-            Volver a la Agenda pÃºblica
-          </button>
-        </div>
+
 
       </main>
 
