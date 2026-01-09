@@ -42,7 +42,7 @@ const VerificacionEmail = () => {
     try {
       console.log('🔄 Reenviando código a:', email);
 
-      const response = await fetch('http://localhost:3001/api/send-verification', {
+      const response = await fetch('/api/send-verification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -213,10 +213,15 @@ const VerificacionEmail = () => {
         // Guardar sesión en Contexto GLOBAL
         auth.loginManual(finalUser);
 
-        // Navegar según tipo de usuario
+        // Navegar: PRIORIDAD ABSOLUTA a la verificación de teléfono para promotores (o intención de serlo)
         setTimeout(() => {
-          if (finalUser.tipo === 'promotor' || finalUser.tipo === 'promotor_pendiente') {
-            navigate('/ConfirmarTelefono', { state: { upgrade: false } });
+          const intent = location.state?.tipo_intent || finalUser.tipo;
+
+          if (intent === 'promotor' || intent === 'promotor_pendiente' || finalUser.tipo === 'promotor') {
+            // Ir siempre a confirmar teléfono
+            navigate('/ConfirmarTelefono', { state: { upgrade: true } });
+          } else if (finalUser.redirectTo) {
+            navigate(finalUser.redirectTo);
           } else {
             navigate('/RegistroCliente');
           }
@@ -372,7 +377,7 @@ const VerificacionEmail = () => {
                         // Verificar email
                         if (email) {
                           try {
-                            const response = await fetch(`http://localhost:3001/check-email?email=${encodeURIComponent(email)}`);
+                            const response = await fetch(`/api/check-email?email=${encodeURIComponent(email)}`);
                             const data = await response.json();
                             console.log('📧 Email check:', data);
                             alert(`Email ${email}: ${data.exists ? 'EXISTE' : 'NO EXISTE'}`);

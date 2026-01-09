@@ -28,10 +28,7 @@ const RegistroCliente = () => {
       return;
     }
 
-    // 2. Si es promotor, permitir acceso pero loguear (ya no redirigimos forzosamente)
-    if (user.tipo === 'promotor') {
-      console.log("📍 Usuario promotor visualizando vista cliente");
-    }
+
 
     // 3. Cargar datos iniciales vacíos
     setTimeout(() => {
@@ -200,15 +197,7 @@ const RegistroCliente = () => {
             Vamos a la AGENDA
           </button>
 
-          <div className="mt-2">
-            <button
-              onClick={() => navigate('/ConfirmarTelefono', { state: { upgrade: true } })}
-              disabled={isUpgrading}
-              className={`text-mo-coral font-bold text-sm hover:underline ${isUpgrading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              {isUpgrading ? 'Mejorando cuenta...' : '¿Eres promotor?'}
-            </button>
-          </div>
+
         </div>
 
       </main>

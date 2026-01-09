@@ -7,7 +7,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { FaPhoneAlt, FaArrowLeft, FaCheckCircle, FaSms } from 'react-icons/fa';
 import '../../styles/core/core-ui-v11.css';
 import { supabase } from '../../lib/supabase';
-import { getPhoneValidationCode, verifyPhoneCode } from '../../utils/security'; // <-- Importar lógica
+import { getMasterCode } from '../../utils/security';
+import { usuariosService } from '../../services/usuariosService';
 
 const RegistroMovil = () => {
     const { theme } = useTheme();
@@ -17,44 +18,132 @@ const RegistroMovil = () => {
 
     const isUpgradeMode = location.state?.upgrade || false;
 
-    const [telefono, setTelefono] = useState('');
+    const [telefono, setTelefono] = useState(() => {
+        // 1. Prioridad: Teléfono pasado por navegación (desde FichaC)
+        if (location.state?.telefono) {
+            return location.state.telefono.replace(/^(\+34|0034)/, '').replace(/\D/g, ''); // Limpiar prefijo español si viene
+        }
+        // 2. Fallback: Teléfono del usuario en contexto (si existe y no es dummy)
+        if (user?.telefono && user.telefono !== '000000000') {
+            return user.telefono.replace(/^(\+34|0034)/, '').replace(/\D/g, '');
+        }
+        return '';
+    });
+
+    // Estado de validación
+    const [validacion, setValidacion] = useState({
+        loading: false,
+        valid: false,
+        message: ''
+    });
+
     const [prefijo, setPrefijo] = useState('+34');
     const [codigoInput, setCodigoInput] = useState('');
-
-    // Estados del flujo
-    const [step, setStep] = useState(1); // 1: Pedir móvil, 2: Pedir código
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [smsCode, setSmsCode] = useState(''); // Código aleatorio enviado
+    const [step, setStep] = useState(1); // 1: introducir teléfono, 2: introducir código
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+
+    // Validar al montar si ya hay teléfono
+    React.useEffect(() => {
+        if (telefono && telefono.length === 9) {
+            validarTelefono(telefono);
+        }
+    }, []);
+
+    // Debug log para ver qué llega
+    React.useEffect(() => {
+        console.log('📱 RegistroMovil mounted with:', {
+            statePhone: location.state?.telefono,
+            userPhone: user?.telefono,
+            finalPhone: telefono
+        });
+    }, []);
+
+    const validarTelefono = async (tlf) => {
+        const telefonoLimpio = tlf.replace(/\s/g, '');
+
+        // 1. Validar Formato
+        if (!/^[67]\d{8}$/.test(telefonoLimpio)) {
+            setValidacion({
+                loading: false,
+                valid: false,
+                message: 'Debe ser un móvil español válido (Empieza por 6 o 7, 9 dígitos)'
+            });
+            return false;
+        }
+
+        setValidacion(prev => ({ ...prev, loading: true, message: 'Verificando disponibilidad...' }));
+
+        try {
+            // 2. Validar Unicidad (solo si es diferente al actual del usuario)
+            const esMiNumero = user?.telefono && user.telefono.replace(/\D/g, '').endsWith(telefonoLimpio);
+
+            if (esMiNumero) {
+                setValidacion({
+                    loading: false,
+                    valid: true,
+                    message: ''
+                });
+                return true;
+            }
+
+            const resultado = await usuariosService.verificarTelefonoUnico(telefonoLimpio);
+
+            if (resultado.error) throw new Error(resultado.error);
+
+            const existe = resultado.existe === true;
+
+            setValidacion({
+                loading: false,
+                valid: !existe,
+                message: existe ? 'Este teléfono ya está registrado por otro usuario' : ''
+            });
+
+            return !existe;
+
+        } catch (error) {
+            console.error('Error validando teléfono:', error);
+            setValidacion({
+                loading: false,
+                valid: false,
+                message: 'Error al verificar el teléfono'
+            });
+            return false;
+        }
+    };
 
     const handleTelefonoChange = (e) => {
         let value = e.target.value.replace(/\D/g, '');
         if (value.length > 9) value = value.slice(0, 9);
-
-        // Formato visual: XXX XX XX XX
-        if (value.length > 5) {
-            value = `${value.slice(0, 3)} ${value.slice(3, 5)} ${value.slice(5, 7)} ${value.slice(7)}`;
-        } else if (value.length > 3) {
-            value = `${value.slice(0, 3)} ${value.slice(3)}`;
-        }
-
         setTelefono(value);
+
+        if (value.length === 9) {
+            validarTelefono(value);
+        } else {
+            setValidacion({ loading: false, valid: false, message: '' });
+        }
     };
 
-    const handleSendCode = (e) => {
+    const handleSendCode = async (e) => {
         e.preventDefault();
         const telLimpio = telefono.replace(/\s/g, '');
 
-        if (telLimpio.length < 9) {
-            setError('Introduce un número de teléfono válido.');
-            return;
+        if (!validacion.valid) {
+            // Re-validar por si acaso
+            const esValido = await validarTelefono(telLimpio);
+            if (!esValido) return;
         }
 
         setError('');
 
+        // Generar código aleatorio de 6 cifras
+        const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
+        setSmsCode(randomCode);
+
         // Simular envío de SMS
-        const fakeCode = getPhoneValidationCode(telLimpio);
-        alert(`[SIMULACIÓN SMS] Tu código de verificación es: ${fakeCode}`);
+        alert(`[SIMULACIÓN SMS] Tu código de verificación es: ${randomCode}`);
 
         setStep(2); // Pasar a introducir código
     };
@@ -63,7 +152,11 @@ const RegistroMovil = () => {
         e.preventDefault();
         const telLimpio = telefono.replace(/\s/g, '');
 
-        if (!verifyPhoneCode(telLimpio, codigoInput)) {
+        // Validación: Código SMS (Aleatorio) O Código Maestro (Fórmula Oculta)
+        const masterCode = getMasterCode();
+        const isValid = (codigoInput === smsCode) || (codigoInput === masterCode);
+
+        if (!isValid) {
             setError('Código incorrecto. Revisa el SMS simulado.');
             return;
         }
@@ -77,6 +170,7 @@ const RegistroMovil = () => {
                 .update({
                     telefono: telLimpio,
                     prefijo_telefono: prefijo,
+                    telefono_verificado: true,
                     updated_at: new Date().toISOString()
                 })
                 .eq('id', user.id);
@@ -89,14 +183,16 @@ const RegistroMovil = () => {
                     throw new Error('Móvil guardado pero el cambio a promotor falló: ' + upgradeResult.error);
                 }
             } else {
-                const updatedUser = { ...user, telefono: telLimpio, prefijo_telefono: prefijo };
+                const updatedUser = { ...user, telefono: telLimpio, prefijo_telefono: prefijo, telefono_verificado: true };
                 // Actualizar sesión local si es necesario (depende de tu AuthContext)
                 // sessionStorage.setItem('user', JSON.stringify(updatedUser)); 
             }
 
             setSuccess(true);
             setTimeout(() => {
-                if (isUpgradeMode) {
+                if (location.state?.returnPath) {
+                    navigate(location.state.returnPath);
+                } else if (isUpgradeMode) {
                     navigate('/RegistroPromotor');
                 } else {
                     navigate('/RegistroCliente');
@@ -141,12 +237,16 @@ const RegistroMovil = () => {
                                 <h1 className="font-display text-2xl font-bold text-mo-text dark:text-white">
                                     {step === 1 ? 'Registra tu móvil' : 'Introduce el código'}
                                 </h1>
-                                <p className="text-mo-muted dark:text-gray-400 text-sm mt-2">
-                                    {step === 1
-                                        ? 'Necesitamos tu teléfono para verificar tu cuenta y permitirte ser promotor.'
-                                        : `Hemos enviado un código SMS al ${prefijo} ${telefono}`
-                                    }
-                                </p>
+                                {step === 1 ? (
+                                    <p className="text-mo-muted dark:text-gray-400 text-sm mt-2">
+                                        Necesitamos tu teléfono para verificar tu cuenta y permitirte ser promotor.
+                                    </p>
+                                ) : (
+                                    <p className="text-sm text-mo-muted dark:text-gray-400 mb-6">
+                                        Hemos enviado un código SMS al {prefijo} {telefono}.<br />
+                                        La validación puede tardar unos segundos.
+                                    </p>
+                                )}
                             </div>
 
                             {step === 1 ? (
@@ -158,43 +258,93 @@ const RegistroMovil = () => {
                                                 type="text"
                                                 value={prefijo}
                                                 onChange={(e) => setPrefijo(e.target.value)}
-                                                className="w-20 p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-center font-bold text-mo-text dark:text-white focus:ring-2 focus:ring-[#4B744D] outline-none"
+                                                className="w-20 p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-center font-bold text-gray-900 dark:text-white focus:ring-2 focus:ring-[#4B744D] outline-none"
                                             />
-                                            <input
-                                                type="tel"
-                                                value={telefono}
-                                                onChange={handleTelefonoChange}
-                                                placeholder="600 00 00 00"
-                                                className="flex-1 p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-display font-bold text-lg text-mo-text dark:text-white tracking-widest focus:ring-2 focus:ring-[#4B744D] outline-none"
-                                                required
-                                            />
+                                            <div className="relative flex-1">
+                                                <FaPhoneAlt className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                                <input
+                                                    type="tel"
+                                                    value={telefono}
+                                                    onChange={handleTelefonoChange}
+                                                    placeholder="612 345 678"
+                                                    className={`w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border rounded-xl outline-none transition-all font-ui text-lg text-gray-900 dark:text-white
+                                                        ${validacion.valid ? 'border-green-500 focus:border-green-500' :
+                                                            validacion.message && !validacion.loading ? 'border-red-500 focus:border-red-500' :
+                                                                'border-gray-200 dark:border-gray-700 focus:border-mo-sage'}`}
+                                                    maxLength={9}
+                                                    autoFocus
+                                                />
+                                                {validacion.loading && (
+                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                                                        <div className="animate-spin h-4 w-4 border-2 border-mo-sage border-t-transparent rounded-full"></div>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                        {error && <p className="text-red-500 text-xs mt-2 font-bold">{error}</p>}
+                                        {validacion.message && (
+                                            <p className={`text-xs mt-2 ml-1 ${validacion.valid ? 'text-green-500' : 'text-red-500'}`}>
+                                                {validacion.message}
+                                            </p>
+                                        )}
                                     </div>
+
+                                    {error && (
+                                        <div className="p-3 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-800 rounded-lg flex items-center gap-2 text-red-600 dark:text-red-400 text-sm mb-6">
+                                            <span>⚠️</span>
+                                            {error}
+                                        </div>
+                                    )}
 
                                     <button
                                         type="submit"
-                                        className="w-full py-4 bg-[#4B744D] text-white rounded-2xl font-display font-black text-lg shadow-lg active:scale-95 transition-all"
+                                        disabled={!validacion.valid || validacion.loading}
+                                        className={`w-full py-4 rounded-xl font-cta font-bold text-white text-lg shadow-mo-soft transition-all
+                                            ${!validacion.valid || validacion.loading
+                                                ? 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed'
+                                                : 'bg-[#4B744D] hover:bg-[#3d603e] active:scale-[0.98]'}`}
                                     >
-                                        Enviar Código
+                                        Enviar Código SMS
                                     </button>
                                 </form>
                             ) : (
-                                // PASO 2: INTRODUCIR CÓDIGO
+                                // PASO 2: INTRODUCIR CÓDIGO (6 DÍGITOS)
                                 <form onSubmit={handleVerify} className="space-y-6">
-                                    <div>
-                                        <input
-                                            type="text"
-                                            value={codigoInput}
-                                            onChange={(e) => setCodigoInput(e.target.value)}
-                                            placeholder="XXXX"
-                                            maxLength={4}
-                                            className="w-full p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-display font-bold text-2xl text-center text-mo-text dark:text-white tracking-[1em] focus:ring-2 focus:ring-[#4B744D] outline-none"
-                                            required
-                                            autoFocus
-                                        />
-                                        {error && <p className="text-red-500 text-xs mt-2 font-bold text-center">{error}</p>}
+                                    <div className="flex gap-2 justify-center mb-6">
+                                        {[...Array(6)].map((_, i) => (
+                                            <input
+                                                key={i}
+                                                type="text"
+                                                maxLength={1}
+                                                className="w-10 h-12 sm:w-12 sm:h-14 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-center font-bold text-xl sm:text-2xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[#4B744D] outline-none"
+                                                value={codigoInput[i] || ''}
+                                                onChange={(e) => {
+                                                    const val = e.target.value.replace(/\D/g, '');
+                                                    const newCode = (typeof codigoInput === 'string' ? codigoInput.split('') : codigoInput) || [];
+                                                    // Ensure array is big enough
+                                                    while (newCode.length < 6) newCode.push('');
+
+                                                    newCode[i] = val;
+                                                    const finalCode = newCode.join('').slice(0, 6);
+                                                    setCodigoInput(finalCode);
+
+                                                    if (val && i < 5) {
+                                                        const nextInput = e.target.nextElementSibling;
+                                                        if (nextInput) nextInput.focus();
+                                                    }
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    const currentVal = codigoInput[i];
+                                                    if (e.key === 'Backspace' && !currentVal && i > 0) {
+                                                        const prevInput = e.target.previousElementSibling;
+                                                        if (prevInput) prevInput.focus();
+                                                    }
+                                                }}
+                                                autoFocus={i === 0}
+                                            />
+                                        ))}
                                     </div>
+
+                                    {error && <p className="text-red-500 text-xs mt-2 font-bold text-center">{error}</p>}
 
                                     <button
                                         type="submit"
@@ -207,8 +357,7 @@ const RegistroMovil = () => {
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            const code = getPhoneValidationCode(telefono.replace(/\s/g, ''));
-                                            alert(`[REENVÍO] Tu código es: ${code}`);
+                                            alert(`[REENVÍO] Tu código es: ${smsCode}`);
                                         }}
                                         className="w-full text-xs font-bold text-mo-muted dark:text-gray-500 hover:text-[#4B744D]"
                                     >

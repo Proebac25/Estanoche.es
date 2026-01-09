@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
       // 3. Obtener datos completos del perfil público (Selección explícita)
       const { data: dbProfile, error: profileError } = await supabase
         .from('usuarios')
-        .select('id, nombre_usuario, email, telefono, tipo, nombre, apellidos, calle, numero, ciudad, provincia, codigo_postal, avatar_url, updated_at')
+        .select('id, nombre_usuario, email, telefono, telefono_verificado, tipo, nombre, apellidos, calle, numero, ciudad, provincia, codigo_postal, avatar_url, updated_at')
         .eq('id', authData.user.id)
         .single();
 
@@ -163,6 +163,7 @@ export const AuthProvider = ({ children }) => {
         apellidos: db.apellidos || publicProfile?.apellidos || authData.user.user_metadata?.apellidos,
         tipo: publicProfile?.tipo || authData.user.user_metadata?.tipo,
         telefono: publicProfile?.telefono || authData.user.user_metadata?.telefono,
+        telefono_verificado: publicProfile?.telefono_verificado || false,
         avatar_url: db.avatar_url || publicProfile?.avatar_url || ''
       };
 
@@ -521,6 +522,41 @@ export const AuthProvider = ({ children }) => {
       return { success: false, error: error.message };
     }
   };
+  // FUNCIÓN: Downgrade a Cliente (si rechaza validar teléfono)
+  const downgradeToClient = async (userId) => {
+    try {
+      console.log('📉 Iniciando downgrade a cliente para:', userId);
+
+      const { error } = await supabase
+        .from('usuarios')
+        .update({
+          tipo: 'cliente',
+          tipo_usuario: 'cliente', // Por si acaso usa este campo también
+          telefono_verificado: false
+        })
+        .eq('id', userId);
+
+      if (error) {
+        console.error('❌ Error haciendo downgrade (Supabase):', error);
+        return { success: false, error: error.message };
+      }
+
+      console.log('✅ Downgrade exitoso. Actualizando estado local...');
+
+      if (user && user.id === userId) {
+        const updatedUser = { ...user, tipo: 'cliente', telefono_verificado: false };
+        setUser(updatedUser);
+        sessionStorage.setItem('user', JSON.stringify(updatedUser));
+        return { success: true };
+      } else {
+        return { success: true, warning: 'Usuario local no sincronizado' };
+      }
+
+    } catch (error) {
+      console.error('💥 Error en downgradeToClient:', error);
+      return { success: false, error: error.message };
+    }
+  };
 
   // Permite iniciar sesión manualmente con datos ya verificados (ej: desde VerificacionEmail)
   const loginManual = (userData) => {
@@ -536,7 +572,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     quickRegister,
     verificarCodigoEmail,
-    upgradeToPromoter, // <--- Nueva función
+    upgradeToPromoter,
+    downgradeToClient, // <--- Nueva función
     obtenerRedesSociales,
     agregarRedSocial,
     eliminarRedSocial,

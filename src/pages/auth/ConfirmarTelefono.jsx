@@ -10,7 +10,7 @@ import { supabase } from '../../lib/supabase';
 
 const ConfirmarTelefono = () => {
     const { theme } = useTheme();
-    const { user } = useAuth();
+    const { user, downgradeToClient } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -25,6 +25,25 @@ const ConfirmarTelefono = () => {
             setTelefono(user.telefono);
         }
     }, [user]);
+
+    const handleSaltarValidacion = async () => {
+        setIsSubmitting(true);
+        try {
+            if (user?.tipo === 'promotor' || user?.tipo === 'promotor_pendiente') {
+                // Si es promotor y salta, se cancela la solicitud y vuelve a cliente
+                const result = await downgradeToClient(user.id);
+                if (!result.success) throw new Error(result.error);
+                console.log('📉 Downgrade a cliente realizado por salto de validación');
+            }
+            // En cualquier caso, redirigir a ficha cliente
+            navigate('/RegistroCliente');
+        } catch (error) {
+            console.error('Error saltando validación:', error);
+            setError('Error al omitir validación. Inténtalo de nuevo.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     const handleConfirmar = async () => {
         if (!telefono || telefono.length < 9) {
@@ -72,13 +91,7 @@ const ConfirmarTelefono = () => {
             <main className="flex-1 flex flex-col items-center justify-center p-6 md:p-12">
                 <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 p-8">
 
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 text-mo-muted hover:text-mo-text dark:hover:text-white transition-colors mb-8 text-xs font-black uppercase tracking-widest"
-                    >
-                        <FaArrowLeft />
-                        <span>Volver</span>
-                    </button>
+
 
                     <div className="text-center mb-10">
                         <div className="w-16 h-16 bg-mo-coral/10 dark:bg-mo-coral/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-mo-coral">
@@ -132,6 +145,16 @@ const ConfirmarTelefono = () => {
                         >
                             Confirmar y recibir SMS
                         </button>
+
+                        <div className="text-center pt-2">
+                            <button
+                                onClick={handleSaltarValidacion}
+                                disabled={isSubmitting}
+                                className="text-xs font-bold text-mo-muted hover:text-mo-text dark:hover:text-white uppercase tracking-widest underline disabled:opacity-50 transition-colors"
+                            >
+                                No validar ahora {user?.tipo?.includes('promotor') ? '(Volver a Cliente)' : ''}
+                            </button>
+                        </div>
 
                         <p className="text-center text-[10px] text-mo-muted dark:text-gray-400 uppercase tracking-widest leading-relaxed">
                             Este paso es obligatorio para activar tu<br />cuenta de promotor profesional

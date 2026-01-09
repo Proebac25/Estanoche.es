@@ -4,13 +4,13 @@ import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaUser, FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaGlobe, FaArrowLeft, FaCamera, FaSave, FaPlus, FaTrash, FaInstagram, FaTwitter, FaTiktok, FaWhatsapp, FaFacebook } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaGlobe, FaArrowLeft, FaCamera, FaSave, FaPlus, FaTrash, FaInstagram, FaTwitter, FaTiktok, FaWhatsapp, FaFacebook, FaHome } from 'react-icons/fa';
 import '../../styles/core/core-ui-v11.css';
 import { supabase } from '../../lib/supabase';
 
 const FichaUsuario = () => {
     const { theme } = useTheme();
-    const { user, loginManual, obtenerRedesSociales, agregarRedSocial, eliminarRedSocial } = useAuth();
+    const { user, loginManual, obtenerRedesSociales, agregarRedSocial, eliminarRedSocial, upgradeToPromoter } = useAuth();
     const navigate = useNavigate();
 
     // Estado para datos básicos y dirección
@@ -32,7 +32,31 @@ const FichaUsuario = () => {
     const [showAddRed, setShowAddRed] = useState(false);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isUpgrading, setIsUpgrading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
+
+    // Validar teléfono español (9 dígitos, empieza por 6 o 7)
+    const isPhoneValid = formData.telefono && /^[67]\d{8}$/.test(formData.telefono.replace(/\s/g, ''));
+
+    const handleUpgradeToPromoter = async () => {
+        if (!user?.telefono_verificado) {
+            setMessage({ type: 'error', text: 'Debes validar tu teléfono antes de ser promotor' });
+            return;
+        }
+
+        if (window.confirm('¿Confirmas que quieres convertir tu cuenta en Promotor? Podrás publicar eventos y gestionar entidades.')) {
+            setIsUpgrading(true);
+            const result = await upgradeToPromoter(user.id);
+            setIsUpgrading(false);
+
+            if (result.success) {
+                setMessage({ type: 'success', text: '¡Cuenta mejorada! Redirigiendo...' });
+                setTimeout(() => navigate('/RegistroPromotor'), 1500);
+            } else {
+                setMessage({ type: 'error', text: 'Error al mejorar cuenta: ' + result.error });
+            }
+        }
+    };
 
     // Cargar datos iniciales
     const cargarDatos = useCallback(async () => {
@@ -52,13 +76,18 @@ const FichaUsuario = () => {
         try {
             const { data: userData, error } = await supabase
                 .from('usuarios')
-                .select('id, nombre_usuario, email, telefono, tipo, nombre, apellidos, calle, numero, ciudad, provincia, codigo_postal, avatar_url')
+                .select('id, nombre_usuario, email, telefono, telefono_verificado, tipo, nombre, apellidos, calle, numero, ciudad, provincia, codigo_postal, avatar_url')
                 .eq('id', user.id)
                 .single();
 
             if (error) {
                 console.error('❌ Error al cargar perfil:', error);
             } else {
+                // Actualizar contexto si hay info nueva (ej: verificación)
+                if (userData.telefono_verificado !== user.telefono_verificado) {
+                    loginManual({ ...user, ...userData });
+                }
+
                 setFormData(prev => ({
                     ...prev,
                     nombre: userData.nombre || user.nombre || '',
@@ -230,6 +259,12 @@ const FichaUsuario = () => {
         }
     };
 
+    console.log('FichaUsuario Render: User:', user);
+
+    if (!user) {
+        return <div className="min-h-screen bg-mo-bg dark:bg-gray-900 flex items-center justify-center text-mo-text dark:text-white">Cargando perfil...</div>;
+    }
+
     const getRedIcon = (tipo) => {
         const t = tipo.toLowerCase();
         if (t.includes('instagram')) return <FaInstagram />;
@@ -363,24 +398,42 @@ const FichaUsuario = () => {
                                 </button>
                             </div>
 
-                            {/* Teléfono con botón Cambiar */}
+                            {/* Teléfono con botón Añadir/Cambiar/Validar */}
                             <div className="flex gap-2">
                                 <input
                                     type="tel"
                                     name="telefono"
                                     value={formData.telefono}
-                                    onChange={handleChange}
-                                    disabled={user?.telefono && user.telefono.length > 5}
-                                    className={`flex-1 p-3 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-xl outline-none text-mo-text dark:text-white transition-all shadow-sm text-sm ${user?.telefono && user.telefono.length > 5 ? 'opacity-60 cursor-not-allowed bg-gray-50' : ''}`}
-                                    placeholder="Teléfono móvil (+34...)"
+                                    readOnly
+                                    disabled
+                                    className="flex-1 p-3 bg-gray-50 dark:bg-gray-900 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl font-ui text-mo-muted dark:text-gray-500 text-sm cursor-not-allowed"
+                                    placeholder="Sin teléfono vinculado"
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() => navigate('/RegistroMovil')}
-                                    className="px-4 py-3 bg-gray-100 dark:bg-gray-800 text-mo-text dark:text-white text-xs font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                                >
-                                    Cambiar
-                                </button>
+                                {user?.telefono_verificado ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/RegistroMovil')}
+                                        className="px-4 py-3 bg-gray-100 dark:bg-gray-800 text-mo-text dark:text-white text-xs font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                                    >
+                                        Cambiar
+                                    </button>
+                                ) : formData.telefono ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/RegistroMovil', { state: { telefono: formData.telefono } })}
+                                        className="px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-xl transition-colors shadow-sm"
+                                    >
+                                        Validar
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/RegistroMovil')}
+                                        className="px-4 py-3 bg-mo-sage hover:bg-mo-olive text-white text-xs font-bold rounded-xl transition-colors shadow-sm"
+                                    >
+                                        Añadir
+                                    </button>
+                                )}
                             </div>
                         </div>
 
@@ -534,11 +587,11 @@ const FichaUsuario = () => {
                         <div className="flex gap-2 mt-3">
                             <button
                                 type="button"
-                                onClick={() => navigate(-1)}
+                                onClick={() => navigate('/RegistroCliente')}
                                 className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-mo-text dark:text-white rounded-mo font-cta font-bold text-base shadow-mo-soft active:scale-95 transition-all flex items-center justify-center gap-2"
                             >
-                                <FaArrowLeft size={16} />
-                                Volver
+                                <FaHome size={16} />
+                                Principal
                             </button>
                             <button
                                 type="submit"
@@ -549,9 +602,49 @@ const FichaUsuario = () => {
                                 {isSubmitting ? 'Guardando...' : 'Guardar'}
                             </button>
                         </div>
+
+                        {/* ZONA PROMOTOR */}
+                        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <div className="bg-mo-sage/5 dark:bg-mo-sage/10 p-4 rounded-mo border border-mo-sage/20">
+                                <h3 className="font-display font-bold text-mo-text dark:text-gray-100 mb-2 flex items-center gap-2">
+                                    <span className="text-xl">🎉</span> ¿Eres promotor de actividades?
+                                </h3>
+
+                                <div className="space-y-3">
+                                    <p className="text-sm text-mo-muted dark:text-gray-400">
+                                        Si organizas eventos y quieres darlos a conocer, actualiza tu cuenta a Promotor.
+                                    </p>
+
+                                    <button
+                                        type="button"
+                                        onClick={handleUpgradeToPromoter}
+                                        disabled={!user?.telefono_verificado || isUpgrading}
+                                        className={`w-full py-3 rounded-mo font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2
+                                            ${!user?.telefono_verificado
+                                                ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                                                : 'bg-gradient-to-r from-mo-spot to-mo-amber text-white hover:shadow-lg active:scale-[0.98]'
+                                            }`}
+                                    >
+                                        {isUpgrading ? (
+                                            <span>Procesando...</span>
+                                        ) : !user?.telefono_verificado ? (
+                                            <span>⚠️ Necesita Validar Teléfono</span>
+                                        ) : (
+                                            <>
+                                                Pasar a Promotor
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </main>
+
+            <div className="text-center mt-8 mb-4 text-[10px] text-mo-muted dark:text-gray-500">
+                Si desea dar de baja su usuario pulse <button onClick={() => navigate('/BajaUsuario')} className="underline hover:text-red-500 transition-colors font-bold cursor-pointer bg-transparent border-none p-0 inline">aquí</button>
+            </div>
 
             <Footer />
         </div>

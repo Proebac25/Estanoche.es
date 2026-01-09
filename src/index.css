@@ -7,13 +7,13 @@
   --font-display: 'Roboto', serif;
   --font-ui: 'Inter', sans-serif;
   --font-cta: 'Montserrat', sans-serif;
-  
+
   --radius: 14px;
   --btn-h: 44px;
   --btn-w: 220px;
   --space: 16px;
   --grid: 8px;
-  
+
   --mo-bg: #F4F1EE;
   --mo-surface: #FFFFFF;
   --mo-muted: #9AA19A;
@@ -23,13 +23,13 @@
   --mo-coral: #FF6B6B;
   --mo-spot: #F72585;
   --mo-amber: #FFB703;
-  
+
   --en-blue-light: #3C3C8A;
   --en-pink: #F72585;
-  
-  --shadow-soft: 0 6px 18px rgba(30,40,40,0.08);
-  --glass: rgba(255,255,255,0.6);
-  --focus-outline: 3px solid rgba(75,116,77,0.18);
+
+  --shadow-soft: 0 6px 18px rgba(30, 40, 40, 0.08);
+  --glass: rgba(255, 255, 255, 0.6);
+  --focus-outline: 3px solid rgba(75, 116, 77, 0.18);
 }
 
 /* Tema noche */
@@ -42,13 +42,14 @@
 
 /* Base */
 @layer base {
-body {
-  @apply bg-mo-bg text-mo-text m-0 min-h-screen;
-  font-family: var(--font-ui);
-  background-color: var(--mo-bg);
-  color: var(--mo-text);
-}
-  
+  body {
+    @apply bg-mo-bg text-mo-text m-0 min-h-screen;
+    font-family: var(--font-ui);
+    background-color: var(--mo-bg);
+    color: var(--mo-text);
+    overflow-x: hidden;
+  }
+
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-mo-olive/30;
   }
@@ -59,59 +60,59 @@ body {
   .btn {
     @apply inline-flex items-center justify-center gap-2.5 px-4 h-btn min-w-btn rounded-mo font-cta font-bold cursor-pointer border-none transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-mo-olive/30 focus:ring-offset-2;
   }
-  
+
   .btn-primary {
     @apply btn bg-gradient-mo-primary text-white shadow-mo-soft hover:opacity-90 active:scale-[0.98];
   }
-  
+
   .btn-accent {
     @apply btn bg-mo-coral text-white shadow-mo-soft hover:opacity-90 active:scale-[0.98];
   }
-  
+
   .btn-ghost {
     @apply btn bg-transparent border border-gray-200 dark:border-gray-700 text-mo-text hover:bg-gray-50 dark:hover:bg-gray-800;
   }
-  
+
   .btn-outline {
     @apply btn bg-transparent border-2 border-mo-olive/20 text-mo-olive hover:bg-mo-olive/5;
   }
-  
+
   .card {
     @apply bg-mo-surface rounded-xl p-5 border border-gray-100 dark:border-gray-800 shadow-mo-soft;
   }
-  
+
   .event-card {
     @apply w-80 rounded-mo-lg overflow-hidden bg-gradient-to-b from-white/98 to-gray-50/98 shadow-mo-soft border border-gray-100 dark:from-gray-900/98 dark:to-gray-800/98 dark:border-gray-700;
   }
-  
+
   .badge {
     @apply inline-block px-2.5 py-1.5 rounded-full text-xs font-bold;
   }
-  
+
   .badge-vip {
     @apply badge bg-gradient-mo-vip text-white;
   }
-  
+
   .text-muted {
     @apply text-mo-muted;
   }
-  
+
   .surface {
     @apply bg-mo-surface;
   }
-  
+
   .input {
     @apply w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-mo text-mo-text placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-mo-olive/30 focus:border-transparent transition-colors;
   }
-  
+
   .input-error {
     @apply border-red-300 dark:border-red-700 focus:ring-red-300;
   }
-  
+
   .label {
     @apply block mb-2 font-semibold text-sm text-mo-text;
   }
-  
+
   .error-message {
     @apply text-red-500 dark:text-red-400 text-sm mt-1;
   }
@@ -122,15 +123,15 @@ body {
   .scrollbar-thin {
     scrollbar-width: thin;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar {
     @apply w-2;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-track {
     @apply bg-gray-100 dark:bg-gray-800;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb {
     @apply bg-gray-300 dark:bg-gray-600 rounded-full;
   }

@@ -119,6 +119,7 @@ const Sobre = () => {
               }}
               muted
               playsInline
+              autoPlay
             >
               <source src={videos[currentVideoIndex]} type="video/mp4" />
               Tu navegador no soporta videos.
@@ -147,26 +148,26 @@ const Sobre = () => {
             padding: '1rem' // Reduced padding here too
           }}>
             <h1 style={{
-              fontSize: 'clamp(4rem, 10vw, 9rem)', // Doubled: was 2rem, 5vw, 4.5rem
-              whiteSpace: 'nowrap',
+              fontSize: 'clamp(1.6rem, 5vw, 3.3rem)',
               fontWeight: 700,
               marginBottom: '1.5rem',
               background: 'linear-gradient(90deg, #F72585, #FFB703)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              lineHeight: 1.2
+              lineHeight: 1.2,
+              wordBreak: 'break-word'
             }}>
               <strong>EstaNoche.es</strong>
             </h1>
 
             <p style={{
-              fontSize: 'clamp(2rem, 6vw, 4rem)', // Doubled: was 1rem, 3vw, 2rem
-              lineHeight: 1.4, // Adjusted line height for larger text
+              fontSize: 'clamp(0.85rem, 2.7vw, 1rem)',
+              lineHeight: 1.5,
               marginBottom: '2rem',
               color: '#FFFFFF',
               textShadow: '0 2px 8px rgba(0,0,0,0.8)',
-              maxWidth: '90%', // Increased max-width to accommodate larger text
+              maxWidth: '90%',
               margin: '0 auto 2rem auto'
             }}>
               <strong>Estamos trabajando para crear
@@ -225,7 +226,7 @@ const Sobre = () => {
           }}>
             <h1 style={{
               color: '#FFB703',
-              fontSize: 'clamp(3rem, 10vw, 5rem)', // Doubled: was 1.5rem, 5vw, 2.5rem
+              fontSize: 'clamp(1.3rem, 3.5vw, 2rem)',
               marginBottom: '1rem',
               textAlign: 'center',
               fontWeight: 900
@@ -234,7 +235,7 @@ const Sobre = () => {
             </h1>
 
             <div style={{
-              fontSize: 'clamp(2rem, 6vw, 2.5rem)', // Doubled: was 1rem, 3vw, 1.25rem
+              fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
               lineHeight: 1.6
             }}>
               <p>
@@ -244,18 +245,13 @@ const Sobre = () => {
               </p>
 
               <p>
-                Si eres promotor, <strong style={strongStyle}>aprovecha la oportunidad </strong>que te brinda EstaNoche.Es para dar a conocer
+                Si eres <strong style={strongStyle}>promotor, aprovecha la oportunidad que te brinda ESTANOCHE.ES </strong>para dar a conocer
                 tu evento, tendrán acceso todos los usuarios de la aplicación que busquen ocio en la ciudad.
-                Podrán elegir <strong style={strongStyle}>seguir tus Eventos </strong>y ser notificados de cada convocatoria.
+                Podrán elegir <strong style={strongStyle}>seguir tus Eventos y ser Notificados </strong>de cada convocatoria.
               </p>
 
-              <p>Ya seas artista, dueño de un local o promotor que apuesta por un ocio diferente,
-                EstaNoche.Es es la <strong style={strongStyle}>herramienta ideal</strong> para darte a conocer
-              </p>
-
-              <p>
-                Una <strong style={strongStyle}>PWA innovadora, gratuita y accesible</strong> dedicada a
-                facilitar a sus usuarios el acceso a opciones de ocio en cualquier ciudad.
+              <p>Ya seas artista, dueño de un local, organizador de eventos o promotor que apuesta por un ocio diferente, usa
+                <strong style={strongStyle}> EstaNoche.es, la herramienta ideal para darte a conocer.</strong>
               </p>
 
               <p>
@@ -265,13 +261,16 @@ const Sobre = () => {
               </p>
 
               <p>
-                Dirigida a todos los públicos interesados en planes locales –desde
-                conciertos y fiestas hasta actividades culturales o deportivas–,
-                promueve el entretenimiento sin barreras:{' '}
-                <strong style={strongStyle}>
-                  no requiere registro, descargas ni pagos
-                </strong>{' '}
-                para explorar contenido.
+                <strong style={strongStyle}>Multiplataforma, innovadora y gratuita,</strong>
+                facilita a sus usuarios el acceso a opciones de ocio en cualquier ciudad.
+              </p>
+
+
+              <p>
+                ¿Quieres en encontrar planes en cualquier ciudad, entretenimiento sin barreras?
+                Muy pronto la podrás probar{' '}
+                <strong style={strongStyle}> no requiere registro, descargas ni pagos.</strong>
+                {' '}
               </p>
 
               <p>
@@ -281,7 +280,7 @@ const Sobre = () => {
 
               <h2 style={{
                 color: '#FFB703',
-                fontSize: 'clamp(2.6rem, 8vw, 3.6rem)', // Doubled: was 1.3rem, 4vw, 1.8rem
+                fontSize: 'clamp(1rem, 3vw, 1.4rem)',
                 margin: '1.5rem 0 1rem',
                 fontWeight: 700
               }}>

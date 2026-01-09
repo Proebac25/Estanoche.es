@@ -1,38 +1,64 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <!-- Fuentes Core UI V11 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+  <!-- Fuentes Core UI V11 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
+    rel="stylesheet">
 
-    <!-- Título -->
-    <title>Agenda de Ocio · EstaNoche.es </title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Favicon -->
-    <link rel="icon" href="/Assets/LogoEN.png" type="image/png" />
+  <!-- Título -->
+  <title>Agenda de Ocio · EstaNoche.es </title>
 
-    <!-- Colores base UI -->
-    <meta name="theme-color" content="#F4F1EE" />
+  <!-- Favicon -->
+  <link rel="icon" href="/Assets/LogoEN.png" type="image/png" />
 
-    <!-- Core UI V11 (CSS legacy - mantener para compatibilidad) -->
-    <link rel="stylesheet" href="/src/styles/core/core-ui-v11.css" />
+  <!-- Colores base UI -->
+  <meta name="theme-color" content="#F4F1EE" />
 
-    <!-- PWA Manifest (generado por vite-plugin-pwa) -->
-    <!-- <link rel="manifest" href="/manifest.json" /> -->
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="Descubre los mejores eventos, fiestas y agenda de ocio nocturno en tu ciudad. EstaNoche.es es tu guía definitiva." />
+  <meta name="keywords" content="ocio nocturno, eventos, fiestas, discotecas, agenda, salir de fiesta, EstaNoche" />
+  <meta name="author" content="EstaNoche.es" />
 
-    <!-- Seguridad y compatibilidad -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    
-  </head>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://estanoche.es/" />
+  <meta property="og:title" content="Agenda de Ocio · EstaNoche.es" />
+  <meta property="og:description"
+    content="Descubre los mejores eventos, fiestas y agenda de ocio nocturno en tu ciudad." />
+  <meta property="og:image" content="/Assets/LogoEN.png" />
 
-  <body style="margin:0; padding:0;">
-    <div id="root"></div>
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://estanoche.es/" />
+  <meta property="twitter:title" content="Agenda de Ocio · EstaNoche.es" />
+  <meta property="twitter:description"
+    content="Descubre los mejores eventos, fiestas y agenda de ocio nocturno en tu ciudad." />
+  <meta property="twitter:image" content="/Assets/LogoEN.png" />
 
-    <!-- Entrada React -->
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <!-- Core UI V11 (CSS legacy - mantener para compatibilidad) -->
+  <link rel="stylesheet" href="/src/styles/core/core-ui-v11.css" />
+
+  <!-- PWA Manifest (generado por vite-plugin-pwa) -->
+  <!-- <link rel="manifest" href="/manifest.json" /> -->
+
+  <!-- Seguridad y compatibilidad -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+</head>
+
+<body style="margin:0; padding:0;">
+  <div id="root"></div>
+
+  <!-- Entrada React -->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

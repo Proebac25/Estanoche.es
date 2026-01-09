@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -510,11 +511,14 @@ const AltaUsuario = () => {
         telefono: telefonoLimpio,
         telefono_verificado: false,
         password: formData.password,
-        tipo_usuario: formData.esPromotor ? 'promotor' : 'cliente'
+        // SIEMPRE registrar como 'cliente' inicialmente.
+        // Si marcó "Es Promotor", la actualización se hará tras validar el teléfono.
+        tipo_usuario: 'cliente',
+        es_promotor_pendiente: formData.esPromotor // Flag para recordar intención
       };
 
       // Enviar datos al servidor para verificación de email
-      const response = await fetch('http://localhost:3001/api/send-verification', {
+      const response = await fetch('/api/send-verification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -532,7 +536,8 @@ const AltaUsuario = () => {
       navigate('/VerificacionEmail', {
         state: {
           ...userData,
-          redirectTo: formData.esPromotor ? '/promotor/dashboard' : '/usuario/dashboard'
+          tipo_intent: formData.esPromotor ? 'promotor' : 'cliente', // Pasar intención para el flujo posterior
+          redirectTo: '/FichaUsuario'
         }
       });
 
@@ -811,9 +816,9 @@ const AltaUsuario = () => {
                 <button
                   type="button"
                   onClick={toggleMostrarPassword}
-                  style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: mutedColor, cursor: 'pointer', fontSize: '0.9rem' }}
+                  style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: mutedColor, cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center' }}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
               {errors.password && (
@@ -841,6 +846,13 @@ const AltaUsuario = () => {
                 <span style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: mutedColor, fontSize: '0.9rem' }}>
                   🔒
                 </span>
+                <button
+                  type="button"
+                  onClick={toggleMostrarPassword}
+                  style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: mutedColor, cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center' }}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
               {errors.confirmPassword && (
                 <span style={{ display: 'block', marginTop: '0.25rem', color: errorColor, fontSize: '0.7rem' }}>

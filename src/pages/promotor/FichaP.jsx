@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaArrowLeft, FaSave, FaTrash, FaPlus, FaCamera } from 'react-icons/fa';
+import { FaArrowLeft, FaSave, FaTrash, FaPlus, FaCamera, FaHome } from 'react-icons/fa';
 import { supabase } from '../../lib/supabase';
 import {
     FaInstagram,
@@ -21,6 +21,7 @@ const FichaPromotor = () => {
     const { theme } = useTheme();
     const { user, loginManual } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [formData, setFormData] = useState({
         nombre_usuario: '',
@@ -363,24 +364,12 @@ const FichaPromotor = () => {
                                 className="w-full p-2 bg-gray-50 dark:bg-gray-900 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-mo font-ui text-mo-muted dark:text-gray-500 text-xs cursor-not-allowed"
                             />
                             {/* Teléfono con botón Cambiar */}
-                            <div className="flex gap-2">
-                                <input
-                                    type="tel"
-                                    name="telefono"
-                                    value={formData.telefono}
-                                    onChange={handleChange}
-                                    disabled={user?.telefono && user.telefono.length > 5}
-                                    className={`flex-1 p-3 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-xl outline-none text-mo-text dark:text-white transition-all shadow-sm text-sm ${user?.telefono && user.telefono.length > 5 ? 'opacity-60 cursor-not-allowed bg-gray-50' : ''}`}
-                                    placeholder="Teléfono móvil (+34...)"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => navigate('/RegistroEmail')}
-                                    className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-mo-text dark:text-white text-xs font-bold rounded-mo hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                                >
-                                    Cambiar
-                                </button>
-                            </div>
+                            <input
+                                type="tel"
+                                value={formData.telefono}
+                                disabled
+                                className="w-full p-2 bg-gray-50 dark:bg-gray-900 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-mo font-ui text-mo-muted dark:text-gray-500 text-xs cursor-not-allowed"
+                            />
                         </div>
 
                         {/* DIRECCIÓN */}
@@ -534,11 +523,11 @@ const FichaPromotor = () => {
                         <div className="flex gap-2 mt-3">
                             <button
                                 type="button"
-                                onClick={() => navigate(-1)}
+                                onClick={() => navigate('/RegistroPromotor')}
                                 className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-mo-text dark:text-white rounded-mo font-cta font-bold text-base shadow-mo-soft active:scale-95 transition-all flex items-center justify-center gap-2"
                             >
-                                <FaArrowLeft size={16} />
-                                Volver
+                                <FaHome size={16} />
+                                Principal
                             </button>
                             <button
                                 type="submit"
@@ -551,7 +540,13 @@ const FichaPromotor = () => {
                         </div>
                     </form>
                 </div>
-            </main>
+            </main >
+
+            <div className="text-center mt-8 mb-4 text-[10px] text-mo-muted dark:text-gray-500">
+                Si desea dar de baja su usuario pulse <button onClick={() => navigate('/BajaUsuario')} className="underline hover:text-red-500 transition-colors font-bold cursor-pointer bg-transparent border-none p-0 inline">aquí</button>
+            </div>
+
+            <Footer />
         </div>
     );
 };

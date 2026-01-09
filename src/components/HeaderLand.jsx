@@ -1,6 +1,6 @@
 // D:\ene\src\components\HeaderLand.jsx - VERSIÓN CORREGIDA
 import { useState, useEffect, useRef } from 'react';
-import { FaBars, FaUser, FaTimes, FaMobileAlt, FaChrome, FaEllipsisH, FaCheck } from 'react-icons/fa';
+import { FaBars, FaUser, FaTimes, FaMobileAlt, FaChrome, FaEllipsisH, FaCheck, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LogoEN from '../assets/LogoEN.png';
@@ -14,6 +14,7 @@ const HeaderLand = ({ theme = 'day' }) => {
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
 
   const navigate = useNavigate();
@@ -545,6 +546,25 @@ const HeaderLand = ({ theme = 'day' }) => {
             </div>
 
             <form onSubmit={handleLoginSubmit} style={{ margin: 0, padding: 0 }}>
+              {loginError && (
+                <div style={{
+                  backgroundColor: theme === 'night' ? 'rgba(220, 38, 38, 0.1)' : '#FEE2E2',
+                  color: theme === 'night' ? '#FCA5A5' : '#DC2626',
+                  border: `1px solid ${theme === 'night' ? 'rgba(220, 38, 38, 0.3)' : '#FCA5A5'}`,
+                  borderRadius: '8px',
+                  padding: '12px',
+                  marginBottom: '20px',
+                  fontSize: '14px',
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}>
+                  <span>⚠️</span>
+                  {loginError}
+                </div>
+              )}
               {/* Campo Email */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{
@@ -585,30 +605,43 @@ const HeaderLand = ({ theme = 'day' }) => {
                 }}>
                   Contraseña
                 </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Introduce tu contraseña"
-                  required
-                  style={{
-                    width: '100%',
-                    padding: '14px 16px',
-                    borderRadius: '8px',
-                    border: `1px solid ${theme === 'night' ? 'rgba(255, 255, 255, 0.2)' : '#CCCCCC'}`,
-                    backgroundColor: theme === 'night' ? 'rgba(255, 255, 255, 0.05)' : '#F8F9FA',
-                    color: theme === 'night' ? '#FFFFFF' : '#111111',
-                    fontSize: '16px'
-                  }}
-                />
-                <small style={{
-                  display: 'block',
-                  marginTop: '6px',
-                  color: theme === 'night' ? 'rgba(255, 255, 255, 0.7)' : '#555555',
-                  fontSize: '13px'
-                }}>
-                  Demo: 123456 (Productor) o 654321 (Cliente)
-                </small>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Introduce tu contraseña"
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '14px 45px 14px 16px', // Padding derecho extra para el icono
+                      borderRadius: '8px',
+                      border: `1px solid ${theme === 'night' ? 'rgba(255, 255, 255, 0.2)' : '#CCCCCC'}`,
+                      backgroundColor: theme === 'night' ? 'rgba(255, 255, 255, 0.05)' : '#F8F9FA',
+                      color: theme === 'night' ? '#FFFFFF' : '#111111',
+                      fontSize: '16px'
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '12px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'transparent',
+                      border: 'none',
+                      color: theme === 'night' ? 'rgba(255, 255, 255, 0.6)' : '#666666',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '4px'
+                    }}
+                  >
+                    {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                  </button>
+                </div>
               </div>
 
               {/* CONTENEDOR DE BOTONES - VERSIÓN SIMPLE */}

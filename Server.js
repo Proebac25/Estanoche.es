@@ -219,6 +219,11 @@ app.post('/api/verify-code', async (req, res) => {
 
     // --- CÓDIGO VERIFICADO EXITOSAMENTE ---
     const { userData } = storedData;
+    console.log('📦 Verificando código. UserData recuperado:', JSON.stringify(userData, null, 2));
+
+    // DETERMINAR TIPO REAL (Salvaguarda)
+    const tipoReal = (userData.es_promotor_pendiente || userData.esPromotor) ? 'cliente' : (userData.tipo_usuario || 'cliente');
+
     let userId = null; // ID de Supabase
 
     // 1. Crear usuario en Supabase (si tenemos credenciales)
@@ -235,7 +240,8 @@ app.post('/api/verify-code', async (req, res) => {
             nombre: userData.nombre,
             apellidos: userData.apellidos,
             telefono: userData.telefono,
-            tipo_usuario: userData.tipo_usuario
+            // SALVAGUARDA: Si es promotor pendiente, FORZAR 'cliente' en la creación.
+            tipo_usuario: tipoReal
           }
         });
 
@@ -243,14 +249,8 @@ app.post('/api/verify-code', async (req, res) => {
         userId = authData.user.id;
         console.log('✅ Usuario creado en Supabase Auth con ID:', userId);
 
-        // Opcional: Insertar en public.usuarios si no hay trigger automático
-        // (Asumimos que el trigger handle_new_user de Supabase se encarga, 
-        // pero si no, aquí iría el insert a la tabla pública)
-
       } catch (dbError) {
         console.error('❌ Error al crear usuario en Supabase:', dbError);
-        // No fallamos la request completa, pero avisamos. 
-        // En producción deberíamos decidir si revertir o reintentar.
         return res.status(500).json({
           success: false,
           error: 'Error al registrar usuario en base de datos: ' + dbError.message
@@ -263,13 +263,14 @@ app.post('/api/verify-code', async (req, res) => {
     // Limpiar código usado
     verificationCodes.delete(email);
 
-    // Responder al cliente
+    // Responder al cliente con el TIPO REAL
     return res.json({
       success: true,
       message: 'Usuario verificado y registrado correctamente',
-      tipo: userData.tipo_usuario || 'cliente',
+      tipo: tipoReal, // <--- RECTIFICADO
+      id: userId, // Legacy support
       userId: userId, // ID real de Supabase
-      userData: { ...userData, id: userId } // Añadir ID al objeto userData
+      userData: { ...userData, id: userId, tipo: tipoReal, tipo_usuario: tipoReal } // Añadir ID y TIPO corregido
     });
 
   } catch (error) {
@@ -688,6 +689,98 @@ app.post('/api/upgrade-promoter', async (req, res) => {
       success: false,
       error: error.message
     });
+  }
+});
+
+/**
+ * Envía código para BAJA de usuario
+ * @route POST /api/send-delete-code
+ */
+app.post('/api/send-delete-code', async (req, res) => {
+  try {
+    const { email, userId } = req.body;
+
+    if (!email || !userId) return res.status(400).json({ error: 'Email y ID requeridos' });
+
+    // Generar código
+    const deleteCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = Date.now() + 15 * 60 * 1000;
+
+    // Guardar con prefijo especial para no colisionar con verificación normal
+    verificationCodes.set(`DELETE:${email}`, {
+      code: deleteCode,
+      expiresAt,
+      attempts: 0,
+      userId
+    });
+
+    console.log(`⚠️ Generado código de BAJA para ${email}: ${deleteCode}`);
+
+    // Enviar email
+    const { error } = await resend.emails.send({
+      from: 'EstaNoche <noresponder@estanoche.es>',
+      to: email,
+      subject: 'CÓDIGO DE SEGURIDAD: ELIMINAR CUENTA',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px;">
+          <h2 style="color: #DC2626; text-align: center;">ELIMINACIÓN DE CUENTA</h2>
+          <p>Has solicitado eliminar tu cuenta. Este proceso es irreversible.</p>
+          <div style="background-color: #FEF2F2; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; border: 1px solid #FECACA;">
+             <span style="font-size: 32px; letter-spacing: 5px; font-weight: bold; color: #DC2626;">${deleteCode}</span>
+          </div>
+          <p style="font-size: 12px; color: #666; text-align: center;">Si no has sido tú, cambia tu contraseña inmediatamente.</p>
+        </div>
+      `
+    });
+
+    if (error) throw error;
+
+    res.json({ success: true, message: 'Código enviado' });
+
+  } catch (error) {
+    console.error('Error send-delete-code:', error);
+    res.status(500).json({ error: 'Error al enviar email' });
+  }
+});
+
+/**
+ * Confirma eliminación de usuario
+ * @route POST /api/confirm-delete-user
+ */
+app.post('/api/confirm-delete-user', async (req, res) => {
+  try {
+    const { email, code, userId } = req.body;
+
+    // Verificar código
+    const stored = verificationCodes.get(`DELETE:${email}`);
+    if (!stored || stored.code !== code) {
+      return res.status(400).json({ error: 'Código incorrecto o expirado' });
+    }
+
+    if (!supabaseAdmin) return res.status(500).json({ error: 'Error de configuración servidor' });
+
+    console.log(`🗑️ BORRANDO USUARIO: ${email} (${userId})`);
+
+    // 0. Borrar redes sociales (enlaces únicos) explícitamente
+    const { error: redesError } = await supabaseAdmin.from('redes_sociales').delete().eq('propietario_id', userId);
+    if (redesError) console.warn('⚠️ Error borrando redes (puede que no tenga):', redesError);
+
+    // 1. Borrar de public.usuarios
+    const { error: dbError } = await supabaseAdmin.from('usuarios').delete().eq('id', userId);
+    if (dbError) throw dbError;
+
+    // 2. Borrar de Auth (Usuario real)
+    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
+    if (authError) throw authError;
+
+    verificationCodes.delete(`DELETE:${email}`);
+
+    console.log('✅ Usuario eliminado correctamente');
+    res.json({ success: true });
+
+  } catch (error) {
+    console.error('Error confirm-delete-user:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 

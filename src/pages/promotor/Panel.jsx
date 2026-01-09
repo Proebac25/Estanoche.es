@@ -42,6 +42,10 @@ const RegistroPromotor = () => {
 
   }, [user, navigate]);
 
+  if (!user) {
+    return <div className="min-h-screen bg-mo-bg dark:bg-gray-900" />;
+  }
+
   // Validar cÃ³digo de promotor
   const handleValidarCodigo = async (e) => {
     e.preventDefault();

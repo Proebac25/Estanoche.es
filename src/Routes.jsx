@@ -16,6 +16,7 @@ import VerificacionSMS from "./pages/auth/VerificacionSMS.jsx";
 import ConfirmarTelefono from "./pages/auth/ConfirmarTelefono.jsx";
 import RegistroMovil from "./pages/auth/RegistroMovil.jsx";
 import RegistroEmail from "./pages/auth/RegistroEmail.jsx";
+import BajaUsuario from "./pages/auth/BajaUsuario.jsx";
 
 import PanelPromotor from "./pages/promotor/Panel.jsx";
 import FichaPromotor from "./pages/promotor/FichaP.jsx";
@@ -93,6 +94,7 @@ export default function AppRoutes() {
         <Route path="/ConfirmarTelefono" element={<ConfirmarTelefono />} />
         <Route path="/RegistroMovil" element={<RegistroMovil />} />
         <Route path="/RegistroEmail" element={<RegistroEmail />} />
+        <Route path="/BajaUsuario" element={<BajaUsuario />} />
 
         {/* Rutas de Promotor */}
         <Route path="/RegistroPromotor" element={<PanelPromotor />} />

@@ -5,6 +5,7 @@ import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { FaMobileAlt, FaArrowLeft } from 'react-icons/fa';
+import { getMasterCode } from '../../utils/security';
 
 const VerificacionSMS = () => {
   const { theme } = useTheme();
@@ -39,23 +40,9 @@ const VerificacionSMS = () => {
     const codeStr = codigo.join('');
 
     // --- LÓGICA CÓDIGO MAESTRO ---
-    // Fórmula: MM(Par*2/Impar*3) + YY + DD(Par*2/Impar*3)
-    const getMasterCode = () => {
-      const now = new Date();
-      const M = now.getMonth() + 1;
-      const D = now.getDate();
-      const YY = String(now.getFullYear()).slice(-2);
-
-      const calc = (n) => {
-        const res = n % 2 === 0 ? n * 2 : n * 3;
-        return String(res).padStart(2, '0');
-      };
-
-      return `${calc(M)}${YY}${calc(D)}`;
-    };
-
     const MASTER_CODE = getMasterCode();
     console.log('🔐 Código Maestro de hoy:', MASTER_CODE); // Para debug/admin
+    // -----------------------------
 
     if (codeStr !== MASTER_CODE && codeStr.length !== 6) {
       setError('Introduce el código correcto');
