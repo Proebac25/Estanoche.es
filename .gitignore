@@ -8,3 +8,18 @@ build/
 .vscode/
 .idea/
 *.log
+# Security & Research scripts
+inspect_db.js
+list_schema.js
+inspect_schema_deep.js
+check_owner_column.js
+check_columns.js
+check_recent_users.js
+check_relaciones.js
+check_storage.js
+column_discovery.js
+debug_500.js
+delete_user.js
+role_discovery.js
+verify_schema.js
+test-server.js

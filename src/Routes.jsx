@@ -30,6 +30,9 @@ import EntidadesList from "./pages/entidades/EntidadesList.jsx";
 import EntidadForm from "./pages/entidades/EntidadForm.jsx";
 import EntidadDetalle from "./pages/entidades/EntidadDetalle.jsx";
 
+import EventosList from "./pages/eventos/EventosList.jsx";
+import EventoForm from "./pages/eventos/EventoForm.jsx";
+
 import SEO from "./components/SEO.jsx"; // <-- Importar SEO
 
 export default function AppRoutes() {
@@ -120,12 +123,15 @@ export default function AppRoutes() {
         <Route path="/entidad/:id/editar" element={<EntidadForm />} />
 
         {/* Rutas pendientes de implementar (placeholders) */}
+        {/* Rutas de Eventos */}
         {/* 
         <Route path="/agenda" element={<Agenda />} />
+        */}
         <Route path="/eventos" element={<EventosList />} />
         <Route path="/evento/nuevo" element={<EventoForm />} />
-        <Route path="/evento/:id" element={<EventoDetalle />} />
+        {/* <Route path="/evento/:id" element={<EventoDetalle />} /> */}
         <Route path="/evento/:id/editar" element={<EventoForm />} />
+        {/*
         <Route path="/productor/perfil" element={<PerfilProductor />} />
         <Route path="/productor/eventos" element={<EventosProductor />} />
         <Route path="/productor/entidades" element={<EntidadesProductor />} />

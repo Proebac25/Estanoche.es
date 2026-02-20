@@ -744,6 +744,154 @@ app.post('/api/send-delete-code', async (req, res) => {
 });
 
 /**
+ * Envía un código de recuperación de contraseña
+ * @route POST /api/send-password-reset
+ */
+app.post('/api/send-password-reset', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Formato de email inválido'
+      });
+    }
+
+    // Comprobar si el usuario existe en Supabase Auth
+    if (!supabaseAdmin) {
+      return res.status(500).json({ success: false, error: 'Base de datos no configurada' });
+    }
+
+    // Buscamos el usuario en la tabla public.usuarios
+    const { data: user, error: userError } = await supabaseAdmin
+      .from('usuarios')
+      .select('id')
+      .eq('email', email)
+      .single();
+
+    // Si no existe, no decimos nada por seguridad, solo fingimos que se envió
+    if (userError || !user) {
+      console.log(`[Seguridad] Intento de reset en email inexistente: ${email}`);
+      return res.json({ success: true, message: 'Si el correo existe, recibirás un código' });
+    }
+
+    // Generar código de recuperación
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = Date.now() + 15 * 60 * 1000;
+
+    // Guardar con prefijo especial
+    verificationCodes.set(`RESET:${email}`, {
+      code: resetCode,
+      expiresAt,
+      attempts: 0,
+      userId: user.id
+    });
+
+    console.log(`🔑 Generado código RESET para ${email}: ${resetCode}`);
+
+    // Enviar email
+    try {
+      const { error: emailError } = await resend.emails.send({
+        from: 'EstaNoche <noresponder@estanoche.es>',
+        to: email,
+        subject: 'Tu código de recuperación - EstaNoche',
+        html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1E2933;">
+                    <h2 style="color: #4B744D; font-family: Roboto, serif;">Recuperación de contraseña</h2>
+                    <p>Usa el siguiente código para reestablecer tu contraseña en EstaNoche:</p>
+                    <div style="background-color: #f4f1ee; padding: 25px; border-radius: 8px; text-align: center; margin: 25px 0; border: 1px solid #e2e8f0;">
+                        <h1 style="font-size: 36px; letter-spacing: 12px; color: #1E2933; margin: 0; font-family: monospace;">${resetCode}</h1>
+                    </div>
+                    <p style="color: #64748B; font-size: 14px;">
+                        ⏳ Este código expira en 15 minutos.<br>
+                        🔒 Si no solicitaste este código, ignora este email.
+                    </p>
+                </div>
+            `
+      });
+
+      if (emailError) throw emailError;
+
+      return res.json({ success: true, message: 'Código de recuperación enviado' });
+    } catch (emailError) {
+      console.error('Error enviando código reset:', emailError);
+      return res.status(500).json({ success: false, error: 'Error al enviar email' });
+    }
+  } catch (error) {
+    console.error('Error send-password-reset:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+/**
+ * Verifica código y actualiza la contraseña
+ * @route POST /api/reset-password
+ */
+app.post('/api/reset-password', async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+
+    if (!email || !code || !newPassword) {
+      return res.status(400).json({ success: false, error: 'Email, código y nueva contraseña son requeridos' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ success: false, error: 'La contraseña debe tener al menos 6 caracteres' });
+    }
+
+    // Verificar código
+    const storedData = verificationCodes.get(`RESET:${email}`);
+    const now = Date.now();
+
+    if (!storedData) {
+      return res.status(400).json({ success: false, error: 'Código no encontrado o expirado' });
+    }
+
+    if (now > storedData.expiresAt) {
+      verificationCodes.delete(`RESET:${email}`);
+      return res.status(400).json({ success: false, error: 'El código ha expirado' });
+    }
+
+    if (storedData.code !== code) {
+      storedData.attempts += 1;
+      if (storedData.attempts >= 5) {
+        verificationCodes.delete(`RESET:${email}`);
+        return res.status(400).json({ success: false, error: 'Demasiados intentos fallidos' });
+      }
+      return res.status(400).json({ success: false, error: 'Código incorrecto' });
+    }
+
+    if (!supabaseAdmin) {
+      return res.status(500).json({ success: false, error: 'Base de datos no configurada' });
+    }
+
+    console.log(`🔐 Actualizando contraseña para: ${email} (ID: ${storedData.userId})`);
+
+    // Actualizar contraseña en Auth
+    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+      storedData.userId,
+      { password: newPassword }
+    );
+
+    if (updateError) {
+      console.error('❌ Error actualizando contraseña en Supabase:', updateError);
+      return res.status(500).json({ success: false, error: 'Error al actualizar la contraseña' });
+    }
+
+    // Limpiar código
+    verificationCodes.delete(`RESET:${email}`);
+
+    console.log('✅ Contraseña actualizada con éxito');
+    return res.json({ success: true, message: 'Contraseña actualizada correctamente' });
+
+  } catch (error) {
+    console.error('Error reset-password:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+/**
  * Confirma eliminación de usuario
  * @route POST /api/confirm-delete-user
  */
@@ -997,11 +1145,16 @@ app.listen(PORT, () => {
   console.log('📧 Endpoints disponibles:');
   console.log(`   • POST http://localhost:${PORT}/api/send-verification - Envía un código de verificación`);
   console.log(`   • POST http://localhost:${PORT}/api/verify-code - Verifica un código de verificación`);
+  console.log(`   • POST http://localhost:${PORT}/api/verify-change-email - Verifica y actualiza el email`);
   console.log(`   • GET  http://localhost:${PORT}/api/get-profile/:userId - Obtiene perfil (Bypass RLS)`);
   console.log(`   • POST http://localhost:${PORT}/api/update-profile - Actualiza el perfil de usuario (Bypass RLS)`);
   console.log(`   • GET  http://localhost:${PORT}/api/get-social-networks/:propietarioId/:tipoPropietario - Obtiene redes sociales (Bypass RLS)`);
   console.log(`   • POST http://localhost:${PORT}/api/add-social-network - Añade red social (Bypass RLS)`);
   console.log(`   • DELETE http://localhost:${PORT}/api/delete-social-network/:redId - Elimina red social (Bypass RLS)`);
   console.log(`   • POST http://localhost:${PORT}/api/upgrade-promoter - Mejora cuenta a promotor (Bypass RLS)`);
+  console.log(`   • POST http://localhost:${PORT}/api/send-delete-code - Envía código de baja de usuario`);
+  console.log(`   • POST http://localhost:${PORT}/api/confirm-delete-user - Confirma baja de usuario`);
+  console.log(`   • POST http://localhost:${PORT}/api/send-password-reset - Envía un código para recuperar contraseña`);
+  console.log(`   • POST http://localhost:${PORT}/api/reset-password - Verifica código y establece nueva contraseña`);
   console.log('\n📧 Servicio de correo:', process.env.RESEND_API_KEY ? 'Resend configurado' : 'Usando clave de prueba');
 });

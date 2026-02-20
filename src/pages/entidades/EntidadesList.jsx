@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaPlus, FaEdit, FaTrash, FaStore, FaMusic, FaTheaterMasks, FaEye } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaStore, FaMusic, FaTheaterMasks, FaEye, FaArrowLeft } from 'react-icons/fa';
 import { supabase } from '../../lib/supabase';
 import '../../styles/core/core-ui-v11.css';
 
@@ -113,9 +113,17 @@ const EntidadesList = () => {
                 <div className="p-2">
                     {/* Título y botón crear */}
                     <div className="flex items-center justify-between mb-4">
-                        <h1 className="font-display text-2xl font-bold text-mo-text dark:text-white">
-                            Mis Entidades
-                        </h1>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => navigate('/RegistroPromotor')}
+                                className="w-10 h-10 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+                            >
+                                <FaArrowLeft size={16} className="text-mo-muted" />
+                            </button>
+                            <h1 className="font-display text-2xl font-bold text-mo-text dark:text-white">
+                                Mis Entidades
+                            </h1>
+                        </div>
                         <button
                             onClick={() => navigate('/entidad/nueva')}
                             className="flex items-center gap-2 px-4 py-2 bg-mo-sage hover:bg-mo-olive text-white rounded-mo shadow-mo-soft transition-all active:scale-95"
@@ -191,8 +199,12 @@ const EntidadesList = () => {
                                     {/* Header con icono y tipo */}
                                     <div className="p-4 bg-mo-sage/5 dark:bg-mo-sage/10 border-b border-gray-100 dark:border-gray-700">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-12 h-12 rounded-mo bg-mo-sage/20 dark:bg-mo-sage/30 flex items-center justify-center text-mo-sage">
-                                                {getEntidadIcon(entidad.tipo_entidad)}
+                                            <div className="w-12 h-12 rounded-mo bg-white dark:bg-gray-700 flex items-center justify-center text-mo-sage overflow-hidden border border-gray-100 dark:border-gray-600">
+                                                {entidad.avatar_url ? (
+                                                    <img src={entidad.avatar_url} alt={entidad.nombre} className="w-full h-full object-contain p-1" />
+                                                ) : (
+                                                    getEntidadIcon(entidad.tipo_entidad)
+                                                )}
                                             </div>
                                             <div className="flex-1">
                                                 <h3 className="font-display font-bold text-lg text-mo-text dark:text-white">
@@ -213,9 +225,9 @@ const EntidadesList = () => {
                                             </p>
                                         )}
 
-                                        {entidad.direccion && (
-                                            <div className="text-xs text-mo-muted dark:text-gray-400 mb-3">
-                                                📍 {entidad.direccion}
+                                        {(entidad.calle || entidad.ciudad) && (
+                                            <div className="text-xs text-mo-muted dark:text-gray-400 mb-3 truncate">
+                                                📍 {entidad.calle} {entidad.ciudad && `- ${entidad.ciudad}`}
                                             </div>
                                         )}
 

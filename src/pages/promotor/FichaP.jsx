@@ -6,15 +6,8 @@ import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
 import { FaArrowLeft, FaSave, FaTrash, FaPlus, FaCamera, FaHome } from 'react-icons/fa';
 import { supabase } from '../../lib/supabase';
-import {
-    FaInstagram,
-    FaTiktok,
-    FaTwitter,
-    FaGlobe,
-    FaFacebook,
-    FaWhatsapp,
-    FaShareAlt
-} from 'react-icons/fa';
+import { FaInstagram, FaTiktok, FaTwitter, FaGlobe, FaFacebook, FaWhatsapp, FaShareAlt } from 'react-icons/fa';
+import { validateImageSize, IMAGE_LIMITS } from '../../utils/validators';
 import '../../styles/core/core-ui-v11.css';
 
 const FichaPromotor = () => {
@@ -292,9 +285,10 @@ const FichaPromotor = () => {
 
                                 try {
                                     setMessage({ type: '', text: '' });
-                                    // 1. Validar tamaño (max 256KB)
-                                    if (file.size > 256 * 1024) {
-                                        setMessage({ type: 'error', text: 'La imagen no puede superar los 256KB' });
+                                    // 1. Validar tamaño (500KB para perfiles)
+                                    const validation = validateImageSize(file, IMAGE_LIMITS.USUARIO_ENTIDAD, 'el avatar');
+                                    if (!validation.isValid) {
+                                        setMessage({ type: 'error', text: validation.error });
                                         return;
                                     }
 

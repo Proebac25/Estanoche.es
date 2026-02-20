@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { verifyCode, grantAccess, checkAccess } from '../utils/security';
+import { verifyCode, grantAccess, checkAccess, getDailyCode } from '../utils/security';
 import LogoEN from '../assets/LogoEN.png';
 import { FaLock, FaArrowRight, FaExclamationCircle } from 'react-icons/fa';
 
@@ -11,6 +11,13 @@ const AccessGuard = ({ children }) => {
     const [code, setCode] = useState('');
     const [error, setError] = useState('');
     const [shake, setShake] = useState(false);
+
+    useEffect(() => {
+        // DEV HELPER: Mostrar código en consola
+        if (import.meta.env.DEV) {
+            console.log('🔐 Clave de acceso para hoy:', getDailyCode());
+        }
+    }, []);
 
     useEffect(() => {
         if (checkAccess()) {

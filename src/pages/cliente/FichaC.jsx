@@ -7,6 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { FaUser, FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaGlobe, FaArrowLeft, FaCamera, FaSave, FaPlus, FaTrash, FaInstagram, FaTwitter, FaTiktok, FaWhatsapp, FaFacebook, FaHome } from 'react-icons/fa';
 import '../../styles/core/core-ui-v11.css';
 import { supabase } from '../../lib/supabase';
+import { validateImageSize, IMAGE_LIMITS } from '../../utils/validators';
 
 const FichaUsuario = () => {
     const { theme } = useTheme();
@@ -318,9 +319,10 @@ const FichaUsuario = () => {
 
                                 try {
                                     setMessage({ type: '', text: '' });
-                                    // 1. Validar tamaño
-                                    if (file.size > 256 * 1024) {
-                                        setMessage({ type: 'error', text: 'La imagen no puede superar los 256KB' });
+                                    // 1. Validar tamaño (500KB para perfiles)
+                                    const validation = validateImageSize(file, IMAGE_LIMITS.USUARIO_ENTIDAD, 'el avatar');
+                                    if (!validation.isValid) {
+                                        setMessage({ type: 'error', text: validation.error });
                                         return;
                                     }
 

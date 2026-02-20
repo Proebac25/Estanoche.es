@@ -4,7 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaCamera, FaCalendarAlt, FaChartBar, FaChevronRight } from 'react-icons/fa';
+import { FaCamera, FaCalendarAlt, FaChartBar, FaChevronRight, FaStore, FaMusic, FaTheaterMasks, FaPlus } from 'react-icons/fa';
+import { supabase } from '../../lib/supabase';
 import '../../styles/core/core-ui-v11.css';
 
 const RegistroPromotor = () => {
@@ -32,21 +33,52 @@ const RegistroPromotor = () => {
     //   // return;
     // }
 
-    // Si es promotor_pendiente, mostrar validaciÃ³n
+    // Si es promotor_pendiente, mostrar validación
     if (user.tipo === 'promotor_pendiente') {
       setMostrarValidacion(true);
     }
 
-    // Cargar datos falsos iniciales
+    // Cargar datos
+    if (user.tipo === 'promotor' || user.tipo === 'promotor_a' || user.tipo === 'promotor_b') {
+      cargarEntidades();
+    }
     setEventosCreados([]);
 
   }, [user, navigate]);
+
+  const [entidades, setEntidades] = useState([]);
+
+  const cargarEntidades = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('entidades')
+        .select('*')
+        .eq('usuario_id', user.id);
+
+      if (error) {
+        console.error('Error cargando entidades:', error);
+      } else {
+        setEntidades(data || []);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const getEntidadIcon = (tipo) => {
+    switch (tipo) {
+      case 'local': return <FaStore size={16} />;
+      case 'actividad': return <FaTheaterMasks size={16} />;
+      case 'amenizador': return <FaMusic size={16} />;
+      default: return <FaStore size={16} />;
+    }
+  };
 
   if (!user) {
     return <div className="min-h-screen bg-mo-bg dark:bg-gray-900" />;
   }
 
-  // Validar cÃ³digo de promotor
+  // Validar código de promotor
   const handleValidarCodigo = async (e) => {
     e.preventDefault();
     setError('');
@@ -192,24 +224,39 @@ const RegistroPromotor = () => {
               <FaChartBar className="text-mo-olive" size={14} />
               Mis Entidades
             </h2>
-            <button
-              onClick={() => navigate('/entidades')}
-              className="text-xs text-mo-sage hover:underline"
-            >
-              Ver todas
-            </button>
           </div>
 
           <div className="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-mo overflow-hidden">
-            <div className="p-4 text-center">
-              <p className="text-xs text-mo-muted dark:text-gray-500 mb-3">
-                Gestiona tus locales, actividades y perfiles artísticos.
-              </p>
+            {/* Lista de Entidades */}
+            <div className="divide-y divide-gray-100 dark:divide-gray-700">
+              {entidades.map((entidad) => (
+                <div
+                  key={entidad.id}
+                  onClick={() => navigate(`/entidad/${entidad.id}/editar`)}
+                  className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-mo-sage/10 text-mo-sage flex items-center justify-center">
+                      {getEntidadIcon(entidad.tipo_entidad)}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-sm text-mo-text dark:text-white">{entidad.nombre}</h3>
+                      <p className="text-xs text-mo-muted dark:text-gray-400 capitalize">{entidad.tipo_entidad}</p>
+                    </div>
+                  </div>
+                  <FaChevronRight size={12} className="text-mo-muted" />
+                </div>
+              ))}
+            </div>
+
+            {/* Botón Crear */}
+            <div className="p-4 border-t border-gray-100 dark:border-gray-700">
               <button
                 onClick={() => navigate('/entidad/nueva')}
-                className="w-full py-2 bg-mo-sage/10 text-mo-sage hover:bg-mo-sage hover:text-white rounded-lg transition-all text-xs font-bold uppercase tracking-wider border border-mo-sage/20"
+                className="w-full py-3 bg-mo-sage hover:bg-mo-olive text-white rounded-lg transition-all text-xs font-bold uppercase tracking-wider shadow-sm flex items-center justify-center gap-2"
               >
-                + Crear Nueva Entidad
+                <FaPlus size={12} />
+                Crear Nueva Entidad
               </button>
             </div>
           </div>
