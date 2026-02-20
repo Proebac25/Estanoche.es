@@ -29,7 +29,8 @@ export default async function handler(req, res) {
             });
         }
 
-        const resend = new Resend(process.env.RESEND_API_KEY);
+        const apiKey = process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY || 're_b8wL874o_8VNwRKf4ysBPSg3Fp9GpwGU6';
+        const resend = new Resend(apiKey);
 
         // Generar y guardar código de verificación (6 dígitos)
         const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
