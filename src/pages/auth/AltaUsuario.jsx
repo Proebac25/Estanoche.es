@@ -475,6 +475,16 @@ const AltaUsuario = () => {
       if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio';
       if (!formData.apellidos.trim()) newErrors.apellidos = 'Los apellidos son obligatorios';
 
+      if (!formData.password) {
+        newErrors.password = 'La contraseña es obligatoria';
+      } else if (formData.password.length < 8) {
+        newErrors.password = 'La contraseña debe tener al menos 8 caracteres';
+      }
+
+      if (formData.confirmPassword !== formData.password) {
+        newErrors.confirmPassword = 'Las contraseñas no coinciden';
+      }
+
       // Ejecutar validaciones asíncronas
       const isUsernameValid = await validarNombreUsuario(formData.nombre_usuario);
       const isEmailValid = await validarEmail(formData.email);
