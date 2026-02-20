@@ -465,6 +465,7 @@ const AltaUsuario = () => {
   // --- ENVIAR FORMULARIO ---
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('🚀 Iniciando handleSubmit. Es promotor?', formData.esPromotor);
     setIsSubmitting(true);
     setErrors({});
 
@@ -483,10 +484,14 @@ const AltaUsuario = () => {
       // Validar teléfono (obligatorio para promotores)
       let isPhoneValid = true;
       if (formData.esPromotor) {
+        console.log('📞 Validando teléfono de promotor obligatorio:', formData.telefono);
         isPhoneValid = await validarTelefono(formData.telefono);
       } else if (formData.telefono && formData.telefono.replace(/\s/g, '').length > 0) {
+        console.log('📞 Validando teléfono de cliente opcional:', formData.telefono);
         isPhoneValid = await validarTelefono(formData.telefono);
       }
+
+      console.log('✅ Validaciones completas:', { isUsernameValid, isEmailValid, isPasswordValid, isConfirmPasswordValid, isPhoneValid });
 
       // Si hay errores, mostrarlos y detener el envío
       if (Object.keys(newErrors).length > 0 ||
@@ -495,10 +500,12 @@ const AltaUsuario = () => {
         !isPasswordValid ||
         !isConfirmPasswordValid ||
         !isPhoneValid) {
+        console.warn('❌ handleSubmit abortado por errores de validación', newErrors);
         setErrors(newErrors);
         setIsSubmitting(false);
         return;
       }
+      console.log('➡️ Avanzando a llamar a /api/send-verification');
 
       // Preparar datos para el servidor
       const telefonoLimpio = formData.telefono ? formData.telefono.replace(/\s/g, '') : null;
