@@ -433,13 +433,13 @@ const VerificacionEmail = () => {
                 ¿No llegó?{' '}
                 <button
                   onClick={reenviarCodigo}
-                  disabled={reenviando || tiempoRestante <= 0}
+                  disabled={reenviando}
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: (reenviando || tiempoRestante <= 0) ? mutedColor : primaryColor,
+                    color: reenviando ? mutedColor : primaryColor,
                     fontWeight: 600,
-                    cursor: (reenviando || tiempoRestante <= 0) ? 'not-allowed' : 'pointer',
+                    cursor: reenviando ? 'not-allowed' : 'pointer',
                     textDecoration: 'underline'
                   }}
                 >
