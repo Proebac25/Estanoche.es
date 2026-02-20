@@ -583,7 +583,7 @@ const AltaUsuario = () => {
           )}
 
           {/* Formulario */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
 
             {/* Campo Nombre de Usuario */}
             <div style={{ marginBottom: '1.25rem' }}>
