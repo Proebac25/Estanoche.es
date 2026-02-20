@@ -70,7 +70,12 @@ export default async function handler(req, res) {
 
         if (updateError) {
             console.error('❌ Error actualizando contraseña en Supabase:', updateError);
-            return res.status(500).json({ success: false, error: 'Error al actualizar la contraseña' });
+            return res.status(500).json({
+                success: false,
+                error: 'Error al actualizar la contraseña',
+                details: updateError.message,
+                code: updateError.status
+            });
         }
 
         return res.json({ success: true, message: 'Contraseña actualizada correctamente' });
