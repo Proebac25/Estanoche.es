@@ -30,6 +30,19 @@ export default async function handler(req, res) {
         }
 
         const apiKey = process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY;
+
+        if (!apiKey) {
+            return res.status(500).json({
+                success: false,
+                error: 'Missing API key. Pass it to the constructor `new Resend("re_123")`',
+                debugInfo: {
+                    hasResendKey: !!process.env.RESEND_API_KEY,
+                    hasViteResendKey: !!process.env.VITE_RESEND_API_KEY,
+                    envKeysCount: Object.keys(process.env).length
+                }
+            });
+        }
+
         const resend = new Resend(apiKey);
 
         // Generar y guardar código de verificación (6 dígitos)
