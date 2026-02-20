@@ -31,7 +31,16 @@ export default async function handler(req, res) {
         }
 
         if (!supabaseAdmin) {
-            return res.status(500).json({ success: false, error: 'Base de datos no configurada' });
+            return res.status(500).json({
+                success: false,
+                error: 'Base de datos no configurada',
+                debugInfo: {
+                    hasSupabaseUrl: !!process.env.SUPABASE_URL,
+                    hasViteUrl: !!process.env.VITE_SUPABASE_URL,
+                    hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+                    isFallbackTriggered: true
+                }
+            });
         }
 
         // 1. Obtener el usuario por email

@@ -29,7 +29,7 @@ export default async function handler(req, res) {
             });
         }
 
-        const apiKey = process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY || 're_b8wL874o_8VNwRKf4ysBPSg3Fp9GpwGU6';
+        const apiKey = process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY;
         const resend = new Resend(apiKey);
 
         // Generar y guardar código de verificación (6 dígitos)
