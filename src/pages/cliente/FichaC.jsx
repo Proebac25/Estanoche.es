@@ -235,17 +235,18 @@ const FichaUsuario = () => {
                 updated_at: new Date().toISOString()
             };
 
-            const { data, error } = await supabase
-                .from('usuarios')
-                .update(updateData)
-                .eq('id', user.id)
-                .select();
+            const response = await fetch('/api/update-profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: user.id, updateData })
+            });
+            const result = await response.json();
 
-            if (error) {
-                console.error('❌ Error al actualizar:', error);
-                setMessage({ type: 'error', text: `Error: ${error.message}` });
+            if (!result.success) {
+                console.error('❌ Error al actualizar:', result.error);
+                setMessage({ type: 'error', text: `Error: ${result.error}` });
             } else {
-                console.log('✅ Perfil actualizado (Supabase Directo):', data);
+                console.log('✅ Perfil actualizado:', result.data);
                 // Actualizar contexto local
                 const updatedUser = { ...user, ...formData };
                 loginManual(updatedUser);
