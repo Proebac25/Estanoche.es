@@ -43,8 +43,7 @@ export default async function handler(req, res) {
             .from('usuarios')
             .update(updateData)
             .eq('id', userId)
-            .select()
-            .single();
+            .select();
 
         if (error) {
             return res.status(500).json({ success: false, error: error.message });
