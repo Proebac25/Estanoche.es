@@ -239,8 +239,7 @@ const FichaUsuario = () => {
                 .from('usuarios')
                 .update(updateData)
                 .eq('id', user.id)
-                .select()
-                .single();
+                .select();
 
             if (error) {
                 console.error('❌ Error al actualizar:', error);
