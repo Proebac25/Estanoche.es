@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaArrowLeft, FaEdit, FaTrash, FaStore, FaMusic, FaTheaterMasks, FaPlus, FaInstagram, FaGlobe, FaCalendarAlt, FaStar } from 'react-icons/fa';
+import { FaArrowLeft, FaEdit, FaTrash, FaStore, FaMusic, FaTheaterMasks, FaPlus, FaInstagram, FaGlobe, FaCalendarAlt, FaStar, FaMapMarkerAlt } from 'react-icons/fa';
 import { supabase } from '../../lib/supabase';
 import { FaFacebook, FaTiktok, FaTwitter, FaYoutube } from 'react-icons/fa';
 import '../../styles/core/core-ui-v11.css';
@@ -108,7 +108,7 @@ const EntidadDetalle = () => {
                 .from('eventos')
                 .select('*')
                 .eq('entidad_id', id)
-                .order('fecha_hora_inicio', { ascending: false })
+                .order('fecha_inicio', { ascending: false })
                 .limit(10);
 
             if (error) throw error;
@@ -151,7 +151,7 @@ const EntidadDetalle = () => {
     const getTipoLabel = (tipo) => {
         switch (tipo) {
             case 'local': return 'Local Físico';
-            case 'actividad': return 'Actividad Social';
+            case 'actividad': return 'Organizador / Promotora';
             case 'amenizador': return 'Artista / DJ';
             default: return tipo;
         }
@@ -293,26 +293,51 @@ const EntidadDetalle = () => {
 
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                             <div className="space-y-3">
-                                <div className="flex items-center flex-wrap gap-3">
-                                    <h1 className="font-display text-4xl md:text-5xl font-black text-mo-text dark:text-white leading-tight">
-                                        {entidad.nombre}
-                                    </h1>
-                                    <span className="text-[10px] px-3 py-1 bg-mo-sage/10 text-mo-sage rounded-full font-bold uppercase tracking-[.3em] border border-mo-sage/20 shadow-inner">
-                                        {getTipoLabel(entidad.tipo_entidad)}
-                                    </span>
-                                </div>
-
-                                {entidad.calle && (
-                                    <div className="flex items-start gap-2 text-lg text-mo-muted dark:text-gray-400 font-ui">
-                                        <span className="text-mo-olive mt-1">📍</span>
-                                        <div className="flex flex-col">
-                                            <span>
-                                                {entidad.calle} {entidad.numero && `, ${entidad.numero}`}
-                                            </span>
-                                            <span className="text-sm opacity-80">
-                                                {entidad.codigo_postal} {entidad.ciudad && `- ${entidad.ciudad}`} {entidad.provincia && `(${entidad.provincia})`}
+                                    <div className="flex flex-col gap-1">
+                                        <div className="flex items-center gap-2 text-mo-olive font-bold text-[10px] uppercase tracking-[.3em]">
+                                            <span>{entidad.provincia}</span>
+                                            {entidad.ciudad && (
+                                                <>
+                                                    <span className="opacity-30">|</span>
+                                                    <span>{entidad.ciudad}</span>
+                                                </>
+                                            )}
+                                        </div>
+                                        <h1 className="font-display text-4xl md:text-5xl font-black text-mo-text dark:text-white leading-tight">
+                                            {entidad.nombre}
+                                        </h1>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <span className="text-[10px] px-3 py-1 bg-mo-sage/10 text-mo-sage rounded-full font-bold uppercase tracking-widest border border-mo-sage/20 shadow-inner">
+                                                {entidad.categoria_entidad || getTipoLabel(entidad.tipo_entidad)}
                                             </span>
                                         </div>
+                                    </div>
+
+                                {entidad.calle && (
+                                    <div className="flex items-center justify-between gap-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                        <div className="flex items-start gap-2 text-lg text-mo-muted dark:text-gray-400 font-ui">
+                                            <span className="text-mo-olive mt-1">📍</span>
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-mo-text dark:text-white">
+                                                    {entidad.calle} {entidad.numero && `, ${entidad.numero}`}
+                                                </span>
+                                                <span className="text-sm opacity-80">
+                                                    {entidad.codigo_postal} {entidad.ciudad && `- ${entidad.ciudad}`} {entidad.provincia && `(${entidad.provincia})`}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {entidad.direccion && (
+                                            <a
+                                                href={entidad.direccion}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="w-12 h-12 flex items-center justify-center bg-mo-sage text-white rounded-xl shadow-mo-soft hover:bg-mo-olive transition-all active:scale-95"
+                                                title="Cómo llegar"
+                                            >
+                                                <FaMapMarkerAlt size={20} />
+                                            </a>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -406,15 +431,30 @@ const EntidadDetalle = () => {
                                                     Evento PRO
                                                 </div>
                                                 <div className="text-xs text-mo-muted font-bold font-ui">
-                                                    {new Date(evento.fecha_hora_inicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                                                    {new Date(evento.fecha_inicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                                                 </div>
                                             </div>
                                             <h3 className="font-display text-xl font-black text-mo-text dark:text-white mb-2 group-hover:text-mo-sage transition-colors">
                                                 {evento.titulo}
                                             </h3>
-                                            <div className="flex items-center gap-2 text-sm text-mo-muted dark:text-gray-400 font-ui uppercase tracking-widest">
-                                                <span className="text-mo-olive">●</span>
-                                                {new Date(evento.fecha_hora_inicio).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2 text-sm text-mo-muted dark:text-gray-400 font-ui uppercase tracking-widest">
+                                                    <span className="text-mo-olive">●</span>
+                                                    {new Date(evento.fecha_inicio).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                                                </div>
+
+                                                {evento.ubicacion_coords && (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            window.open(evento.ubicacion_coords, '_blank');
+                                                        }}
+                                                        className="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-mo-sage rounded-full hover:bg-mo-sage hover:text-white transition-all"
+                                                        title="Ver mapa"
+                                                    >
+                                                        <FaMapMarkerAlt size={12} />
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

@@ -7,7 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { FaPhoneAlt, FaArrowLeft, FaCheckCircle, FaSms } from 'react-icons/fa';
 import '../../styles/core/core-ui-v11.css';
 import { supabase } from '../../lib/supabase';
-import { getMasterCode, getPhoneValidationCode } from '../../utils/security';
+import { getPhoneValidationCode } from '../../utils/security';
 import { usuariosService } from '../../services/usuariosService';
 
 const RegistroMovil = () => {

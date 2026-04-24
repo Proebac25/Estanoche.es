@@ -4,9 +4,10 @@ import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaSave, FaArrowLeft, FaStore, FaMusic, FaTheaterMasks, FaCamera, FaPlus, FaInstagram, FaGlobe, FaFacebook, FaTiktok, FaTwitter, FaYoutube, FaTrash } from 'react-icons/fa';
+import { FaSave, FaArrowLeft, FaStore, FaMusic, FaTheaterMasks, FaCamera, FaPlus, FaInstagram, FaGlobe, FaFacebook, FaTiktok, FaTwitter, FaYoutube, FaTrash, FaMapMarkerAlt } from 'react-icons/fa';
 import { supabase } from '../../lib/supabase';
 import { validateImageSize, IMAGE_LIMITS } from '../../utils/validators';
+import GeographyInputs from '../../components/GeographyInputs';
 import '../../styles/core/core-ui-v11.css';
 
 const EntidadForm = () => {
@@ -19,6 +20,7 @@ const EntidadForm = () => {
     const [formData, setFormData] = useState({
         nombre: '',
         tipo_entidad: 'local',
+        categoria_entidad: '',
         descripcion: '',
         calle: '',
         numero: '',
@@ -26,7 +28,8 @@ const EntidadForm = () => {
         codigo_postal: '',
         provincia: '',
         avatar_url: '',
-        banner_url: ''
+        banner_url: '',
+        direccion: ''
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,6 +71,7 @@ const EntidadForm = () => {
             setFormData({
                 nombre: data.nombre || '',
                 tipo_entidad: data.tipo_entidad || 'local',
+                categoria_entidad: data.categoria_entidad || '',
                 descripcion: data.descripcion || '',
                 calle: data.calle || '',
                 numero: data.numero || '',
@@ -75,7 +79,8 @@ const EntidadForm = () => {
                 codigo_postal: data.codigo_postal || '',
                 provincia: data.provincia || '',
                 avatar_url: data.avatar_url || '',
-                banner_url: data.banner_url || ''
+                banner_url: data.banner_url || '',
+                direccion: data.direccion || ''
             });
         } catch (error) {
             console.error('Error cargando entidad:', error);
@@ -146,61 +151,74 @@ const EntidadForm = () => {
     };
 
     const handleGalleryUpload = async (e) => {
-        const files = e.target.files;
+        const files = Array.from(e.target.files);
+        const target = e.target; // ¡Guardamos la referencia a target antes de la primera espera asíncrona!
         if (!files || files.length === 0) return;
 
         setUploadingImage(true);
+        let countSuccess = 0;
+        let lastError = null;
+
         try {
             for (const file of files) {
-                const fileSize = file.size / 1024 / 1024; // MB
-                if (fileSize > 2) {
-                    setMessage({ type: 'error', text: `La imagen ${file.name} excede 2MB` });
+                const validation = validateImageSize(file, IMAGE_LIMITS.USUARIO_ENTIDAD, `la imagen ${file.name}`);
+                if (!validation.isValid) {
+                    lastError = validation.error;
                     continue;
                 }
 
-                // Usamos FileReader para base64 por ahora
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    const base64 = event.target.result;
+                // Leer base64 con promesa para que la carga secuencial funcione
+                const base64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => resolve(event.target.result);
+                    reader.onerror = (err) => reject(err);
+                    reader.readAsDataURL(file);
+                });
 
-                    if (!isEditing) {
-                        // Modo creación: Guardamos en estado local pendiente
-                        setPendingGallery(prev => [...prev, {
-                            id: Date.now() + Math.random(), // ID temporal para el listado
+                if (!isEditing) {
+                    setPendingGallery(prev => [...prev, {
+                        id: Date.now() + Math.random(),
+                        url: base64,
+                        is_main: false,
+                        isPending: true
+                    }]);
+                    countSuccess++;
+                } else {
+                    const { data, error } = await supabase
+                        .from('imagenes_entidad')
+                        .insert([{
+                            entidad_id: id,
                             url: base64,
-                            is_main: false,
-                            isPending: true
-                        }]);
-                    } else {
-                        // Modo edición: Subimos directamente a Supabase
-                        const { data, error } = await supabase
-                            .from('imagenes_entidad')
-                            .insert([{
-                                entidad_id: id,
-                                url: base64,
-                                is_main: false
-                            }])
-                            .select()
-                            .single();
+                            is_main: false
+                        }])
+                        .select()
+                        .single();
 
-                        if (!error && data) {
-                            setGallery(prev => [data, ...prev]);
-                        } else if (error) {
-                            console.error('Error subiendo a Supabase:', error);
-                            setMessage({ type: 'error', text: 'Error al subir imagen a la base de datos' });
-                        }
+                    if (!error && data) {
+                        setGallery(prev => [data, ...prev]);
+                        countSuccess++;
+                    } else if (error) {
+                        console.error('Error subiendo a Supabase:', error);
+                        lastError = 'Error al subir imagen a la base de datos';
                     }
-                };
-                reader.readAsDataURL(file);
+                }
             }
-            setMessage({ type: 'success', text: 'Imágenes añadidas a la galería' });
+
+            if (countSuccess === 0 && lastError) {
+                setMessage({ type: 'error', text: lastError });
+            } else if (countSuccess > 0) {
+                if (lastError) {
+                    setMessage({ type: 'success', text: `Se subieron ${countSuccess} imágenes, pero algunas fallaron por tamaño.` });
+                } else {
+                    setMessage({ type: 'success', text: 'Imágenes añadidas a la galería' });
+                }
+            }
         } catch (error) {
             console.error('Error subiendo imágenes:', error);
-            setMessage({ type: 'error', text: 'Error al subir imágenes' });
+            setMessage({ type: 'error', text: 'Error al procesar imágenes' });
         } finally {
             setUploadingImage(false);
-            // Limpiar input
-            e.target.value = '';
+            target.value = '';
         }
     };
 
@@ -288,6 +306,29 @@ const EntidadForm = () => {
         }
     };
 
+    const handleDeleteEntidad = async () => {
+        if (!window.confirm("¿Estás seguro de que deseas eliminar esta entidad de forma permanente? Se perderán todos sus datos y eventos, y no podrá deshacerse.")) {
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const { error } = await supabase
+                .from('entidades')
+                .delete()
+                .eq('id', id);
+
+            if (error) throw error;
+
+            setMessage({ type: 'success', text: 'Entidad eliminada. Redirigiendo...' });
+            setTimeout(() => navigate('/entidades'), 1500);
+        } catch (error) {
+            console.error('Error borrando entidad:', error);
+            setMessage({ type: 'error', text: 'Error al eliminar la entidad.' });
+            setIsSubmitting(false);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -310,6 +351,7 @@ const EntidadForm = () => {
             const entidadData = {
                 nombre: formData.nombre.trim(),
                 tipo_entidad: formData.tipo_entidad,
+                categoria_entidad: formData.categoria_entidad ? formData.categoria_entidad.trim() : null,
                 descripcion: formData.descripcion.trim(),
                 calle: formData.calle.trim(),
                 numero: formData.numero.trim(),
@@ -318,7 +360,9 @@ const EntidadForm = () => {
                 provincia: formData.provincia.trim(),
                 avatar_url: formData.avatar_url,
                 banner_url: formData.banner_url,
-                usuario_id: user.id
+                direccion: formData.direccion,
+                usuario_id: user.id,
+                estado_entidad: 'verificado'
             };
 
             if (isEditing) {
@@ -436,10 +480,29 @@ const EntidadForm = () => {
                         </h1>
                     </div>
 
-                    {/* Mensaje de Feedback */}
+                    {/* Mensaje de Feedback Flotante (Toast) */}
                     {message.text && (
-                        <div className={`m-6 p-4 rounded-mo font-ui text-center text-sm font-bold shadow-sm ${message.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
-                            {message.text}
+                        <div className={`fixed bottom-6 left-1/2 z-50 p-4 rounded-mo font-ui shadow-2xl flex items-start gap-4 animate-slide-up-center bg-white dark:bg-gray-800 border-l-4 w-[90%] max-w-md ${message.type === 'success' ? 'border-green-500' : 'border-red-500'}`}>
+                            <div className="flex-1">
+                                <p className={`text-sm font-bold ${message.type === 'success' ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
+                                    {message.type === 'success' ? 'Éxito' : 'Aviso'}
+                                </p>
+                                <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{message.text}</p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setMessage({ type: '', text: '' })}
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-white"
+                            >
+                                ✕
+                            </button>
+                            <style>{`
+                                @keyframes slideUpCenter {
+                                    from { opacity: 0; transform: translate(-50%, 20px); }
+                                    to { opacity: 1; transform: translate(-50%, 0); }
+                                }
+                                .animate-slide-up-center { animation: slideUpCenter 0.3s ease-out forwards; }
+                            `}</style>
                         </div>
                     )}
 
@@ -475,7 +538,7 @@ const EntidadForm = () => {
                                     <button
                                         type="button"
                                         onClick={() => setFormData({ ...formData, tipo_entidad: 'local' })}
-                                        className={`p-3 rounded-mo border-2 transition-all flex flex-col items-center gap-1 ${formData.tipo_entidad === 'local' ? 'border-mo-sage bg-mo-sage/5 text-mo-sage shadow-inner' : 'border-gray-100 dark:border-gray-800 opacity-50'}`}
+                                        className={`p-3 rounded-mo border-2 transition-all flex flex-col items-center gap-1 ${formData.tipo_entidad === 'local' ? 'border-mo-sage bg-mo-sage/5 text-mo-sage shadow-inner' : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-mo-sage/50 bg-white dark:bg-gray-800'}`}
                                     >
                                         <FaStore size={18} />
                                         <span className="text-[10px] font-bold uppercase">Local</span>
@@ -483,20 +546,39 @@ const EntidadForm = () => {
                                     <button
                                         type="button"
                                         onClick={() => setFormData({ ...formData, tipo_entidad: 'actividad' })}
-                                        className={`p-3 rounded-mo border-2 transition-all flex flex-col items-center gap-1 ${formData.tipo_entidad === 'actividad' ? 'border-mo-sage bg-mo-sage/5 text-mo-sage shadow-inner' : 'border-gray-100 dark:border-gray-800 opacity-50'}`}
+                                        className={`p-3 rounded-mo border-2 transition-all flex flex-col items-center gap-1 ${formData.tipo_entidad === 'actividad' ? 'border-mo-sage bg-mo-sage/5 text-mo-sage shadow-inner' : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-mo-sage/50 bg-white dark:bg-gray-800'}`}
                                     >
                                         <FaTheaterMasks size={18} />
-                                        <span className="text-[10px] font-bold uppercase">Actividad</span>
+                                        <span className="text-[10px] font-bold uppercase">Organizador</span>
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setFormData({ ...formData, tipo_entidad: 'amenizador' })}
-                                        className={`p-3 rounded-mo border-2 transition-all flex flex-col items-center gap-1 ${formData.tipo_entidad === 'amenizador' ? 'border-mo-sage bg-mo-sage/5 text-mo-sage shadow-inner' : 'border-gray-100 dark:border-gray-800 opacity-50'}`}
+                                        className={`p-3 rounded-mo border-2 transition-all flex flex-col items-center gap-1 ${formData.tipo_entidad === 'amenizador' ? 'border-mo-sage bg-mo-sage/5 text-mo-sage shadow-inner' : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-mo-sage/50 bg-white dark:bg-gray-800'}`}
                                     >
                                         <FaMusic size={18} />
                                         <span className="text-[10px] font-bold uppercase">Artista</span>
                                     </button>
                                 </div>
+                            </div>
+
+                            {/* NUEVO: Subtipo */}
+                            <div>
+                                <label className="block text-xs uppercase tracking-widest font-black text-mo-muted mb-2">
+                                    Tipo
+                                </label>
+                                <input
+                                    type="text"
+                                    name="categoria_entidad"
+                                    value={formData.categoria_entidad}
+                                    onChange={handleChange}
+                                    className="w-full p-4 bg-gray-50 dark:bg-gray-900 border border-transparent focus:border-mo-sage rounded-mo outline-none text-mo-text dark:text-white transition-all font-ui"
+                                    placeholder={
+                                        formData.tipo_entidad === 'local' ? "Ej: Discoteca, Pub..." :
+                                            formData.tipo_entidad === 'actividad' ? "Ej: Promotora, Asociación..." :
+                                                "Ej: Grupo de Jazz, DJ..."
+                                    }
+                                />
                             </div>
 
                             <div>
@@ -511,69 +593,57 @@ const EntidadForm = () => {
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-xs uppercase tracking-widest font-black text-mo-muted mb-2">Dirección {formData.tipo_entidad === 'local' && '*'}</label>
+                            {/* SECCIÓN: DIRECCIÓN (ESTILO CAJA PREMIUM) */}
+                            <div className="p-4 bg-mo-bg/50 dark:bg-gray-900/50 rounded-3xl border border-gray-100 dark:border-gray-700 space-y-4 shadow-inner">
+                                <h3 className="text-[10px] uppercase tracking-widest font-black text-mo-muted px-2">Dirección y Ubicación</h3>
 
-                                <div className="grid grid-cols-12 gap-3 mb-3">
-                                    {/* Calle */}
-                                    <div className="col-span-9">
-                                        <input
-                                            type="text"
-                                            name="calle"
-                                            value={formData.calle}
-                                            onChange={handleChange}
-                                            className="w-full p-4 bg-gray-50 dark:bg-gray-900 border border-transparent focus:border-mo-sage rounded-mo outline-none text-mo-text dark:text-white transition-all font-ui"
-                                            placeholder="Calle / Avenida / Plaza"
-                                            required={formData.tipo_entidad === 'local'}
-                                        />
-                                    </div>
-                                    {/* Número */}
-                                    <div className="col-span-3">
-                                        <input
-                                            type="text"
-                                            name="numero"
-                                            value={formData.numero}
-                                            onChange={handleChange}
-                                            className="w-full p-4 bg-gray-50 dark:bg-gray-900 border border-transparent focus:border-mo-sage rounded-mo outline-none text-mo-text dark:text-white transition-all font-ui"
-                                            placeholder="Nº"
-                                        />
-                                    </div>
-                                </div>
+                                <div className="space-y-3">
+                                    {/* Bloque Geográfico: Provincia / Localidad / CP */}
+                                    <GeographyInputs 
+                                        provinciaValue={formData.provincia}
+                                        municipioValue={formData.ciudad}
+                                        cpValue={formData.codigo_postal}
+                                        onChange={handleChange}
+                                        required={formData.tipo_entidad === 'local'}
+                                    />
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                    {/* Población */}
-                                    <div>
-                                        <input
-                                            type="text"
-                                            name="ciudad"
-                                            value={formData.ciudad}
-                                            onChange={handleChange}
-                                            className="w-full p-4 bg-gray-50 dark:bg-gray-900 border border-transparent focus:border-mo-sage rounded-mo outline-none text-mo-text dark:text-white transition-all font-ui"
-                                            placeholder="Población"
-                                            required={formData.tipo_entidad === 'local'}
-                                        />
+                                    <div className="grid grid-cols-12 gap-3">
+                                        {/* Calle */}
+                                        <div className="col-span-9">
+                                            <input
+                                                type="text"
+                                                name="calle"
+                                                value={formData.calle}
+                                                onChange={handleChange}
+                                                className="w-full p-4 bg-white dark:bg-gray-800 border border-transparent focus:border-mo-sage rounded-2xl outline-none text-mo-text dark:text-white transition-all font-ui shadow-sm"
+                                                placeholder="Calle / Avenida / Plaza"
+                                                required={formData.tipo_entidad === 'local'}
+                                            />
+                                        </div>
+                                        {/* Número */}
+                                        <div className="col-span-3">
+                                            <input
+                                                type="text"
+                                                name="numero"
+                                                value={formData.numero}
+                                                onChange={handleChange}
+                                                className="w-full p-4 bg-white dark:bg-gray-800 border border-transparent focus:border-mo-sage rounded-2xl outline-none text-mo-text dark:text-white transition-all font-ui shadow-sm"
+                                                placeholder="Nº"
+                                            />
+                                        </div>
                                     </div>
-                                    {/* CP */}
-                                    <div>
-                                        <input
-                                            type="text"
-                                            name="codigo_postal"
-                                            value={formData.codigo_postal}
-                                            onChange={handleChange}
-                                            className="w-full p-4 bg-gray-50 dark:bg-gray-900 border border-transparent focus:border-mo-sage rounded-mo outline-none text-mo-text dark:text-white transition-all font-ui"
-                                            placeholder="C. Postal"
-                                        />
-                                    </div>
-                                    {/* Provincia */}
-                                    <div>
-                                        <input
-                                            type="text"
-                                            name="provincia"
-                                            value={formData.provincia}
-                                            onChange={handleChange}
-                                            className="w-full p-4 bg-gray-50 dark:bg-gray-900 border border-transparent focus:border-mo-sage rounded-mo outline-none text-mo-text dark:text-white transition-all font-ui"
-                                            placeholder="Provincia"
-                                        />
+
+                                    {/* URL Google Maps */}
+                                    <div className="relative">
+                                    <FaMapMarkerAlt className="absolute left-4 top-1/2 -translate-y-1/2 text-mo-sage opacity-50" />
+                                    <input
+                                        type="url"
+                                        name="direccion"
+                                        value={formData.direccion}
+                                        onChange={handleChange}
+                                        className="w-full p-4 pl-12 bg-white dark:bg-gray-800 border border-transparent focus:border-mo-sage rounded-2xl outline-none text-mo-text dark:text-white transition-all font-ui text-xs shadow-sm"
+                                        placeholder="Enlace de Google Maps (copia y pega aquí)"
+                                    />
                                     </div>
                                 </div>
                             </div>
@@ -583,7 +653,7 @@ const EntidadForm = () => {
                         {/* LOGOTIPO */}
                         <div className="pt-4 space-y-4 border-t border-gray-100 dark:border-gray-800">
                             <label className="block text-xs uppercase tracking-widest font-black text-mo-muted">
-                                Logotipo de la Entidad
+                                Logotipo de la Entidad <span className="text-[10px] font-normal normal-case opacity-70">(Máx. 500KB)</span>
                             </label>
                             <div className="flex items-center gap-6">
                                 <div
@@ -614,7 +684,7 @@ const EntidadForm = () => {
                         <div className="pt-4 space-y-4 border-t border-gray-100 dark:border-gray-800">
                             <div className="flex justify-between items-end">
                                 <label className="block text-xs uppercase tracking-widest font-black text-mo-muted">
-                                    Galería de Imágenes <span className="text-[10px] font-normal normal-case opacity-70">({(gallery.length + pendingGallery.length)}/5)</span>
+                                    Galería de Imágenes <span className="text-[10px] font-normal normal-case opacity-70">({(gallery.length + pendingGallery.length)}/5) - Máx. 500KB/foto</span>
                                 </label>
                                 {(gallery.length + pendingGallery.length) >= 5 && (
                                     <span className="text-[10px] text-red-500 font-bold">Límite alcanzado</span>
@@ -627,6 +697,7 @@ const EntidadForm = () => {
                                     <FaCamera />
                                     <span>Añadir Fotos</span>
                                     <input
+                                        id="gallery-upload"
                                         type="file"
                                         multiple
                                         accept="image/*"
@@ -679,12 +750,7 @@ const EntidadForm = () => {
                                     );
                                 })}
 
-                                {/* Placeholder Slots to show limit */}
-                                {[...Array(Math.max(0, 5 - ((isEditing ? gallery.length : 0) + pendingGallery.length)))].map((_, i) => (
-                                    <div key={`placeholder-${i}`} className="aspect-square rounded-xl border-2 border-dashed border-gray-100 dark:border-gray-800 flex items-center justify-center opacity-50">
-                                        <span className="text-2xl text-gray-200 dark:text-gray-700">+</span>
-                                    </div>
-                                ))}
+
                             </div>
 
                             <p className="text-[10px] text-mo-muted italic text-center">
@@ -763,8 +829,8 @@ const EntidadForm = () => {
                             </div>
                         )}
 
-                        {/* BOTÓN GUARDAR */}
-                        <div className="pt-6">
+                        {/* BOTÓN GUARDAR Y BORRAR */}
+                        <div className="pt-6 flex flex-col gap-3">
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
@@ -773,6 +839,17 @@ const EntidadForm = () => {
                                 <FaSave size={20} />
                                 {isSubmitting ? 'Guardando...' : (isEditing ? 'Actualizar Ficha' : 'Crear Entidad')}
                             </button>
+                            {isEditing && (
+                                <button
+                                    type="button"
+                                    onClick={handleDeleteEntidad}
+                                    disabled={isSubmitting}
+                                    className="w-full py-4 bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-mo font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    <FaTrash size={16} />
+                                    Eliminar Entidad
+                                </button>
+                            )}
                         </div>
                     </form>
                 </div>

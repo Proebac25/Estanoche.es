@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaCamera, FaCalendarAlt, FaStar, FaChevronRight, FaPhoneAlt } from 'react-icons/fa';
+import { FaCamera, FaCalendarAlt, FaStar, FaChevronRight, FaPhoneAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import '../../styles/core/core-ui-v11.css';
 
 const RegistroCliente = () => {
@@ -149,10 +149,28 @@ const RegistroCliente = () => {
               </div>
             ) : (
               eventosSeguidos.map((ev, index) => (
-                <Link key={ev.id} to={`/eventos/${ev.id}`} className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${index !== eventosSeguidos.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : ''}`}>
-                  <span className="text-mo-text dark:text-gray-300 font-medium truncate text-sm">{ev.nombre}</span>
-                  <FaChevronRight size={10} className="text-mo-muted" />
-                </Link>
+                <div key={ev.id} className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${index !== eventosSeguidos.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : ''}`}>
+                  <Link to={`/eventos/${ev.id}`} className="flex-1 min-w-0 mr-4">
+                    <span className="block text-[10px] text-mo-olive uppercase font-bold truncate">
+                      {ev.provincia} {ev.ciudad && `· ${ev.ciudad}`}
+                    </span>
+                    <span className="text-mo-text dark:text-gray-300 font-medium text-sm block truncate">{ev.nombre || ev.titulo}</span>
+                  </Link>
+                  <div className="flex items-center gap-3">
+                    {ev.ubicacion_coords && (
+                      <a 
+                        href={ev.ubicacion_coords} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-mo-sage hover:text-mo-olive transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FaMapMarkerAlt size={12} />
+                      </a>
+                    )}
+                    <FaChevronRight size={10} className="text-mo-muted" />
+                  </div>
+                </div>
               ))
             )}
           </div>
@@ -174,10 +192,28 @@ const RegistroCliente = () => {
               </div>
             ) : (
               favoritos.map((fav, index) => (
-                <Link key={fav.id} to={`/entidades/${fav.id}`} className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group ${index !== favoritos.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : ''}`}>
-                  <span className="text-mo-text dark:text-gray-300 font-medium text-sm group-hover:text-mo-olive transition-colors">{fav.nombre}</span>
-                  <FaChevronRight size={10} className="text-mo-muted" />
-                </Link>
+                <div key={fav.id} className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group ${index !== favoritos.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : ''}`}>
+                  <Link to={`/entidades/${fav.id}`} className="flex-1 min-w-0 mr-4">
+                    <span className="block text-[10px] text-mo-olive uppercase font-bold truncate">
+                      {fav.provincia} {fav.ciudad && `· ${fav.ciudad}`}
+                    </span>
+                    <span className="text-mo-text dark:text-gray-300 font-medium text-sm block truncate group-hover:text-mo-olive transition-colors">{fav.nombre}</span>
+                  </Link>
+                  <div className="flex items-center gap-3">
+                    {fav.direccion && (
+                      <a 
+                        href={fav.direccion} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-mo-sage hover:text-mo-olive transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FaMapMarkerAlt size={12} />
+                      </a>
+                    )}
+                    <FaChevronRight size={10} className="text-mo-muted" />
+                  </div>
+                </div>
               ))
             )}
           </div>

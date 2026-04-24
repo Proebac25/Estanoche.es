@@ -1,10 +1,10 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaCamera, FaCalendarAlt, FaChartBar, FaChevronRight, FaStore, FaMusic, FaTheaterMasks, FaPlus } from 'react-icons/fa';
+import { FaCamera, FaCalendarAlt, FaChartBar, FaChevronRight, FaStore, FaMusic, FaTheaterMasks, FaPlus, FaMapMarkerAlt } from 'react-icons/fa';
 import { supabase } from '../../lib/supabase';
 import '../../styles/core/core-ui-v11.css';
 
@@ -18,52 +18,46 @@ const RegistroPromotor = () => {
   const [error, setError] = useState('');
   const [mostrarValidacion, setMostrarValidacion] = useState(false);
   const [eventosCreados, setEventosCreados] = useState([]);
+  const [entidades, setEntidades] = useState([]);
 
-  // Verificar estado del usuario al cargar
+  const cargarDatosCompletos = async () => {
+    try {
+      // Cargar Entidades
+      const { data: dataEntidades, error: errEntidades } = await supabase
+        .from('entidades')
+        .select('*')
+        .eq('usuario_id', user.id);
+
+      if (!errEntidades) setEntidades(dataEntidades || []);
+
+      // Cargar Eventos
+      const { data: dataEventos, error: errEventos } = await supabase
+        .from('eventos')
+        .select('id, titulo, provincia, localidad, ubicacion_coords, ubicacion, lugar_manual')
+        .eq('creador_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (!errEventos) setEventosCreados(dataEventos || []);
+
+    } catch (error) {
+      console.error('Error cargando datos del dashboard:', error);
+    }
+  };
+
   useEffect(() => {
     if (!user) {
       navigate('/AltaUsuario');
       return;
     }
 
-    // Si es cliente, redirigir a ficha cliente
-    // if (user.tipo === 'cliente') {
-    //   console.warn('⚠️ PanelPromotor: El usuario es tipo CLIENTE. Debería redirigir, pero lo pausamos para debug.');
-    //   // navigate('/RegistroCliente');
-    //   // return;
-    // }
-
-    // Si es promotor_pendiente, mostrar validación
     if (user.tipo === 'promotor_pendiente') {
       setMostrarValidacion(true);
     }
 
-    // Cargar datos
     if (user.tipo === 'promotor' || user.tipo === 'promotor_a' || user.tipo === 'promotor_b') {
-      cargarEntidades();
+      cargarDatosCompletos();
     }
-    setEventosCreados([]);
-
   }, [user, navigate]);
-
-  const [entidades, setEntidades] = useState([]);
-
-  const cargarEntidades = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('entidades')
-        .select('*')
-        .eq('usuario_id', user.id);
-
-      if (error) {
-        console.error('Error cargando entidades:', error);
-      } else {
-        setEntidades(data || []);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   const getEntidadIcon = (tipo) => {
     switch (tipo) {
@@ -218,48 +212,23 @@ const RegistroPromotor = () => {
           </button>
         </div>
 
-        <div className="w-full mb-2">
-          <div className="flex items-center justify-between mb-2 px-1">
-            <h2 className="font-display text-sm font-semibold text-mo-text dark:text-gray-200 flex items-center gap-2">
-              <FaChartBar className="text-mo-olive" size={14} />
-              Mis Entidades
-            </h2>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-mo overflow-hidden">
-            {/* Lista de Entidades */}
-            <div className="divide-y divide-gray-100 dark:divide-gray-700">
-              {entidades.map((entidad) => (
-                <div
-                  key={entidad.id}
-                  onClick={() => navigate(`/entidad/${entidad.id}/editar`)}
-                  className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-mo-sage/10 text-mo-sage flex items-center justify-center">
-                      {getEntidadIcon(entidad.tipo_entidad)}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-sm text-mo-text dark:text-white">{entidad.nombre}</h3>
-                      <p className="text-xs text-mo-muted dark:text-gray-400 capitalize">{entidad.tipo_entidad}</p>
-                    </div>
-                  </div>
-                  <FaChevronRight size={12} className="text-mo-muted" />
-                </div>
-              ))}
+        {/* Acceso a Gestión de Entidades */}
+        <div className="w-full mb-6">
+          <button
+            onClick={() => navigate('/entidades')}
+            className="w-full bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700 rounded-mo flex items-center justify-between hover:border-mo-sage transition-all active:scale-95 group"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-mo-sage/10 text-mo-sage flex items-center justify-center group-hover:scale-110 group-hover:bg-mo-sage group-hover:text-white transition-all">
+                <FaStore size={20} />
+              </div>
+              <div className="text-left">
+                <h2 className="font-display font-bold text-mo-text dark:text-white text-lg">Mis Entidades</h2>
+                <p className="text-xs text-mo-muted dark:text-gray-400 font-ui mt-0.5">Gestionar locales y perfiles ({entidades.length})</p>
+              </div>
             </div>
-
-            {/* Botón Crear */}
-            <div className="p-4 border-t border-gray-100 dark:border-gray-700">
-              <button
-                onClick={() => navigate('/entidad/nueva')}
-                className="w-full py-3 bg-mo-sage hover:bg-mo-olive text-white rounded-lg transition-all text-xs font-bold uppercase tracking-wider shadow-sm flex items-center justify-center gap-2"
-              >
-                <FaPlus size={12} />
-                Crear Nueva Entidad
-              </button>
-            </div>
-          </div>
+            <FaChevronRight className="text-mo-olive opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" size={20} />
+          </button>
         </div>
 
         {/* SecciÃ³n: Mis Eventos (GestiÃ³n) */}
@@ -279,15 +248,42 @@ const RegistroPromotor = () => {
             ) : (
               eventosCreados.map((ev, index) => (
                 <div key={ev.id} className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${index !== eventosCreados.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : ''}`}>
-                  <span className="text-mo-text dark:text-gray-300 font-medium truncate text-sm">{ev.nombre}</span>
-                  <FaChevronRight size={10} className="text-mo-muted" />
+                  <div className="flex-1 min-w-0 mr-4">
+                    <span className="block text-[10px] text-mo-olive uppercase font-bold truncate">
+                      {ev.provincia} {ev.localidad && `· ${ev.localidad}`}
+                    </span>
+                    <span className="text-mo-text dark:text-gray-300 font-medium truncate text-sm block">
+                      {ev.nombre || ev.titulo}
+                    </span>
+                    <span className="block text-[10px] text-mo-muted mt-0.5 truncate flex items-center gap-1">
+                      <FaMapMarkerAlt size={8} className="text-mo-sage" /> 
+                      {ev.lugar_manual || ev.ubicacion || 'Local por definir'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {ev.ubicacion_coords && (
+                      <a 
+                        href={ev.ubicacion_coords} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-mo-sage hover:text-mo-olive transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FaMapMarkerAlt size={12} />
+                      </a>
+                    )}
+                    <FaChevronRight size={10} className="text-mo-muted" />
+                  </div>
                 </div>
               ))
             )}
 
-            {/* BotÃ³n para crear evento */}
+            {/* Botón para crear evento */}
             <div className="border-t border-gray-100 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900/50 text-center">
-              <button className="text-xs font-bold text-mo-sage hover:text-mo-olive transition-colors uppercase tracking-wider">
+              <button
+                onClick={() => navigate('/evento/nuevo')}
+                className="text-xs font-bold text-mo-sage hover:text-mo-olive transition-colors uppercase tracking-wider"
+              >
                 + Crear Nuevo Evento
               </button>
             </div>

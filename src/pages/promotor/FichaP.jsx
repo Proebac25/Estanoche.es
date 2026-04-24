@@ -8,6 +8,7 @@ import { FaArrowLeft, FaSave, FaTrash, FaPlus, FaCamera, FaHome } from 'react-ic
 import { supabase } from '../../lib/supabase';
 import { FaInstagram, FaTiktok, FaTwitter, FaGlobe, FaFacebook, FaWhatsapp, FaShareAlt } from 'react-icons/fa';
 import { validateImageSize, IMAGE_LIMITS } from '../../utils/validators';
+import GeographyInputs from '../../components/GeographyInputs';
 import '../../styles/core/core-ui-v11.css';
 
 const FichaPromotor = () => {
@@ -367,14 +368,25 @@ const FichaPromotor = () => {
                         </div>
 
                         {/* DIRECCIÓN */}
-                        <div className="space-y-2">
+                        {/* DIRECCIÓN (ESTILO CAJA PREMIUM) */}
+                        <div className="p-4 bg-mo-bg/50 dark:bg-gray-900/50 rounded-3xl border border-gray-100 dark:border-gray-700 space-y-4 shadow-inner">
+                            <h3 className="text-[10px] uppercase tracking-widest font-black text-mo-muted px-2">Ubicación Residencial / Fiscal</h3>
+                            
+                            <GeographyInputs 
+                                provinciaValue={formData.provincia}
+                                municipioValue={formData.ciudad}
+                                cpValue={formData.codigo_postal}
+                                onChange={handleChange}
+                                required={false}
+                            />
+
                             <div className="grid grid-cols-[3fr_1fr] gap-2">
                                 <input
                                     type="text"
                                     name="calle"
                                     value={formData.calle}
                                     onChange={handleChange}
-                                    className="w-full p-3 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-xl outline-none text-mo-text dark:text-white transition-all shadow-sm text-sm"
+                                    className="w-full p-3 bg-white dark:bg-gray-800 shadow-sm border border-transparent focus:border-mo-sage rounded-2xl outline-none text-mo-text dark:text-white transition-all text-sm"
                                     placeholder="Calle / Av. / Plaza"
                                 />
                                 <input
@@ -382,34 +394,8 @@ const FichaPromotor = () => {
                                     name="numero"
                                     value={formData.numero}
                                     onChange={handleChange}
-                                    className="w-full p-3 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-xl outline-none text-mo-text dark:text-white transition-all shadow-sm text-sm"
+                                    className="w-full p-3 bg-white dark:bg-gray-800 shadow-sm border border-transparent focus:border-mo-sage rounded-2xl outline-none text-mo-text dark:text-white transition-all text-sm"
                                     placeholder="Nº"
-                                />
-                            </div>
-                            <div className="grid grid-cols-[2fr_2fr_1fr] gap-2">
-                                <input
-                                    type="text"
-                                    name="ciudad"
-                                    value={formData.ciudad}
-                                    onChange={handleChange}
-                                    className="w-full p-2 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-mo font-ui outline-none text-mo-text dark:text-white transition-all text-sm"
-                                    placeholder="Ciudad"
-                                />
-                                <input
-                                    type="text"
-                                    name="provincia"
-                                    value={formData.provincia}
-                                    onChange={handleChange}
-                                    className="w-full p-2 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-mo font-ui outline-none text-mo-text dark:text-white transition-all text-sm"
-                                    placeholder="Provincia"
-                                />
-                                <input
-                                    type="text"
-                                    name="codigo_postal"
-                                    value={formData.codigo_postal}
-                                    onChange={handleChange}
-                                    className="w-full p-2 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 focus:border-mo-sage rounded-mo font-ui outline-none text-mo-text dark:text-white transition-all text-sm"
-                                    placeholder="C.P."
                                 />
                             </div>
                         </div>

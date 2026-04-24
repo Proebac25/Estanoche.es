@@ -1,0 +1,182 @@
+Tabla,Campo,Tipo de Dato,Permite Nulos
+categorias,id,integer,NO
+categorias,nombre,text,NO
+categorias,icono_emoji,text,NO
+categorias,app,USER-DEFINED,NO
+categorias,activo,boolean,YES
+categorias,orden,integer,YES
+categorias,created_at,timestamp with time zone,YES
+categorias,creador_id,uuid,YES
+categorias,visible_creador,boolean,YES
+entidades,id,uuid,NO
+entidades,nombre,text,NO
+entidades,descripcion,text,YES
+entidades,tipo_entidad,text,YES
+entidades,imagen_url,text,YES
+entidades,direccion,text,YES
+entidades,ciudad,text,YES
+entidades,provincia,text,YES
+entidades,codigo_postal,text,YES
+entidades,coordenadas,point,YES
+entidades,email,text,YES
+entidades,email_verificado,boolean,YES
+entidades,estado_entidad,text,YES
+entidades,visible_publico,boolean,YES
+entidades,configuraciones,jsonb,YES
+entidades,created_at,timestamp with time zone,YES
+entidades,updated_at,timestamp with time zone,YES
+entidades,rol_entidad,text,YES
+entidades,calle,text,YES
+entidades,numero,text,YES
+entidades,avatar_url,text,YES
+entidades,banner_url,text,YES
+entidades,usuario_id,uuid,YES
+eventos,id,uuid,NO
+eventos,creador_id,uuid,NO
+eventos,titulo,text,NO
+eventos,descripcion,text,NO
+eventos,imagen_url,text,YES
+eventos,categoria_id,integer,YES
+eventos,ciudad,USER-DEFINED,NO
+eventos,ubicacion,text,NO
+eventos,ubicacion_coords,point,YES
+eventos,fecha_inicio,timestamp with time zone,NO
+eventos,fecha_fin,timestamp with time zone,NO
+eventos,precio_actual,text,NO
+eventos,precio_original,text,YES
+eventos,tipo,USER-DEFINED,NO
+eventos,visibilidad,USER-DEFINED,NO
+eventos,app_origen,USER-DEFINED,NO
+eventos,estado,USER-DEFINED,NO
+eventos,vistas,integer,YES
+eventos,clics,integer,YES
+eventos,contactos_visibles,jsonb,YES
+eventos,url_evento,text,YES
+eventos,created_at,timestamp with time zone,YES
+eventos,updated_at,timestamp with time zone,YES
+eventos,tsv_title_desc_tsvector,tsvector,YES
+eventos,entidad_id,uuid,YES
+eventos,entidad_local_id,uuid,YES
+eventos,es_vip,boolean,YES
+eventos,lugar_manual,text,YES
+eventos,creador_nombre,text,YES
+eventos,modificador_id,uuid,YES
+eventos,modificador_nombre,text,YES
+eventos,validador_id,uuid,YES
+eventos,validador_nombre,text,YES
+eventos,fecha_validacion,timestamp with time zone,YES
+eventos_analisis,id,uuid,NO
+eventos_analisis,entidad_id,uuid,YES
+eventos_analisis,entidad_nombre,text,YES
+eventos_analisis,entidad_direccion,text,YES
+eventos_analisis,entidad_ciudad,USER-DEFINED,YES
+eventos_analisis,entidad_provincia,text,YES
+eventos_analisis,entidad_coords,point,YES
+eventos_analisis,creador_id,uuid,NO
+eventos_analisis,creador_nombre,text,YES
+eventos_analisis,validador_id,uuid,YES
+eventos_analisis,validador_nombre,text,YES
+eventos_analisis,titulo,text,NO
+eventos_analisis,descripcion,text,YES
+eventos_analisis,categoria_id,integer,YES
+eventos_analisis,categoria_nombre,text,YES
+eventos_analisis,tipo,USER-DEFINED,YES
+eventos_analisis,visibilidad,USER-DEFINED,YES
+eventos_analisis,fecha_inicio,timestamp with time zone,NO
+eventos_analisis,fecha_fin,timestamp with time zone,YES
+eventos_analisis,precio_actual,text,YES
+eventos_analisis,vistas,integer,YES
+eventos_analisis,clics,integer,YES
+eventos_analisis,fecha_validacion,timestamp with time zone,YES
+eventos_analisis,version,integer,YES
+eventos_analisis,anio,smallint,YES
+eventos_analisis,mes,smallint,YES
+eventos_analisis,dia_semana,smallint,YES
+eventos_analisis,entidad_local_id,uuid,YES
+eventos_analisis,es_vip,boolean,YES
+eventos_analisis,imagen_url,text,YES
+eventos_analisis,ciudad,text,YES
+eventos_analisis,ubicacion,text,YES
+eventos_analisis,ubicacion_coords,point,YES
+eventos_analisis,precio_original,text,YES
+eventos_analisis,app_origen,text,YES
+eventos_analisis,estado,text,YES
+eventos_analisis,contactos_visibles,jsonb,YES
+eventos_analisis,url_evento,text,YES
+eventos_analisis,lugar_manual,text,YES
+eventos_analisis,modificador_id,uuid,YES
+eventos_analisis,modificador_nombre,text,YES
+eventos_analisis,evento_id,uuid,YES
+eventos_analisis,created_at,timestamp with time zone,YES
+imagenes_entidad,id,uuid,NO
+imagenes_entidad,entidad_id,uuid,YES
+imagenes_entidad,url,text,NO
+imagenes_entidad,is_main,boolean,YES
+imagenes_entidad,created_at,timestamp with time zone,NO
+notificaciones,id,uuid,NO
+notificaciones,usuario_destino_id,uuid,NO
+notificaciones,tipo_notificacion,text,NO
+notificaciones,titulo,text,NO
+notificaciones,mensaje,text,NO
+notificaciones,entidad_id,uuid,YES
+notificaciones,evento_id,uuid,YES
+notificaciones,leida,boolean,YES
+notificaciones,fecha_creacion,timestamp with time zone,YES
+notificaciones,fecha_lectura,timestamp with time zone,YES
+redes_sociales,id,uuid,NO
+redes_sociales,propietario_id,uuid,NO
+redes_sociales,tipo_propietario,text,NO
+redes_sociales,tipo_red,text,NO
+redes_sociales,url,text,NO
+redes_sociales,imagen_logo,text,YES
+redes_sociales,es_principal,boolean,YES
+redes_sociales,heredado_de,uuid,YES
+redes_sociales,created_at,timestamp with time zone,YES
+relaciones_entidades,id,uuid,NO
+relaciones_entidades,entidad_id,uuid,NO
+relaciones_entidades,usuario_id,uuid,NO
+relaciones_entidades,rol,text,NO
+relaciones_entidades,es_vip,boolean,YES
+relaciones_entidades,fecha_union,timestamp with time zone,YES
+relaciones_entidades,estado,text,YES
+relaciones_entidades,configuraciones,jsonb,YES
+usuarios,id,uuid,NO
+usuarios,telefono,text,YES
+usuarios,nombre_usuario,text,NO
+usuarios,tipo,USER-DEFINED,NO
+usuarios,email,text,YES
+usuarios,telefono_verificado,boolean,YES
+usuarios,estado_profesional,USER-DEFINED,YES
+usuarios,datos_negocio,jsonb,YES
+usuarios,notificaciones_config,jsonb,YES
+usuarios,created_at,timestamp with time zone,YES
+usuarios,updated_at,timestamp with time zone,YES
+usuarios,ultimo_acceso,timestamp with time zone,YES
+usuarios,estado_usuario,text,YES
+usuarios,es_promotor_aprobado,boolean,YES
+usuarios,promotor_aprobado_por,uuid,YES
+usuarios,promotor_aprobado_el,timestamp without time zone,YES
+usuarios,nombre,text,YES
+usuarios,apellidos,text,YES
+usuarios,avatar_url,text,YES
+usuarios,calle,text,YES
+usuarios,numero,text,YES
+usuarios,ciudad,text,YES
+usuarios,provincia,text,YES
+usuarios,codigo_postal,integer,YES
+verification_codes,email,text,NO
+verification_codes,code,text,NO
+verification_codes,expires_at,bigint,NO
+verification_codes,attempts,integer,YES
+verification_codes,user_data,jsonb,YES
+verification_codes,created_at,timestamp with time zone,YES
+zambombas_2025,id,bigint,NO
+zambombas_2025,titulo,character varying,NO
+zambombas_2025,descripcion,text,YES
+zambombas_2025,fecha_evento,date,NO
+zambombas_2025,hora_evento,time without time zone,NO
+zambombas_2025,lugar,character varying,NO
+zambombas_2025,direccion,character varying,YES
+zambombas_2025,artistas,text,YES
+zambombas_2025,fuente,character varying,YES
+zambombas_2025,created_at,timestamp without time zone,YES

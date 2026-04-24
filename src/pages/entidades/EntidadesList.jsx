@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaPlus, FaEdit, FaTrash, FaStore, FaMusic, FaTheaterMasks, FaEye, FaArrowLeft } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaStore, FaMusic, FaTheaterMasks, FaEye, FaArrowLeft, FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import { supabase } from '../../lib/supabase';
 import '../../styles/core/core-ui-v11.css';
 
@@ -42,7 +42,7 @@ const EntidadesList = () => {
                 .from('entidades')
                 .select('*')
                 .eq('usuario_id', user.id)
-                .order('created_at', { ascending: false });
+                .order('nombre', { ascending: true });
 
             if (error) {
                 console.error('❌ Error al cargar entidades:', error);
@@ -207,11 +207,14 @@ const EntidadesList = () => {
                                                 )}
                                             </div>
                                             <div className="flex-1">
-                                                <h3 className="font-display font-bold text-lg text-mo-text dark:text-white">
+                                                <h3 className="font-display font-bold text-base text-mo-text dark:text-white leading-tight">
+                                                    <span className="text-[10px] text-mo-olive uppercase block mb-0.5">
+                                                        {entidad.provincia} {entidad.ciudad && `· ${entidad.ciudad}`}
+                                                    </span>
                                                     {entidad.nombre}
                                                 </h3>
                                                 <div className="text-xs text-mo-muted dark:text-gray-400 font-ui">
-                                                    {gettipoLabel(entidad.tipo_entidad)}
+                                                    {entidad.categoria_entidad || gettipoLabel(entidad.tipo_entidad)}
                                                 </div>
                                             </div>
                                         </div>
@@ -219,15 +222,11 @@ const EntidadesList = () => {
 
                                     {/* Contenido */}
                                     <div className="p-4">
-                                        {entidad.descripcion && (
-                                            <p className="text-sm text-mo-muted dark:text-gray-400 mb-3 line-clamp-2">
-                                                {entidad.descripcion}
-                                            </p>
-                                        )}
+
 
                                         {(entidad.calle || entidad.ciudad) && (
                                             <div className="text-xs text-mo-muted dark:text-gray-400 mb-3 truncate">
-                                                📍 {entidad.calle} {entidad.ciudad && `- ${entidad.ciudad}`}
+                                                📍 {entidad.calle}, {entidad.ciudad} {entidad.provincia && `(${entidad.provincia})`}
                                             </div>
                                         )}
 
@@ -240,6 +239,19 @@ const EntidadesList = () => {
                                                 <FaEye size={14} />
                                                 Ver
                                             </button>
+
+                                            {entidad.direccion && (
+                                                <a
+                                                    href={entidad.direccion}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="w-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-mo hover:bg-blue-100 transition-all"
+                                                    title="Ver en Google Maps"
+                                                >
+                                                    <FaMapMarkerAlt size={14} />
+                                                </a>
+                                            )}
+
                                             <button
                                                 onClick={() => navigate(`/entidad/${entidad.id}/editar`)}
                                                 className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-mo-olive text-white rounded-mo hover:opacity-90 transition-all text-sm font-bold"
@@ -248,11 +260,12 @@ const EntidadesList = () => {
                                                 Editar
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(entidad.id, entidad.nombre)}
-                                                className="px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-mo hover:bg-red-200 dark:hover:bg-red-900/50 transition-all"
-                                                title="Eliminar"
+                                                onClick={() => navigate(`/evento/nuevo?entidad=${entidad.id}`)}
+                                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-mo-sage text-white rounded-mo hover:opacity-90 transition-all text-sm font-bold"
+                                                title="Crear Evento"
                                             >
-                                                <FaTrash size={14} />
+                                                <FaCalendarAlt size={14} />
+                                                Evento
                                             </button>
                                         </div>
                                     </div>

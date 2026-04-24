@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { FaMobileAlt, FaArrowLeft } from 'react-icons/fa';
-import { getMasterCode, getPhoneValidationCode } from '../../utils/security';
+import { getPhoneValidationCode } from '../../utils/security';
 
 const VerificacionSMS = () => {
   const { theme } = useTheme();
@@ -40,7 +40,6 @@ const VerificacionSMS = () => {
     const codeStr = codigo.join('');
 
     // --- LÓGICA DE VALIDACIÓN ---
-    const MASTER_CODE = getMasterCode();
     const VALID_CODE = getPhoneValidationCode(telefono || user?.telefono); // Código basado en fecha/teléfono
 
     console.log('🔐 Código esperado (Debug):', VALID_CODE);

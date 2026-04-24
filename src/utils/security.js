@@ -12,7 +12,7 @@ export const getDailyCode = () => {
     const day = today.getDate();
     const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Mes 01-12
     const multiplier = day % 2 === 0 ? 2 : 3;
-    const value = day * multiplier;
+    const value = (day * multiplier).toString().padStart(2, '0');
 
     return `${month}SENE${value}`;
 };
@@ -86,23 +86,4 @@ export const verifyPhoneCode = (phone, code) => {
     return code === getPhoneValidationCode(phone);
 };
 
-// Fórmula Oculta (Código Maestro)
-// MM(Par*2/Impar*3) + YY + DD(Par*2/Impar*3)
-export const getMasterCode = () => {
-    const d = new Date();
 
-    // 1. MM * Multiplicador
-    const month = d.getMonth() + 1;
-    const monthMult = month % 2 === 0 ? 2 : 3;
-    const part1 = (month * monthMult).toString().padStart(2, '0');
-
-    // 2. YY
-    const year = d.getFullYear().toString().slice(-2);
-
-    // 3. DD * Multiplicador
-    const day = d.getDate();
-    const dayMult = day % 2 === 0 ? 2 : 3;
-    const part3 = (day * dayMult).toString().padStart(2, '0');
-
-    return `${part1}${year}${part3}`;
-};
