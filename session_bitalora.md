@@ -305,3 +305,29 @@ Resolución de una cadena de errores críticos de base de datos ("Errores 500 / 
 
 ### Estado Actual
 El flujo de **Creación de Eventos** vuelve a ser 100% operativo, transmitiendo la auditoría completa (`creador_nombre`, `modificador_nombre`) y superando todas las validaciones de base de datos sin errores de sintaxis.
+
+---
+
+### [2026-04-24] Estabilización de UI y Sincronización de Eventos
+
+### Resumen
+Tras estabilizar la base de datos, nos encontramos con un problema visual: los eventos creados parecían estar guardándose "en blanco" o no aparecían en absoluto en el dashboard del usuario. Se diagnosticó que el problema no estaba en el guardado de datos, sino en múltiples errores silenciosos de la Interfaz (React) y permisos RLS en la tabla analítica.
+
+### Errores Resolucionados
+1.  **Panel Promotor en Blanco (Fallo Silencioso de Supabase)**:
+    *   **Problema**: La consulta de `Panel.jsx` pedía la columna `ciudad` a la tabla `eventos`. Al no existir esta columna (se llama `localidad`), Supabase cancelaba silenciosamente la carga, resultando en que el usuario nunca viera sus eventos en "Mis Eventos".
+    *   **Solución**: Se actualizó la query y el mapeo en React de `ciudad` a `localidad`, restaurando instantáneamente la lista.
+2.  **Omisión de Columnas en Trigger Analítico (`registrar_o_actualizar_evento_analisis`)**:
+    *   **Problema**: El trigger modificado no incluía las columnas de texto libre `lugar_manual`, `ubicacion` ni `amenizador`. Esto causaba que la tabla `eventos_analisis` apareciese parcialmente vacía.
+    *   **Solución**: Se reescribió la función del trigger para volcar fielmente los datos manuales de la tabla `eventos` hacia la tabla de análisis.
+3.  **Bloqueo por RLS en Trigger Automático**:
+    *   **Problema**: Al insertar desde el Front-End, el trigger fallaba con `violates row-level security policy for table "eventos_analisis"`.
+    *   **Solución**: Se añadió `SECURITY DEFINER` al encabezado del trigger, garantizando que su ejecución salte el RLS y pueda mantener el log analítico sin restricciones por usuario.
+4.  **Error Silencioso en `EntidadDetalle.jsx`**:
+    *   **Problema**: La página del organizador no mostraba los eventos debido a que ordenaba la consulta por `fecha_hora_inicio` en lugar del correcto `fecha_inicio`.
+    *   **Solución**: Corregido, los próximos eventos de la entidad ahora se muestran correctamente como tarjetas debajo de la info principal.
+
+### Próximos Pasos Pendientes
+*   [ ] **Construcción de `EventoDetalle.jsx`**: Implementar el diseño Premium para la ficha del evento, el cual resolverá la actual redirección vacía hacia `/evento/:id`.
+*   [ ] **Desarrollo de Agenda**: Iniciar el trabajo sobre el módulo principal de la Agenda de ocio.
+
