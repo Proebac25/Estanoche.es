@@ -331,6 +331,7 @@ Tras estabilizar la base de datos, nos encontramos con un problema visual: los e
     *   **Aclaración Guardada**: Se reafirma la regla de negocio: Las "Actividades" dentro de *Mis Entidades* son **Empresas/Organizadores** de actividades (ej. un Escape Room o empresa de Kayaks, guardados en la tabla `entidades`), NO son fechas concretas. Los eventos temporales creados (fiestas, conciertos) van a la tabla `eventos` y se muestran exclusivamente en "Mis Eventos" dentro del Panel Principal.
 
 ### Próximos Pasos Pendientes
+*   [ ] **Refactorización de "Mis Entidades"**: Cambiar el nombre de esta sección a algo más global (ej. "Mi Actividad") y rediseñarla para que sea un resumen unificado que contenga: Entidades, Eventos generados y Amenizadores.
 *   [ ] **Construcción de `EventoDetalle.jsx`**: Implementar el diseño Premium para la ficha del evento, el cual resolverá la actual redirección vacía hacia `/evento/:id`.
 *   [ ] **Desarrollo de Agenda**: Iniciar el trabajo sobre el módulo principal de la Agenda de ocio.
 
