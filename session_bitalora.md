@@ -326,6 +326,9 @@ Tras estabilizar la base de datos, nos encontramos con un problema visual: los e
 4.  **Error Silencioso en `EntidadDetalle.jsx`**:
     *   **Problema**: La página del organizador no mostraba los eventos debido a que ordenaba la consulta por `fecha_hora_inicio` en lugar del correcto `fecha_inicio`.
     *   **Solución**: Corregido, los próximos eventos de la entidad ahora se muestran correctamente como tarjetas debajo de la info principal.
+5.  **Aclaración Semántica: "Mis Entidades -> Actividades" vs "Mis Eventos"**:
+    *   **Problema**: Confusión al esperar que un *Evento* creado apareciera bajo la pestaña "Actividades" en la vista de "Mis Entidades".
+    *   **Aclaración Guardada**: Se reafirma la regla de negocio: Las "Actividades" dentro de *Mis Entidades* son **Empresas/Organizadores** de actividades (ej. un Escape Room o empresa de Kayaks, guardados en la tabla `entidades`), NO son fechas concretas. Los eventos temporales creados (fiestas, conciertos) van a la tabla `eventos` y se muestran exclusivamente en "Mis Eventos" dentro del Panel Principal.
 
 ### Próximos Pasos Pendientes
 *   [ ] **Construcción de `EventoDetalle.jsx`**: Implementar el diseño Premium para la ficha del evento, el cual resolverá la actual redirección vacía hacia `/evento/:id`.
