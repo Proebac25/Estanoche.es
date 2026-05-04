@@ -475,9 +475,18 @@ const EventoForm = () => {
                 nuevoEvento = data;
             }
 
-            if (socials.length > 0 || formData.guest_social) {
+            // Construir la lista final de redes a insertar
+            let redesFinales = [...socials];
+            if (newSocial.url && newSocial.url.trim() !== '') {
+                redesFinales.push({
+                    tipo_red: newSocial.tipo,
+                    url: newSocial.url.trim()
+                });
+            }
+
+            if (redesFinales.length > 0 || formData.guest_social) {
                 const redesParaInsertar = [
-                    ...socials.map(s => ({
+                    ...redesFinales.map(s => ({
                         propietario_id: nuevoEvento.id,
                         tipo_propietario: 'evento',
                         tipo_red: s.tipo_red,
@@ -494,7 +503,10 @@ const EventoForm = () => {
                     });
                 }
                 
-                await supabase.from('redes_sociales').insert(redesParaInsertar);
+                const { error: errRedes } = await supabase.from('redes_sociales').insert(redesParaInsertar);
+                if (errRedes) {
+                    console.error('Error insertando redes sociales:', errRedes);
+                }
             }
 
             setMessage({ type: 'success', text: isEditMode ? 'Evento actualizado correctamente' : 'Evento publicado correctamente' });
@@ -719,6 +731,7 @@ const EventoForm = () => {
                             <div className="flex gap-2">
                                 <select value={newSocial.tipo} onChange={(e) => setNewSocial({ ...newSocial, tipo: e.target.value })} className="w-24 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl text-[10px] uppercase font-bold outline-none">
                                     <option value="entradas">🎟 Entradas</option>
+                                    <option value="web">🌐 Web</option>
                                     <option value="instagram">📸 Insta</option>
                                     <option value="facebook">👥 FB</option>
                                 </select>

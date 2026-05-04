@@ -115,9 +115,7 @@ const GeographyInputs = ({
                         />
                         <datalist id="municipios-list">
                             {municipios.map((m, idx) => (
-                                <option key={`${m.nombre}-${idx}`} value={m.nombre}>
-                                    {m.cp_prefijo ? `${m.nombre} (${m.cp_prefijo}...)` : m.nombre}
-                                </option>
+                                <option key={`${m.nombre}-${idx}`} value={m.nombre} />
                             ))}
                         </datalist>
                         {isLoading && (

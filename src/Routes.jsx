@@ -34,6 +34,7 @@ import Agenda from "./pages/agenda/Agenda.jsx";
 
 import EventosList from "./pages/eventos/EventosList.jsx";
 import EventoForm from "./pages/eventos/EventoForm.jsx";
+import EventoDetalle from "./pages/eventos/EventoDetalle.jsx";
 
 import SEO from "./components/SEO.jsx"; // <-- Importar SEO
 
@@ -127,7 +128,7 @@ export default function AppRoutes() {
         <Route path="/Agenda" element={<Agenda />} />
         <Route path="/eventos" element={<EventosList />} />
         <Route path="/evento/nuevo" element={<EventoForm />} />
-        {/* <Route path="/evento/:id" element={<EventoDetalle />} /> */}
+        <Route path="/evento/:id" element={<EventoDetalle />} />
         <Route path="/evento/:id/editar" element={<EventoForm />} />
         {/*
         <Route path="/productor/perfil" element={<PerfilProductor />} />

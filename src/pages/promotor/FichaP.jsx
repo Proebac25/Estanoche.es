@@ -53,7 +53,7 @@ const FichaPromotor = () => {
         try {
             const { data: userData, error } = await supabase
                 .from('usuarios')
-                .select('id, nombre_usuario, email, telefono, tipo, nombre, apellidos, calle, numero, ciudad, provincia, codigo_postal, avatar_url')
+                .select('id, nombre_usuario, email, telefono, telefono_verificado, tipo, nombre, apellidos, calle, numero, ciudad, provincia, codigo_postal, avatar_url')
                 .eq('id', user.id)
                 .single();
 
@@ -352,19 +352,60 @@ const FichaPromotor = () => {
                                     placeholder="Apellidos"
                                 />
                             </div>
-                            <input
-                                type="email"
-                                value={formData.email}
-                                disabled
-                                className="w-full p-2 bg-gray-50 dark:bg-gray-900 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-mo font-ui text-mo-muted dark:text-gray-500 text-xs cursor-not-allowed"
-                            />
-                            {/* Teléfono con botón Cambiar */}
-                            <input
-                                type="tel"
-                                value={formData.telefono}
-                                disabled
-                                className="w-full p-2 bg-gray-50 dark:bg-gray-900 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-mo font-ui text-mo-muted dark:text-gray-500 text-xs cursor-not-allowed"
-                            />
+                            {/* Email con botón Cambiar */}
+                            <div className="flex gap-2">
+                                <input
+                                    type="email"
+                                    value={formData.email}
+                                    disabled
+                                    className="flex-1 p-2 bg-gray-50 dark:bg-gray-900 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-mo font-ui text-mo-muted dark:text-gray-500 text-xs cursor-not-allowed"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => navigate('/RegistroEmail')}
+                                    className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-mo-text dark:text-white text-xs font-bold rounded-mo hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    Cambiar
+                                </button>
+                            </div>
+
+                            {/* Teléfono con botón Añadir/Cambiar/Validar */}
+                            <div className="flex gap-2">
+                                <input
+                                    type="tel"
+                                    name="telefono"
+                                    value={formData.telefono}
+                                    readOnly
+                                    disabled
+                                    className="flex-1 p-3 bg-gray-50 dark:bg-gray-900 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl font-ui text-mo-muted dark:text-gray-500 text-sm cursor-not-allowed"
+                                    placeholder="Sin teléfono vinculado"
+                                />
+                                {user?.telefono_verificado ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/RegistroMovil')}
+                                        className="px-4 py-3 bg-gray-100 dark:bg-gray-800 text-mo-text dark:text-white text-xs font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                                    >
+                                        Cambiar
+                                    </button>
+                                ) : formData.telefono ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/RegistroMovil', { state: { telefono: formData.telefono } })}
+                                        className="px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-xl transition-colors shadow-sm"
+                                    >
+                                        Validar
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/RegistroMovil')}
+                                        className="px-4 py-3 bg-mo-sage hover:bg-mo-olive text-white text-xs font-bold rounded-xl transition-colors shadow-sm"
+                                    >
+                                        Añadir
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
                         {/* DIRECCIÓN */}
