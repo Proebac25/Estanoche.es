@@ -335,3 +335,26 @@ Tras estabilizar la base de datos, nos encontramos con un problema visual: los e
 *   [ ] **Construcción de `EventoDetalle.jsx`**: Implementar el diseño Premium para la ficha del evento, el cual resolverá la actual redirección vacía hacia `/evento/:id`.
 *   [ ] **Desarrollo de Agenda**: Iniciar el trabajo sobre el módulo principal de la Agenda de ocio.
 
+---
+
+### [2026-05-04] Agenda Pública y Fase de Pruebas en Vivo (Lanzamiento)
+
+### Resumen
+Sesión enfocada en la creación del Módulo de Agenda Pública, la reparación del flujo de edición de eventos y el empaquetado final para retirar las pantallas de bloqueo ("AccessGuard") y abrir la plataforma a pruebas en vivo reales.
+
+### Cambios Realizados
+1.  **Módulo Agenda (`Agenda.jsx`)**:
+    *   Diseño "Premium" con un motor de filtros reactivo e instantáneo (Provincia, Tarde/Noche, Texto Libre).
+    *   Mapeo cruzado (Join en frontend) para resolver los nombres reales de los Locales y Amenizadores a partir de sus IDs, superando la limitación de la tabla de eventos donde se guardan como IDs referenciales.
+2.  **Reparación de Edición de Eventos**:
+    *   **Dashboard**: Añadido botón "Editar" explícito al panel de control del promotor y a la zona inferior de la Ficha Pública de la Entidad (solo visible si eres el dueño).
+    *   **`EventoForm.jsx`**: Se rediseñó el componente para que soporte "Modo Edición" mediante `useParams()`. Ahora es capaz de recibir un ID de evento, descargar su contenido desde Supabase, inyectarlo en el formulario (incluyendo conversión correcta de fechas UTC a Locales para evitar desfases) y hacer un `UPDATE` en lugar de un `INSERT`.
+3.  **Apertura a Producción (Sin Cadenas)**:
+    *   Eliminado el componente `<AccessGuard>` del enrutador.
+    *   Reconfigurada la ruta raíz (`/`) para apuntar directamente a la página "Sobre" (visión de vídeos) por ser visualmente inmersiva, a petición del usuario.
+    *   Añadido un enorme botón interactivo ("Ver Agenda") sobre los vídeos como embudo principal de conversión hacia los eventos.
+
+### Próximos Pasos (En Fase Viva)
+*   Ir solucionando errores (bugs) que aparezcan en producción durante las pruebas reales.
+*   Retomar la refactorización visual de "Mi Ecosistema".
+*   Finalizar la vista de `EventoDetalle.jsx` para cuando alguien comparta el enlace de un evento por WhatsApp.

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -18,6 +18,8 @@ const EventoForm = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const { id: eventoId } = useParams();
+    const isEditMode = !!eventoId;
     const entidadId = searchParams.get('entidad');
 
     const [formData, setFormData] = useState({
@@ -164,13 +166,79 @@ const EventoForm = () => {
                         return {};
                     };
 
-                    if (entidadId) {
-                        const origen = data.find(e => e.id === entidadId);
-                        if (origen) {
-                            setFormData(prev => ({ ...prev, entidad_id: entidadId, ...aplicarHerencia(origen) }));
+                    // Si estamos en modo EDICIÓN
+                    if (isEditMode) {
+                        const { data: eventData, error: eventError } = await supabase
+                            .from('eventos')
+                            .select('*')
+                            .eq('id', eventoId)
+                            .single();
+                            
+                        if (eventData && !eventError) {
+                            setFormData(prev => ({
+                                ...prev,
+                                titulo: eventData.titulo || '',
+                                descripcion: eventData.descripcion || '',
+                                fecha_inicio: eventData.fecha_inicio || '',
+                                fecha_fin: eventData.fecha_fin || '',
+                                categoria_id: eventData.categoria_id || '',
+                                provincia: eventData.provincia || '',
+                                localidad: eventData.localidad || '',
+                                ubicacion: eventData.ubicacion || '',
+                                lugar_manual: eventData.lugar_manual || '',
+                                imagen_url: eventData.imagen_url || '',
+                                entidad_id: eventData.entidad_id || '',
+                                entidad_local_id: eventData.entidad_local_id || '',
+                                entidad_amenizador_id: eventData.entidad_amenizador_id || '',
+                                amenizador: eventData.amenizador || '',
+                                url_evento: eventData.url_evento || '',
+                                codigo_postal: eventData.codigo_postal || '',
+                            }));
+                            
+                            if (eventData.fecha_inicio) {
+                                const d = new Date(eventData.fecha_inicio);
+                                const localDate = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                                setFechaHora({
+                                    fecha: localDate,
+                                    hora: d.getHours().toString().padStart(2, '0'),
+                                    minuto: d.getMinutes().toString().padStart(2, '0')
+                                });
+                            }
+                            if (eventData.fecha_fin) {
+                                const d = new Date(eventData.fecha_fin);
+                                const localDate = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                                setFechaHoraFin({
+                                    fecha: localDate,
+                                    hora: d.getHours().toString().padStart(2, '0'),
+                                    minuto: d.getMinutes().toString().padStart(2, '0')
+                                });
+                            }
+                            
+                            const { data: socialData } = await supabase
+                                .from('redes_sociales')
+                                .select('*')
+                                .eq('propietario_id', eventoId)
+                                .eq('tipo_propietario', 'evento');
+                                
+                            if (socialData && socialData.length > 0) {
+                                const gs = socialData.find(s => s.tipo_red === 'guest_social');
+                                if (gs) {
+                                    setFormData(prev => ({ ...prev, guest_social: gs.url }));
+                                }
+                                const otherSocials = socialData.filter(s => s.tipo_red !== 'guest_social');
+                                setSocials(otherSocials);
+                            }
                         }
-                    } else if (data.length === 1) {
-                        setFormData(prev => ({ ...prev, entidad_id: data[0].id, ...aplicarHerencia(data[0]) }));
+                    } else {
+                        // Creación nueva
+                        if (entidadId) {
+                            const origen = data.find(e => e.id === entidadId);
+                            if (origen) {
+                                setFormData(prev => ({ ...prev, entidad_id: entidadId, ...aplicarHerencia(origen) }));
+                            }
+                        } else if (data.length === 1) {
+                            setFormData(prev => ({ ...prev, entidad_id: data[0].id, ...aplicarHerencia(data[0]) }));
+                        }
                     }
                 }
             } catch (err) {
@@ -341,21 +409,32 @@ const EventoForm = () => {
                 estado: 'activo',
 
                 // Auditoría (Aseguramos que sean UUID válidos o null)
-                creador_id: isValidUUID(user.id) ? user.id : null,
-                creador_nombre: creadorNombre,
                 modificador_id: isValidUUID(user.id) ? user.id : null,
                 modificador_nombre: creadorNombre
             };
 
+            if (!isEditMode) {
+                finalPayload.creador_id = isValidUUID(user.id) ? user.id : null;
+                finalPayload.creador_nombre = creadorNombre;
+            }
+
             // IDs de Relación (Solo si son UUID válidos)
             if (isValidUUID(formData.entidad_local_id)) {
                 finalPayload.entidad_local_id = formData.entidad_local_id;
+            } else {
+                finalPayload.entidad_local_id = null;
             }
+            
             if (isValidUUID(formData.entidad_amenizador_id)) {
                 finalPayload.entidad_amenizador_id = formData.entidad_amenizador_id;
+            } else {
+                finalPayload.entidad_amenizador_id = null;
             }
+            
             if (isValidUUID(formData.entidad_id)) {
                 finalPayload.entidad_id = formData.entidad_id;
+            } else {
+                finalPayload.entidad_id = null;
             }
 
             console.log('👤 Usuario actual:', user);
@@ -372,13 +451,29 @@ const EventoForm = () => {
                 }
             }
 
-            const { data: nuevoEvento, error } = await supabase
-                .from('eventos')
-                .insert([finalPayload])
-                .select()
-                .single();
-
-            if (error) throw error;
+            let nuevoEvento;
+            
+            if (isEditMode) {
+                const { data, error } = await supabase
+                    .from('eventos')
+                    .update(finalPayload)
+                    .eq('id', eventoId)
+                    .select()
+                    .single();
+                if (error) throw error;
+                nuevoEvento = data;
+                
+                // Borrar redes viejas para recrearlas (más sencillo que sincronizar)
+                await supabase.from('redes_sociales').delete().eq('propietario_id', eventoId).eq('tipo_propietario', 'evento');
+            } else {
+                const { data, error } = await supabase
+                    .from('eventos')
+                    .insert([finalPayload])
+                    .select()
+                    .single();
+                if (error) throw error;
+                nuevoEvento = data;
+            }
 
             if (socials.length > 0 || formData.guest_social) {
                 const redesParaInsertar = [
@@ -402,8 +497,8 @@ const EventoForm = () => {
                 await supabase.from('redes_sociales').insert(redesParaInsertar);
             }
 
-            setMessage({ type: 'success', text: 'Evento publicado correctamente' });
-            setTimeout(() => navigate(`/entidad/${formData.entidad_id}`), 1500);
+            setMessage({ type: 'success', text: isEditMode ? 'Evento actualizado correctamente' : 'Evento publicado correctamente' });
+            setTimeout(() => navigate(-1), 1500); // Volver atrás en vez de a la entidad fija
         } catch (error) {
             console.error('Error al guardar el evento:', error);
             setMessage({ type: 'error', text: 'Error al publicar el evento: ' + error.message });
@@ -429,7 +524,7 @@ const EventoForm = () => {
                             <FaArrowLeft size={16} className="text-mo-muted" />
                         </button>
                         <h1 className="font-display text-2xl font-bold text-mo-text dark:text-white">
-                            Nuevo Evento
+                            {isEditMode ? 'Editar Evento' : 'Nuevo Evento'}
                         </h1>
                     </div>
 
@@ -653,7 +748,7 @@ const EventoForm = () => {
 
                         {/* 7. PUBLICAR */}
                         <button type="submit" disabled={isSubmitting} className="w-full py-5 bg-mo-sage hover:bg-mo-olive text-white rounded-[2rem] font-bold text-lg shadow-mo-soft transition-all active:scale-[0.98] mt-4">
-                            {isSubmitting ? 'Publicando...' : 'Publicar Evento Ahora'}
+                            {isSubmitting ? (isEditMode ? 'Guardando...' : 'Publicando...') : (isEditMode ? 'Guardar Cambios' : 'Publicar Evento Ahora')}
                         </button>
                     </form>
                 </div>

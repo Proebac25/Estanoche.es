@@ -30,6 +30,8 @@ import EntidadesList from "./pages/entidades/EntidadesList.jsx";
 import EntidadForm from "./pages/entidades/EntidadForm.jsx";
 import EntidadDetalle from "./pages/entidades/EntidadDetalle.jsx";
 
+import Agenda from "./pages/agenda/Agenda.jsx";
+
 import EventosList from "./pages/eventos/EventosList.jsx";
 import EventoForm from "./pages/eventos/EventoForm.jsx";
 
@@ -42,30 +44,27 @@ export default function AppRoutes() {
       <SEO />
 
       <Routes>
-        {/* Ruta principal PÚBLICA (Ahora es Sobre) */}
+        {/* Ruta principal PÚBLICA (Con videos de fondo) */}
         <Route path="/" element={
           <>
             <SEO
-              title="Sobre Nosotros"
-              description="Bienvenido a EstaNoche.es, tu agenda definitiva de ocio nocturno."
+              title="EstaNoche | Tu Agenda de Ocio Nocturno"
+              description="Bienvenido a EstaNoche.es, la agenda definitiva de ocio nocturno en tu ciudad."
             />
             <Sobre />
           </>
         } />
 
-        {/* Landing Page REAL (Protegida) */}
-        <Route
-          path="/landing"
-          element={
-            <AccessGuard>
-              <SEO
-                title="Agenda"
-                description="Explora los mejores eventos y fiestas de esta noche."
-              />
-              <Landing />
-            </AccessGuard>
-          }
-        />
+        {/* Ruta Landing Alternativa */}
+        <Route path="/landing" element={
+          <>
+            <SEO
+              title="EstaNoche | Entra a la Agenda"
+              description="Explora los mejores eventos y fiestas de esta noche. Sin registros ni apps."
+            />
+            <Landing />
+          </>
+        } />
 
         {/* Rutas legales */}
         <Route path="/legal/cookies" element={
@@ -93,7 +92,7 @@ export default function AppRoutes() {
           </>
         } />
 
-        {/* Ruta explícita para Sobre (redirige a /) */}
+        {/* Antiguas rutas redireccionadas por compatibilidad */}
         <Route path="/sobre" element={<Navigate to="/" replace />} />
 
         {/* Rutas de registro y acceso */}
@@ -124,9 +123,8 @@ export default function AppRoutes() {
 
         {/* Rutas pendientes de implementar (placeholders) */}
         {/* Rutas de Eventos */}
-        {/* 
         <Route path="/agenda" element={<Agenda />} />
-        */}
+        <Route path="/Agenda" element={<Agenda />} />
         <Route path="/eventos" element={<EventosList />} />
         <Route path="/evento/nuevo" element={<EventoForm />} />
         {/* <Route path="/evento/:id" element={<EventoDetalle />} /> */}

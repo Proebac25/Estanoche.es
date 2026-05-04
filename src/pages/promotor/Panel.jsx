@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
-import { FaCamera, FaCalendarAlt, FaChartBar, FaChevronRight, FaStore, FaMusic, FaTheaterMasks, FaPlus, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaCamera, FaCalendarAlt, FaChartBar, FaChevronRight, FaStore, FaMusic, FaTheaterMasks, FaPlus, FaMapMarkerAlt, FaEdit } from 'react-icons/fa';
 import { supabase } from '../../lib/supabase';
 import '../../styles/core/core-ui-v11.css';
 
@@ -223,7 +223,7 @@ const RegistroPromotor = () => {
                 <FaStore size={20} />
               </div>
               <div className="text-left">
-                <h2 className="font-display font-bold text-mo-text dark:text-white text-lg">Mis Entidades</h2>
+                <h2 className="font-display font-bold text-mo-text dark:text-white text-lg">Mi Ecosistema</h2>
                 <p className="text-xs text-mo-muted dark:text-gray-400 font-ui mt-0.5">Gestionar locales y perfiles ({entidades.length})</p>
               </div>
             </div>
@@ -272,7 +272,14 @@ const RegistroPromotor = () => {
                         <FaMapMarkerAlt size={12} />
                       </a>
                     )}
-                    <FaChevronRight size={10} className="text-mo-muted" />
+                    <button
+                      onClick={() => navigate(`/evento/${ev.id}/editar`)}
+                      className="p-2 text-mo-sage hover:bg-mo-sage/10 rounded-lg transition-colors flex items-center gap-1"
+                      title="Editar Evento"
+                    >
+                      <FaEdit size={14} />
+                      <span className="text-xs font-bold hidden sm:inline">Editar</span>
+                    </button>
                   </div>
                 </div>
               ))

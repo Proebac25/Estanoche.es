@@ -121,7 +121,7 @@ const EntidadesList = () => {
                                 <FaArrowLeft size={16} className="text-mo-muted" />
                             </button>
                             <h1 className="font-display text-2xl font-bold text-mo-text dark:text-white">
-                                Mis Entidades
+                                Mi Ecosistema
                             </h1>
                         </div>
                         <button

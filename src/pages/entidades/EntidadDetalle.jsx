@@ -213,7 +213,7 @@ const EntidadDetalle = () => {
                         <h2 className="font-display text-xl font-bold text-mo-text dark:text-white mb-2">Entidad no encontrada</h2>
                         <p className="text-mo-muted dark:text-gray-400 mb-6">Parece que el enlace no es válido o la entidad ha sido eliminada.</p>
                         <button onClick={() => navigate('/entidades')} className="w-full py-3 bg-mo-sage text-white rounded-mo font-bold shadow-mo-soft transition-all active:scale-95">
-                            Volver a mis entidades
+                            Volver a mi ecosistema
                         </button>
                     </div>
                 </main>
@@ -235,7 +235,7 @@ const EntidadDetalle = () => {
                         className="flex items-center justify-center w-10 h-10 md:w-auto md:px-4 md:py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm md:bg-white dark:md:bg-gray-800 text-mo-muted hover:text-mo-sage rounded-full md:rounded-mo shadow-lg border border-gray-100 dark:border-gray-700 transition-all font-bold group"
                     >
                         <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
-                        <span className="hidden md:block ml-2 text-xs uppercase tracking-widest">Mis Entidades</span>
+                        <span className="hidden md:block ml-2 text-xs uppercase tracking-widest">Mi Ecosistema</span>
                     </button>
                 </div>
 
@@ -443,18 +443,33 @@ const EntidadDetalle = () => {
                                                     {new Date(evento.fecha_inicio).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
                                                 </div>
 
-                                                {evento.ubicacion_coords && (
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            window.open(evento.ubicacion_coords, '_blank');
-                                                        }}
-                                                        className="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-mo-sage rounded-full hover:bg-mo-sage hover:text-white transition-all"
-                                                        title="Ver mapa"
-                                                    >
-                                                        <FaMapMarkerAlt size={12} />
-                                                    </button>
-                                                )}
+                                                <div className="flex items-center gap-2">
+                                                    {evento.ubicacion_coords && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                window.open(evento.ubicacion_coords, '_blank');
+                                                            }}
+                                                            className="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-mo-sage rounded-full hover:bg-mo-sage hover:text-white transition-all"
+                                                            title="Ver mapa"
+                                                        >
+                                                            <FaMapMarkerAlt size={12} />
+                                                        </button>
+                                                    )}
+                                                    
+                                                    {isOwner && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                navigate(`/evento/${evento.id}/editar`);
+                                                            }}
+                                                            className="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-mo-sage rounded-full hover:bg-mo-sage hover:text-white transition-all"
+                                                            title="Editar Evento"
+                                                        >
+                                                            <FaEdit size={12} />
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -1,5 +1,6 @@
 // src/pages/sobre/Sobre.jsx
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -13,6 +14,7 @@ const videos = [V1, V2, V3];
 
 const Sobre = () => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const videoRef = useRef(null);
@@ -169,12 +171,45 @@ const Sobre = () => {
               maxWidth: '90%',
               margin: '0 auto 2rem auto'
             }}>
-              <strong>Estamos trabajando para crear
-                una agenda que concentre los eventos, conciertos,
-                fiestas y actividades culturales de tu ciudad.<br />
-                Gratis, sin registro, accesible
+              <strong>Sube tus eventos a la agenda o descubre
+                los mejores conciertos, fiestas y actividades culturales de tu ciudad.<br />
+                Gratis, sin registro y accesible
                 desde cualquier dispositivo.</strong>
             </p>
+
+            {/* Botón para entrar a la Agenda */}
+            <div style={{ marginTop: '1rem', marginBottom: '2rem' }}>
+              <button
+                onClick={() => navigate('/agenda')}
+                style={{
+                  width: '100%',
+                  maxWidth: '350px',
+                  padding: '1.5rem 2rem',
+                  borderRadius: '50px',
+                  background: 'linear-gradient(90deg, #F72585, #FFB703)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#FFFFFF',
+                  fontFamily: 'system-ui, sans-serif',
+                  fontWeight: 900,
+                  fontSize: 'clamp(1.4rem, 6vw, 1.8rem)',
+                  letterSpacing: '1px',
+                  textTransform: 'uppercase',
+                  boxShadow: '0 10px 35px rgba(247, 37, 133, 0.5)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-4px) scale(1.05)';
+                  e.target.style.boxShadow = '0 15px 40px rgba(247, 37, 133, 0.6)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0) scale(1)';
+                  e.target.style.boxShadow = '0 8px 30px rgba(247, 37, 133, 0.4)';
+                }}
+              >
+                Ver Agenda
+              </button>
+            </div>
 
             {/* Controles de video (Solo puntos) */}
             <div style={{
