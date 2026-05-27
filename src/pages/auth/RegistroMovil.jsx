@@ -137,11 +137,29 @@ const RegistroMovil = () => {
         }
 
         setError('');
+        setIsSubmitting(true);
 
-        // Ya no generamos códigos aleatorios ni mostramos alertas
-        // El código válido es el derivado de la fecha
+        try {
+            // Generar código matemático seguro
+            const validCode = getPhoneValidationCode(telLimpio);
+            
+            // Enviar el código por email al usuario
+            if (user?.email) {
+                const res = await fetch('/api/send-phone-code-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: user.email, code: validCode, telefono: telLimpio })
+                });
+                if (!res.ok) throw new Error('Error al enviar email');
+            }
 
-        setStep(2); // Pasar a introducir código
+            setStep(2); // Pasar a introducir código
+        } catch (error) {
+            console.error('Error al enviar código:', error);
+            setError('Error al solicitar el código. Inténtalo de nuevo.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleVerify = async (e) => {
@@ -240,7 +258,7 @@ const RegistroMovil = () => {
                                     </p>
                                 ) : (
                                     <p className="text-sm text-mo-muted dark:text-gray-400 mb-6">
-                                        Hemos enviado un código SMS al {prefijo} {telefono}.<br />
+                                        Hemos enviado un código por SMS o Email (revisa tu bandeja de entrada).<br />
                                         La validación puede tardar unos segundos.
                                     </p>
                                 )}
@@ -300,7 +318,7 @@ const RegistroMovil = () => {
                                                 ? 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed'
                                                 : 'bg-[#4B744D] hover:bg-[#3d603e] active:scale-[0.98]'}`}
                                     >
-                                        Enviar Código SMS
+                                        Enviar Código (SMS / Email)
                                     </button>
                                 </form>
                             ) : (

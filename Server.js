@@ -1138,6 +1138,47 @@ app.post('/api/reset-password', async (req, res) => {
   }
 });
 
+/**
+ * Envía código matemático seguro al email del usuario para verificación del teléfono
+ * @route POST /api/send-phone-code-email
+ */
+app.post('/api/send-phone-code-email', async (req, res) => {
+  try {
+    const { email, code, telefono } = req.body;
+
+    if (!email || !code) {
+      return res.status(400).json({ error: 'Email y código son requeridos' });
+    }
+
+    console.log(`📱 Enviando código de teléfono (${code}) a ${email} para el número ${telefono || 'no especificado'}`);
+
+    // Enviar email
+    const { error } = await resend.emails.send({
+      from: 'EstaNoche <noresponder@estanoche.es>',
+      to: email,
+      subject: 'Código de verificación de teléfono - EstaNoche',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px;">
+          <h2 style="color: #4B744D; text-align: center;">Verificación de Teléfono</h2>
+          <p>Has solicitado verificar tu número de teléfono ${telefono ? `(${telefono})` : ''}.</p>
+          <div style="background-color: #F8FAFC; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; border: 1px solid #E2E8F0;">
+             <span style="font-size: 32px; letter-spacing: 5px; font-weight: bold; color: #1E293B;">${code}</span>
+          </div>
+          <p style="font-size: 12px; color: #666; text-align: center;">Si no has solicitado este código, ignora este correo.</p>
+        </div>
+      `
+    });
+
+    if (error) throw error;
+
+    res.json({ success: true, message: 'Código enviado por email' });
+
+  } catch (error) {
+    console.error('Error send-phone-code-email:', error);
+    res.status(500).json({ error: 'Error al enviar email con código de teléfono' });
+  }
+});
+
 // Iniciar el servidor
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

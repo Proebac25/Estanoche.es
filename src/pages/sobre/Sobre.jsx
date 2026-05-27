@@ -82,6 +82,27 @@ const Sobre = () => {
       display: 'flex',
       flexDirection: 'column'
     }}>
+      {/* Marca de agua "Estamos en pruebas" */}
+      <div style={{
+        position: 'fixed',
+        bottom: '30px',
+        right: '30px',
+        backgroundColor: 'rgba(247, 37, 133, 0.85)',
+        color: '#FFFFFF',
+        padding: '10px 25px',
+        borderRadius: '50px',
+        zIndex: 9999,
+        fontWeight: '900',
+        fontSize: '1rem',
+        textTransform: 'uppercase',
+        letterSpacing: '1px',
+        pointerEvents: 'none',
+        boxShadow: '0 5px 20px rgba(0,0,0,0.3)',
+        backdropFilter: 'blur(5px)'
+      }}>
+        Estamos en pruebas
+      </div>
+
       {/* Header básico */}
       <Header theme={theme} />
 
@@ -279,7 +300,7 @@ const Sobre = () => {
               </p>
 
               <p>
-                Si eres <strong style={strongStyle}>promotor, aprovecha la oportunidad que te brinda ESTANOCHE.ES </strong>para dar a conocer
+                Si <strong style={strongStyle}>organizas eventos o actividades, aprovecha la oportunidad que te brinda ESTANOCHE.ES </strong>para dar a conocer
                 tu evento, tendrán acceso todos los usuarios de la aplicación que busquen ocio en la ciudad.
                 Podrán elegir <strong style={strongStyle}>seguir tus Eventos y ser Notificados </strong>de cada convocatoria.
               </p>
