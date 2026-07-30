@@ -358,3 +358,26 @@ Sesión enfocada en la creación del Módulo de Agenda Pública, la reparación 
 *   Ir solucionando errores (bugs) que aparezcan en producción durante las pruebas reales.
 *   Retomar la refactorización visual de "Mi Ecosistema".
 *   Finalizar la vista de `EventoDetalle.jsx` para cuando alguien comparta el enlace de un evento por WhatsApp.
+
+---
+
+### [2026-07-30] Integración de Google Analytics y Banner de Consentimiento
+
+### Resumen
+Se ha integrado Google Analytics 4 (GA4) cumpliendo con la normativa RGPD y el estándar Google Consent Mode V2, incorporando un banner interactivo premium y glassmorphic para gestionar los consentimientos de los usuarios.
+
+### Cambios Realizados
+1. **Google Analytics & Consent Mode V2 (`index.html`)**:
+   - Se ha insertado el script de configuración por defecto de `gtag` en el `<head>`, definiendo todos los accesos de rastreo como `'denied'` por defecto.
+   - Carga asíncrona del script oficial de GA4 con el Measurement ID `G-PDMCSM186J`.
+
+2. **Componente de Consentimiento (`CookieBanner.jsx`)**:
+   - Creación de un banner flotante premium en la esquina inferior derecha con efecto glassmorphism, blur de fondo y animación suave de entrada.
+   - Lógica para guardar la decisión del usuario en `localStorage` (como `accepted` o `rejected`) para evitar molestar de nuevo.
+   - Actualización dinámica del consentimiento en `window.gtag` al conceder permisos (`granted`).
+
+3. **Integración Global (`App.jsx`)**:
+   - Inyección del componente `<CookieBanner />` a nivel raíz para asegurar que esté activo y controle las cookies en toda la aplicación.
+
+### Verificación
+- El proyecto compila y empaqueta en producción sin errores mediante `npm run build`.
